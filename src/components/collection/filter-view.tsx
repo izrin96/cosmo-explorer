@@ -13,6 +13,7 @@ import { Toggle } from "../ui/toggle";
 import MemberFilter from "./filter-member";
 import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
 import ArtistFilter from "./filter-artist";
+import ColumnFilter from "./filter-column";
 
 type Props = {
   artists: CosmoArtistWithMembers[];
@@ -69,6 +70,7 @@ export default function FilterView({ isOwned, artists }: Props) {
           Combine duplicate
         </Toggle>
       )}
+      <ColumnFilter filters={filters.column} setFilters={setFilters} />
     </div>
   );
 }

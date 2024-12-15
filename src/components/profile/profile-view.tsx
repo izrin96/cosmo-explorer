@@ -4,7 +4,12 @@ import { COSMO_ENDPOINT } from "@/lib/universal/cosmo/common";
 import { OwnedObjektsResult } from "@/lib/universal/cosmo/objekts";
 import { getCollectionShortId, parsePage } from "@/lib/universal/objekts";
 import { ofetch } from "ofetch";
-import React, { CSSProperties, useCallback, useEffect, useMemo } from "react";
+import React, {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useMemo,
+} from "react";
 import { CosmoPublicUser } from "@/lib/universal/cosmo/auth";
 import FilterView from "../collection/filter-view";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
@@ -14,7 +19,7 @@ import ObjektView from "../objekt/objekt-view";
 import { filterObjektsOwned } from "@/lib/filter-utils";
 import { groupBy, prop } from "remeda";
 import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
-import { toast } from "sonner";
+import { Loader } from "../ui";
 
 type Props = {
   artists: CosmoArtistWithMembers[];
@@ -47,7 +52,7 @@ export default function ProfileView({ profile, artists }: Props) {
 
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useSuspenseInfiniteQuery({
-      queryKey: ["owned-objekts"],
+      queryKey: ["owned-objekts", profile.address],
       queryFn: queryFunction,
       initialPageParam: 0,
       getNextPageParam: (lastPage) => lastPage.nextStartAfter,
@@ -68,24 +73,22 @@ export default function ProfileView({ profile, artists }: Props) {
   }, [filters, objektsOwned]);
 
   useEffect(() => {
-    setTimeout(() => toast("Loading objekts.."), 100);
-  }, []);
-
-  useEffect(() => {
     if (hasNextPage && isFetching === false) {
       fetchNextPage();
     }
-    if (!hasNextPage) toast("Objekts loaded");
   }, [hasNextPage, fetchNextPage, isFetching]);
 
   const css = {
-    "--grid-columns": GRID_COLUMNS,
+    "--grid-columns": filters.column ?? GRID_COLUMNS,
   } as CSSProperties;
 
   return (
     <div className="flex flex-col gap-2">
       <FilterView isOwned artists={artists} />
-      <span className="font-bold">{objektsFiltered.length} total</span>
+      <div className="flex items-center gap-2">
+        {hasNextPage && <Loader />}
+        <span className="font-bold">{objektsFiltered.length} total</span>
+      </div>
       <div
         style={css}
         className="relative grid grid-cols-3 gap-4 py-2 w-full md:grid-cols-[repeat(var(--grid-columns),_minmax(0,_1fr))]"

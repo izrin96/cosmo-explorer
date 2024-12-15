@@ -1,7 +1,7 @@
 "use client";
 
 import { PropsWithFilters } from "@/hooks/use-cosmo-filters";
-import { TextField } from "../ui";
+import { SearchField } from "../ui";
 
 type Props = PropsWithFilters<"collection">;
 
@@ -14,8 +14,8 @@ export default function FilterCollectionNo({ filters, setFilters }: Props) {
 
   return (
     <div>
-      <TextField
-        placeholder="Search.."
+      <SearchField
+        placeholder="Search"
         onChange={(value) => update(value)}
         className="w-40"
         value={filters ?? ""}

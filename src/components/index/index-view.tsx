@@ -31,7 +31,7 @@ export default function IndexView({ objekts, artists }: Props) {
   }, [filters, objektsMap]);
 
   const css = {
-    "--grid-columns": GRID_COLUMNS,
+    "--grid-columns": filters.column ?? GRID_COLUMNS,
   } as CSSProperties;
 
   return (

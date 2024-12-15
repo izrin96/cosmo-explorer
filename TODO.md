@@ -11,20 +11,23 @@
 - [x] change to react-aria based components
 - [x] add members and artists filter
 - [x] objekt count if grouped
-- [ ] use accessToken and refreshToken when request to cosmo api
-- [ ] search users
+- [x] use accessToken and refreshToken when request to cosmo api
+- [x] search users
+- [x] debounced delay search when typing
+- [x] column adjust
+- [ ] virtualize
 - [ ] fetch metadata from apollo
-- [ ] login
 - [ ] get all objekts from database
+- [ ] user's trades history
+- [ ] objekt's trades history
+- [ ] user's como, user's profile picture
 - [ ] progress
 - [ ] leaderboard
-- [ ] trades history
+- [ ] login
 - [ ] transfer objekt, can select multiple
-- [ ] column adjust
-- [ ] debounced delay search when typing
 - [ ] suspense
-- [ ] virtualize
 - [ ] utilize zustand
+- [ ] prefetch
 
 ## features
 

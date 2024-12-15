@@ -16,6 +16,7 @@ import {
   parseAsStringEnum,
   useQueryStates,
   parseAsBoolean,
+  parseAsInteger,
 } from "nuqs";
 
 export function useCosmoFilters() {
@@ -39,7 +40,8 @@ export function useCosmoFilters() {
     collection: parseAsString,
     // index param: ["101Z", "102Z"]
     collectionNo: parseAsArrayOf(parseAsString),
-    grouped: parseAsBoolean
+    grouped: parseAsBoolean,
+    column: parseAsInteger
   });
 }
 
