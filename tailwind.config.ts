@@ -1,6 +1,9 @@
-import type { Config } from "tailwindcss";
-import animate from "tailwindcss-animate"
-import plugin from "tailwindcss/plugin"
+/** @type {import('tailwindcss').Config} */
+
+import { withTV } from 'tailwind-variants/transformer'
+import ta from 'tailwindcss-animate'
+import trac from 'tailwindcss-react-aria-components'
+import plugin from 'tailwindcss/plugin';
 
 const flipUtilities = plugin(function ({ addUtilities }) {
 	addUtilities({
@@ -16,73 +19,77 @@ const flipUtilities = plugin(function ({ addUtilities }) {
 	});
 });
 
-export default {
-	darkMode: ["class"],
+export default withTV({
+	darkMode: 'class',
 	content: [
 		"./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
 		"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
 	],
+	plugins: [ta, trac, flipUtilities],
 	theme: {
-		container: {
-			center: true,
-			padding: "1rem",
-			screens: {
-				"2xl": "1250px",
-			},
-		},
 		extend: {
-			aspectRatio: {
-				'photocard': '5.5 / 8.5'
-			},
+			aspectRatio: { 'photocard': '5.5 / 8.5' },
 			colors: {
-				background: 'hsl(var(--background))',
-				foreground: 'hsl(var(--foreground))',
-				card: {
-					DEFAULT: 'hsl(var(--card))',
-					foreground: 'hsl(var(--card-foreground))'
-				},
-				popover: {
-					DEFAULT: 'hsl(var(--popover))',
-					foreground: 'hsl(var(--popover-foreground))'
-				},
+				light: "hsl(var(--light))",
+				dark: "hsl(var(--dark))",
+				border: "hsl(var(--border))",
+				input: "hsl(var(--input))",
+				ring: "hsl(var(--ring))",
+				toggle: "hsl(var(--toggle))",
+				bg: "hsl(var(--bg))",
+				fg: "hsl(var(--fg))",
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					DEFAULT: "hsl(var(--primary))",
+					fg: "hsl(var(--primary-fg))",
 				},
 				secondary: {
-					DEFAULT: 'hsl(var(--secondary))',
-					foreground: 'hsl(var(--secondary-foreground))'
+					DEFAULT: "hsl(var(--secondary))",
+					fg: "hsl(var(--secondary-fg))"
 				},
-				muted: {
-					DEFAULT: 'hsl(var(--muted))',
-					foreground: 'hsl(var(--muted-foreground))'
+				tertiary: {
+					DEFAULT: "hsl(var(--tertiary))",
+					fg: "hsl(var(--tertiary-fg))"
 				},
 				accent: {
-					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
+					DEFAULT: "hsl(var(--accent))",
+					fg: "hsl(var(--accent-fg))",
+					subtle: "hsl(var(--accent-subtle))",
+					"subtle-fg": "hsl(var(--accent-subtle-fg))"
 				},
-				destructive: {
-					DEFAULT: 'hsl(var(--destructive))',
-					foreground: 'hsl(var(--destructive-foreground))'
+				success: {
+					DEFAULT: "hsl(var(--success))",
+					fg: "hsl(var(--success-fg))"
 				},
-				border: 'hsl(var(--border))',
-				input: 'hsl(var(--input))',
-				ring: 'hsl(var(--ring))',
-				chart: {
-					'1': 'hsl(var(--chart-1))',
-					'2': 'hsl(var(--chart-2))',
-					'3': 'hsl(var(--chart-3))',
-					'4': 'hsl(var(--chart-4))',
-					'5': 'hsl(var(--chart-5))'
+				info: {
+					DEFAULT: "hsl(var(--info))",
+					fg: "hsl(var(--info-fg))"
+				},
+				danger: {
+					DEFAULT: "hsl(var(--danger))",
+					fg: "hsl(var(--danger-fg))"
+				},
+				warning: {
+					DEFAULT: "hsl(var(--warning))",
+					fg: "hsl(var(--warning-fg))"
+				},
+				muted: {
+					DEFAULT: "hsl(var(--muted))",
+					fg: "hsl(var(--muted-fg))"
+				},
+				overlay: {
+					DEFAULT: "hsl(var(--overlay))",
+					fg: "hsl(var(--overlay-fg))"
 				}
 			},
 			borderRadius: {
-				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
-			}
+				'3xl': "calc(var(--radius) + 6px)",
+				'2xl': "calc(var(--radius) + 4px)",
+				xl: "calc(var(--radius) + 2px)",
+				lg: "calc(var(--radius))",
+				md: "calc(var(--radius) - 2px)",
+				sm: "calc(var(--radius) - 4px)"
+			},
 		}
 	},
-	plugins: [animate, flipUtilities],
-} satisfies Config;
+})
