@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import ClientProviders from "./client-providers";
-import { Toaster } from "@/components/ui/toaster";
+import { Toast } from "@/components/ui/toast";
 import Navbar from "@/components/navbar/navbar";
 
 const geistSans = localFont({
@@ -30,18 +30,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="dark">
           <ClientProviders>
             <div className="relative flex min-h-dvh flex-col">
               <Navbar />
-              <div className="flex min-w-full flex-col text-foreground">
+              <div className="flex min-w-full flex-col items-center">
                 {children}
               </div>
             </div>
+            <Toast />
           </ClientProviders>
-          <Toaster />
         </ThemeProvider>
       </body>
     </html>

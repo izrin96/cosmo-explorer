@@ -1,17 +1,11 @@
 "use client";
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { PropsWithFilters } from "@/hooks/use-cosmo-filters";
 import { ValidSort, validSorts } from "@/lib/universal/cosmo/common";
+import { Select } from "../ui";
 
 interface Props extends PropsWithFilters<"sort"> {
-  showSerial?: boolean
+  showSerial?: boolean;
 }
 
 const map: Record<ValidSort, string> = {
@@ -23,10 +17,14 @@ const map: Record<ValidSort, string> = {
   serialDesc: "Highest Serial",
 };
 
-export default function SortFilter({ filters, setFilters, showSerial = false }: Props) {
-  function update(value: string) {
+export default function SortFilter({
+  filters,
+  setFilters,
+  showSerial = false,
+}: Props) {
+  function update(value: ValidSort) {
     setFilters({
-      sort: value === "newest" ? null : (value as ValidSort),
+      sort: value === "newest" ? null : value,
     });
   }
 
@@ -35,17 +33,20 @@ export default function SortFilter({ filters, setFilters, showSerial = false }: 
   );
 
   return (
-    <Select value={filters ?? "newest"} onValueChange={update}>
-      <SelectTrigger className="w-36">
-        <SelectValue placeholder="Sort" />
-      </SelectTrigger>
-      <SelectContent>
-        {availableSorts.map((sort) => (
-          <SelectItem key={sort} value={sort}>
-            <span>{map[sort]}</span>
-          </SelectItem>
-        ))}
-      </SelectContent>
+    <Select
+      className="w-36"
+      selectedKey={filters ?? "newest"}
+      onSelectionChange={(val) => update(val as ValidSort)}
+      aria-label="Sort"
+    >
+      <Select.Trigger />
+      <Select.List items={availableSorts.map((value) => ({ value }))}>
+        {(item) => (
+          <Select.Option id={item.value} textValue={item.value}>
+            {map[item.value]}
+          </Select.Option>
+        )}
+      </Select.List>
     </Select>
   );
 }

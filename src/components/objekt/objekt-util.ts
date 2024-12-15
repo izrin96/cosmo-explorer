@@ -1,4 +1,9 @@
+import { OwnedObjekt } from "@/lib/universal/cosmo/objekts";
 import { ValidObjekt } from "@/lib/universal/objekts";
+
+export type ValidObjektWithId = ValidObjekt & { collectionShortId: string };
+export type OwnedObjektWithId = OwnedObjekt & { collectionShortId: string };
+
 /**
  * Parse a valid key from an ambiguous objekt.
  */

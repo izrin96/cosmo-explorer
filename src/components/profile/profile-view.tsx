@@ -13,12 +13,15 @@ import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import ObjektView from "../objekt/objekt-view";
 import { filterObjektsOwned } from "@/lib/filter-utils";
 import { groupBy, prop } from "remeda";
+import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
+import { toast } from "sonner";
 
 type Props = {
+  artists: CosmoArtistWithMembers[];
   profile: CosmoPublicUser;
 };
 
-export default function ProfileView({ profile }: Props) {
+export default function ProfileView({ profile, artists }: Props) {
   const [filters] = useCosmoFilters();
 
   const queryFunction = useCallback(
@@ -65,9 +68,14 @@ export default function ProfileView({ profile }: Props) {
   }, [filters, objektsOwned]);
 
   useEffect(() => {
+    setTimeout(() => toast("Loading objekts.."), 100)
+  }, [])
+
+  useEffect(() => {
     if (hasNextPage && isFetching === false) {
       fetchNextPage();
     }
+    if (!hasNextPage) toast("Objekts loaded");
   }, [hasNextPage, fetchNextPage, isFetching]);
 
   const css = {
@@ -76,7 +84,7 @@ export default function ProfileView({ profile }: Props) {
 
   return (
     <div className="flex flex-col gap-2">
-      <FilterView isOwned />
+      <FilterView isOwned artists={artists} />
       <span className="font-bold">{objektsFiltered.length} total</span>
       <div
         style={css}

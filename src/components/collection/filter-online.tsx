@@ -1,20 +1,14 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { type Selection } from "@react-types/shared"
 import { PropsWithFilters } from "@/hooks/use-cosmo-filters";
 import {
   ValidOnlineType,
   validOnlineTypes,
 } from "@/lib/universal/cosmo/common";
-import { memo, useState } from "react";
-import { ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { memo, useEffect, useState } from "react";
+import { Menu } from "../ui";
+import { Button } from "../ui/button";
 
 type Props = PropsWithFilters<"on_offline">;
 
@@ -24,51 +18,31 @@ const map: Record<ValidOnlineType, string> = {
 };
 
 export default memo(function OnlineFilter({ filters, setFilters }: Props) {
-  const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState<Selection>(new Set(filters))
 
-  function updateFilter(property: ValidOnlineType, checked: boolean) {
-    let newFilters = filters ?? [];
-
-    if (checked) {
-      if (!newFilters.includes(property)) {
-        newFilters.push(property);
-      }
-    } else {
-      if (newFilters.includes(property)) {
-        newFilters = newFilters.filter((f) => f !== property);
-      }
-    }
-
+  useEffect(() => {
+    const newFilters = [...selected] as ValidOnlineType[]
     setFilters({
       on_offline: newFilters.length > 0 ? newFilters : null,
     });
-  }
+  }, [selected])
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn(
-            "flex gap-2 items-center",
-            filters && filters.length > 0 && "border-cosmo"
-          )}
-        >
-          <span>Physical</span>
-          <ChevronDown className="h-4 w-4 opacity-50" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-36">
-        {Object.values(validOnlineTypes).map((onlineType) => (
-          <DropdownMenuCheckboxItem
-            key={onlineType}
-            checked={filters?.includes(onlineType)}
-            onCheckedChange={(checked) => updateFilter(onlineType, checked)}
-          >
-            {map[onlineType]}
-          </DropdownMenuCheckboxItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Menu>
+      <Button appearance="outline">Physical</Button>
+      <Menu.Content
+        placement="bottom"
+        selectionMode="multiple"
+        selectedKeys={selected}
+        onSelectionChange={setSelected}
+        items={Object.values(validOnlineTypes).map((value) => ({ value }))}
+      >
+        {(item) => (
+          <Menu.Checkbox id={item.value} textValue={item.value}>
+            {map[item.value]}
+          </Menu.Checkbox>
+        )}
+      </Menu.Content>
+    </Menu>
   );
 });

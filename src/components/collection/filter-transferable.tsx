@@ -1,8 +1,8 @@
 "use client";
 
-import { Toggle } from "@/components/ui/toggle";
 import { PropsWithFilters } from "@/hooks/use-cosmo-filters";
 import { memo } from "react";
+import { Toggle } from "../ui";
 
 type Props = PropsWithFilters<"transferable">;
 
@@ -12,14 +12,13 @@ export default memo(function TransferableFilter({
 }: Props) {
   return (
     <Toggle
-      variant="outline"
-      pressed={filters ?? false}
-      onPressedChange={(v) =>
+      appearance="outline"
+      isSelected={filters ?? false}
+      onChange={(v) =>
         setFilters({
           transferable: v ? true : null,
         })
       }
-      aria-label="Toggle transferable"
     >
       Transferable
     </Toggle>

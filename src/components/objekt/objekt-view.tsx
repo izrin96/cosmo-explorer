@@ -2,16 +2,9 @@ import React, { CSSProperties, memo, useState } from "react";
 import { default as NextImage } from "next/image";
 import { ValidObjekt } from "@/lib/universal/objekts";
 import { OwnedObjekt } from "@/lib/universal/cosmo/objekts";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "../ui/dialog";
-import VisuallyHidden from "../ui/visually-hidden";
 import { getObjektArtist, getObjektType } from "./objekt-util";
-import { Separator } from "../ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { Badge, GridList, Separator, Tabs } from "../ui";
+import { Modal } from "../ui";
 
 type ValidObjektWithId = ValidObjekt & { collectionShortId: string };
 type OwnedObjektWithId = OwnedObjekt & { collectionShortId: string };
@@ -24,13 +17,14 @@ type Props = {
 
 const MemoizedImage = memo(NextImage);
 
-export default function ObjektView({ objekts, isOwned = false, showSerial = false }: Props) {
+export default memo(function ObjektView({
+  objekts,
+  isOwned = false,
+  showSerial = false,
+}: Props) {
   const [objekt] = objekts;
   const [flipped, setFlipped] = useState(false);
   const [open, setOpen] = useState(false);
-  function onOpenChange(state: boolean) {
-    setOpen(state);
-  }
 
   const css = {
     "--objekt-background-color": objekt.backgroundColor,
@@ -40,7 +34,7 @@ export default function ObjektView({ objekts, isOwned = false, showSerial = fals
   return (
     <>
       <div className="flex flex-col gap-2">
-        <div className="relative overflow-hidden aspect-photocard">
+        <div className="relative overflow-hidden aspect-photocard drop-shadow">
           <MemoizedImage
             fill
             src={objekt.thumbnailImage}
@@ -55,66 +49,64 @@ export default function ObjektView({ objekts, isOwned = false, showSerial = fals
         </div>
       </div>
 
-      <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-3xl p-0 gap-0">
-          <VisuallyHidden>
-            <DialogTitle>{objekt.collectionId}</DialogTitle>
-            <DialogDescription>{objekt.collectionId}</DialogDescription>
-          </VisuallyHidden>
-          <div className="flex flex-col md:flex-row">
-            <div className="flex h-[23rem] md:h-[28rem] aspect-photocard self-center">
-              <div
-                onClick={() => setFlipped((prev) => !prev)}
-                data-flipped={flipped}
-                style={css}
-                className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform preserve-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
-              >
-                <div className="absolute inset-0 backface-hidden">
-                  <MemoizedImage
-                    fill
-                    src={objekt.frontImage}
-                    alt={objekt.collectionId}
-                  />
-                </div>
-                <div className="absolute inset-0 backface-hidden rotate-y-180">
-                  <MemoizedImage
-                    fill
-                    src={objekt.backImage}
-                    alt={objekt.collectionId}
-                  />
-                </div>
+      <Modal.Content isOpen={open} onOpenChange={setOpen} size="3xl">
+        <Modal.Header className="hidden">
+          <Modal.Title>Objekt display</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="flex flex-col md:flex-row my-4">
+          <div className="flex h-[23rem] md:h-[28rem] aspect-photocard self-center">
+            <div
+              onClick={() => setFlipped((prev) => !prev)}
+              data-flipped={flipped}
+              style={css}
+              className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform preserve-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
+            >
+              <div className="absolute inset-0 backface-hidden drop-shadow">
+                <MemoizedImage
+                  fill
+                  src={objekt.frontImage}
+                  alt={objekt.collectionId}
+                />
+              </div>
+              <div className="absolute inset-0 backface-hidden rotate-y-180 drop-shadow">
+                <MemoizedImage
+                  fill
+                  src={objekt.backImage}
+                  alt={objekt.collectionId}
+                />
               </div>
             </div>
-
-            <div className="flex flex-col grow h-[23rem] md:h-[28rem] overflow-y-auto">
-              <AttributePanel objekt={objekt} />
-              <Separator orientation="horizontal" />
-              <Tabs
-                defaultValue={isOwned ? "owned" : "metadata"}
-                className="m-3"
-              >
-                <TabsList>
-                  {isOwned && <TabsTrigger value="owned">Owned</TabsTrigger>}
-                  <TabsTrigger value="metadata">Metadata</TabsTrigger>
-                  <TabsTrigger value="trades">Trades</TabsTrigger>
-                </TabsList>
-                {isOwned && (
-                  <TabsContent value="owned">
-                    <OwnedListPanel objekts={objekts as OwnedObjektWithId[]} />
-                  </TabsContent>
-                )}
-                <TabsContent value="metadata">
-                  <MetadataPanel />
-                </TabsContent>
-                <TabsContent value="trades">not yet available</TabsContent>
-              </Tabs>
-            </div>
           </div>
-        </DialogContent>
-      </Dialog>
+
+          <div className="flex flex-col grow h-[23rem] md:h-[28rem] overflow-y-auto">
+            <AttributePanel objekt={objekt} />
+            {/* <Separator orientation="horizontal" /> */}
+            <Tabs
+              aria-label="Objekt tab"
+              defaultSelectedKey={isOwned ? "owned" : "metadata"}
+              className="m-3"
+            >
+              <Tabs.List>
+                {isOwned && <Tabs.Tab id="owned">Owned</Tabs.Tab>}
+                <Tabs.Tab id="metadata">Metadata</Tabs.Tab>
+                <Tabs.Tab id="trades">Trades</Tabs.Tab>
+              </Tabs.List>
+              {isOwned && (
+                <Tabs.Panel id="owned">
+                  <OwnedListPanel objekts={objekts as OwnedObjektWithId[]} />
+                </Tabs.Panel>
+              )}
+              <Tabs.Panel id="metadata">
+                <MetadataPanel />
+              </Tabs.Panel>
+              <Tabs.Panel id="trades">Not yet available</Tabs.Panel>
+            </Tabs>
+          </div>
+        </Modal.Body>
+      </Modal.Content>
     </>
   );
-}
+});
 
 type AttributeProps = {
   objekt: ValidObjektWithId;
@@ -137,9 +129,6 @@ function AttributePanel({ objekt }: AttributeProps) {
         value={onOffline === "online" ? "Digital" : "Physical"}
       />
       <Pill label="Collection No." value={objekt.collectionNo} />
-      {/* todo: copies */}
-      {/* todo: tradable */}
-      {/* todo: rarity */}
       <PillColor
         label="Accent Color"
         value={objekt.accentColor}
@@ -151,7 +140,7 @@ function AttributePanel({ objekt }: AttributeProps) {
 }
 
 function MetadataPanel() {
-  return <div>Metadata not yet available</div>;
+  return <div>Not yet available</div>;
 }
 
 type OwnedListPanelProps = {
@@ -160,13 +149,18 @@ type OwnedListPanelProps = {
 
 function OwnedListPanel({ objekts }: OwnedListPanelProps) {
   return (
-    <div>
-      <ul>
-        {objekts.map((objekt) => (
-          <li key={objekt.tokenId}>{objekt.objektNo}</li>
-        ))}
-      </ul>
-    </div>
+    <GridList
+      selectionMode="multiple"
+      items={objekts}
+      aria-label="Select your favorite bands"
+      className="min-w-64"
+    >
+      {(item) => (
+        <GridList.Item textValue={"" + item.objektNo} id={item.tokenId}>
+          #{item.objektNo}
+        </GridList.Item>
+      )}
+    </GridList>
   );
 }
 
@@ -178,26 +172,29 @@ type PillProps = {
 
 function Pill({ label, value }: PillProps) {
   return (
-    <div className="flex items-center gap-1 rounded-full bg-accent px-2 py-1 text-sm">
+    <Badge intent="secondary" className="">
       <span className="font-semibold">{label}</span>
       <span>{value}</span>
-    </div>
+    </Badge>
   );
 }
 
 function PillColor({ label, value, objekt }: PillProps) {
   return (
-    <div
-      className="flex items-center gap-1 rounded-full bg-[var(--objekt-accent-color)] px-2 py-1 text-sm text-[var(--objekt-text-color)]"
-      style={
-        {
-          "--objekt-accent-color": objekt?.accentColor,
-          "--objekt-text-color": objekt?.textColor,
-        } as CSSProperties
-      }
-    >
-      <span className="font-semibold">{label}</span>
-      <span>{value}</span>
+    <div>
+      <Badge
+        shape="circle"
+        style={
+          {
+            "--objekt-accent-color": objekt?.accentColor,
+            "--objekt-text-color": objekt?.textColor,
+          } as CSSProperties
+        }
+        className="!bg-[var(--objekt-accent-color)] !text-[var(--objekt-text-color)]"
+      >
+        <span className="font-semibold">{label}</span>
+        <span>{value}</span>
+      </Badge>
     </div>
   );
 }

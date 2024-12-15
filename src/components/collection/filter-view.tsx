@@ -10,18 +10,22 @@ import FilterOnline from "./filter-online";
 import FilterClass from "./filter-class";
 import FilterCollectionNo from "./filter-collection-no";
 import { Toggle } from "../ui/toggle";
+import MemberFilter from "./filter-member";
+import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
+import ArtistFilter from "./filter-artist";
 
 type Props = {
+  artists: CosmoArtistWithMembers[];
   isOwned?: boolean;
 };
 
-export default function FilterView({ isOwned }: Props) {
-  // todo: member filter
-  // todo: artist filter
+export default function FilterView({ isOwned, artists }: Props) {
   const [filters, setFilters] = useCosmoFilters();
 
   return (
     <div className="flex gap-2 items-center flex-wrap justify-center">
+      <ArtistFilter filters={filters.artist} setFilters={setFilters} artists={artists} />
+      <MemberFilter filters={filters.member} setFilters={setFilters} artists={artists} />
       {isOwned && (
         <FilterGridable filters={filters.gridable} setFilters={setFilters} />
       )}
@@ -45,9 +49,9 @@ export default function FilterView({ isOwned }: Props) {
       />
       {isOwned && (
         <Toggle
-          variant="outline"
-          pressed={filters.grouped ?? false}
-          onPressedChange={(v) =>
+          appearance="outline"
+          isSelected={filters.grouped ?? false}
+          onChange={(v) =>
             setFilters({
               grouped: v ? true : null,
             })

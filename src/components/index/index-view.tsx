@@ -7,12 +7,14 @@ import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
 import { GRID_COLUMNS } from "@/lib/utils";
 import ObjektView from "../objekt/objekt-view";
 import { filterObjektsIndexed } from "@/lib/filter-utils";
+import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
 
 type Props = {
+  artists: CosmoArtistWithMembers[];
   objekts: IndexedObjekt[];
 };
 
-export default function IndexView({ objekts }: Props) {
+export default function IndexView({ objekts, artists }: Props) {
   const [filters] = useCosmoFilters();
 
   const objektsMap = useMemo(() => {
@@ -34,7 +36,7 @@ export default function IndexView({ objekts }: Props) {
 
   return (
     <div className="flex flex-col gap-2">
-      <FilterView />
+      <FilterView artists={artists} />
       <span className="font-bold">{objektsFiltered.length} total</span>
       <div
         style={css}

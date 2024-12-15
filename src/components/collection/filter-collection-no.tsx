@@ -1,7 +1,7 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { PropsWithFilters } from "@/hooks/use-cosmo-filters";
+import { TextField } from "../ui";
 
 type Props = PropsWithFilters<"collection">;
 
@@ -13,12 +13,14 @@ export default function FilterCollectionNo({ filters, setFilters }: Props) {
   }
 
   return (
-    <Input
-      className="w-52"
-      type="text"
-      placeholder="Search Collection No."
-      value={filters ?? ""}
-      onChange={(e) => update(e.target.value)}
-    />
+    <div>
+      <TextField
+        placeholder="Search.."
+        onChange={(value) => update(value)}
+        className="w-40"
+        value={filters ?? ""}
+        aria-label="Search"
+      />
+    </div>
   );
 }

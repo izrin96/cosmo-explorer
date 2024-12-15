@@ -8,8 +8,8 @@
 - [x] objekt click to view
 - [x] setup indexer
 - [x] grouped duplicate can see all objekt
-- [ ] change to react-aria based components
-- [ ] add members and artists filter
+- [x] change to react-aria based components
+- [x] add members and artists filter
 - [ ] objekt count if grouped
 - [ ] use accessToken and refreshToken when request to cosmo api
 - [ ] search users
@@ -24,6 +24,7 @@
 - [ ] delay search when typing
 - [ ] suspense
 - [ ] virtualize
+- [ ] utilize zustand
 
 ## features
 
