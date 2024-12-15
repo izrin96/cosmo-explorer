@@ -24,8 +24,16 @@ export default function FilterView({ isOwned, artists }: Props) {
 
   return (
     <div className="flex gap-2 items-center flex-wrap justify-center">
-      <ArtistFilter filters={filters.artist} setFilters={setFilters} artists={artists} />
-      <MemberFilter filters={filters.member} setFilters={setFilters} artists={artists} />
+      <ArtistFilter
+        filters={filters.artist}
+        setFilters={setFilters}
+        artists={artists}
+      />
+      <MemberFilter
+        filters={filters.member}
+        setFilters={setFilters}
+        artists={artists}
+      />
       {isOwned && (
         <FilterGridable filters={filters.gridable} setFilters={setFilters} />
       )}
@@ -49,6 +57,7 @@ export default function FilterView({ isOwned, artists }: Props) {
       />
       {isOwned && (
         <Toggle
+          className="selected:border-primary"
           appearance="outline"
           isSelected={filters.grouped ?? false}
           onChange={(v) =>
@@ -57,7 +66,7 @@ export default function FilterView({ isOwned, artists }: Props) {
             })
           }
         >
-          Group duplicate
+          Combine duplicate
         </Toggle>
       )}
     </div>

@@ -10,7 +10,7 @@
 - [x] grouped duplicate can see all objekt
 - [x] change to react-aria based components
 - [x] add members and artists filter
-- [ ] objekt count if grouped
+- [x] objekt count if grouped
 - [ ] use accessToken and refreshToken when request to cosmo api
 - [ ] search users
 - [ ] fetch metadata from apollo
@@ -21,7 +21,7 @@
 - [ ] trades history
 - [ ] transfer objekt, can select multiple
 - [ ] column adjust
-- [ ] delay search when typing
+- [ ] debounced delay search when typing
 - [ ] suspense
 - [ ] virtualize
 - [ ] utilize zustand

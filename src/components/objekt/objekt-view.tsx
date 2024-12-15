@@ -3,7 +3,7 @@ import { default as NextImage } from "next/image";
 import { ValidObjekt } from "@/lib/universal/objekts";
 import { OwnedObjekt } from "@/lib/universal/cosmo/objekts";
 import { getObjektArtist, getObjektType } from "./objekt-util";
-import { Badge, GridList, Separator, Tabs } from "../ui";
+import { Badge, GridList, Tabs } from "../ui";
 import { Modal } from "../ui";
 
 type ValidObjektWithId = ValidObjekt & { collectionShortId: string };
@@ -32,7 +32,7 @@ export default memo(function ObjektView({
   } as CSSProperties;
 
   return (
-    <>
+    <div style={css}>
       <div className="flex flex-col gap-2">
         <div className="relative overflow-hidden aspect-photocard drop-shadow">
           <MemoizedImage
@@ -42,6 +42,11 @@ export default memo(function ObjektView({
             onClick={() => setOpen(true)}
             className="cursor-pointer"
           />
+          {objekts.length > 1 && (
+            <div className="flex absolute top-2 left-2 rounded-full px-2 py-1 justify-center items-center font-bold text-[var(--objekt-text-color)] bg-[var(--objekt-background-color)] text-xs">
+              {objekts.length}
+            </div>
+          )}
         </div>
         <div className="flex justify-center text-sm">
           {objekt.collectionShortId}
@@ -58,7 +63,6 @@ export default memo(function ObjektView({
             <div
               onClick={() => setFlipped((prev) => !prev)}
               data-flipped={flipped}
-              style={css}
               className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform preserve-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
             >
               <div className="absolute inset-0 backface-hidden drop-shadow">
@@ -104,7 +108,7 @@ export default memo(function ObjektView({
           </div>
         </Modal.Body>
       </Modal.Content>
-    </>
+    </div>
   );
 });
 

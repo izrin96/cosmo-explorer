@@ -15,3 +15,5 @@ export * from './tabs';
 export * from './badge';
 export * from './grid-list';
 export * from './checkbox';
+export * from './tooltip';
+export * from './table';

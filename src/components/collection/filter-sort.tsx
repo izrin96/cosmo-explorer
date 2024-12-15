@@ -11,8 +11,8 @@ interface Props extends PropsWithFilters<"sort"> {
 const map: Record<ValidSort, string> = {
   newest: "Newest",
   oldest: "Oldest",
-  noAscending: "Lowest No.",
-  noDescending: "Highest No.",
+  noAscending: "Lowest Collection No.",
+  noDescending: "Highest Collection No.",
   serialAsc: "Lowest Serial",
   serialDesc: "Highest Serial",
 };
@@ -34,7 +34,7 @@ export default function SortFilter({
 
   return (
     <Select
-      className="w-36"
+      className="w-48"
       selectedKey={filters ?? "newest"}
       onSelectionChange={(val) => update(val as ValidSort)}
       aria-label="Sort"

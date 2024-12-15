@@ -1,7 +1,6 @@
 import { CosmoFilters } from "@/hooks/use-cosmo-filters";
 import { ValidClass, ValidSeason } from "@/lib/universal/cosmo/common";
 import { IndexedObjekt } from "./universal/objekts";
-import { prop, sortBy, sort as rSort } from "remeda";
 import { OwnedObjekt } from "./universal/cosmo/objekts";
 
 export function filterObjektsIndexed(filters: CosmoFilters, objekts: (IndexedObjekt & { collectionShortId: string })[]) {
@@ -41,16 +40,16 @@ export function filterObjektsIndexed(filters: CosmoFilters, objekts: (IndexedObj
     const sort = filters.sort ?? "newest";
     switch (sort) {
         case "newest":
-            filteredObjekts = sortBy(filteredObjekts, [prop("createdAt"), "desc"])
+            filteredObjekts = filteredObjekts.toSorted((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
             break
         case "oldest":
-            filteredObjekts = sortBy(filteredObjekts, [prop("createdAt"), "asc"])
+            filteredObjekts = filteredObjekts.toSorted((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
             break
         case "noDescending":
-            filteredObjekts = sortBy(filteredObjekts, [prop("collectionNo"), "desc"])
+            filteredObjekts = filteredObjekts.toSorted((a, b) => b.collectionNo.localeCompare(a.collectionNo))
             break
         case "noAscending":
-            filteredObjekts = sortBy(filteredObjekts, [prop("collectionNo"), "asc"])
+            filteredObjekts = filteredObjekts.toSorted((a, b) => a.collectionNo.localeCompare(b.collectionNo))
             break
     }
 
@@ -105,22 +104,22 @@ export function filterObjektsOwned(filters: CosmoFilters, objekts: (OwnedObjekt 
     const sort = filters.sort ?? "newest";
     switch (sort) {
         case "newest":
-            filteredObjekts = sortBy(filteredObjekts, [prop("receivedAt"), "desc"])
+            filteredObjekts = filteredObjekts.toSorted((a, b) => new Date(b.receivedAt).getTime() - new Date(a.receivedAt).getTime())
             break
         case "oldest":
-            filteredObjekts = sortBy(filteredObjekts, [prop("receivedAt"), "asc"])
+            filteredObjekts = filteredObjekts.toSorted((a, b) => new Date(a.receivedAt).getTime() - new Date(b.receivedAt).getTime())
             break
         case "noDescending":
-            filteredObjekts = sortBy(filteredObjekts, [prop("collectionNo"), "desc"])
+            filteredObjekts = filteredObjekts.toSorted((a, b) => b.collectionNo.localeCompare(a.collectionNo))
             break
         case "noAscending":
-            filteredObjekts = sortBy(filteredObjekts, [prop("collectionNo"), "asc"])
+            filteredObjekts = filteredObjekts.toSorted((a, b) => a.collectionNo.localeCompare(b.collectionNo))
             break
         case "serialDesc":
-            filteredObjekts = rSort(filteredObjekts, (a, b) => b.objektNo - a.objektNo)
+            filteredObjekts = filteredObjekts.toSorted((a, b) => b.objektNo - a.objektNo)
             break
         case "serialAsc":
-            filteredObjekts = rSort(filteredObjekts, (a, b) => a.objektNo - b.objektNo)
+            filteredObjekts = filteredObjekts.toSorted((a, b) => a.objektNo - b.objektNo)
             break
     }
 

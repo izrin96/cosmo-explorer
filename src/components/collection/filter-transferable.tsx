@@ -12,6 +12,7 @@ export default memo(function TransferableFilter({
 }: Props) {
   return (
     <Toggle
+      className="selected:border-primary"
       appearance="outline"
       isSelected={filters ?? false}
       onChange={(v) =>

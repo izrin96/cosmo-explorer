@@ -68,8 +68,8 @@ export default function ProfileView({ profile, artists }: Props) {
   }, [filters, objektsOwned]);
 
   useEffect(() => {
-    setTimeout(() => toast("Loading objekts.."), 100)
-  }, [])
+    setTimeout(() => toast("Loading objekts.."), 100);
+  }, []);
 
   useEffect(() => {
     if (hasNextPage && isFetching === false) {

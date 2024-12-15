@@ -6,7 +6,7 @@ import {
   ValidOnlineType,
   validOnlineTypes,
 } from "@/lib/universal/cosmo/common";
-import { memo, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Menu } from "../ui";
 import { Button } from "../ui/button";
 
@@ -18,23 +18,23 @@ const map: Record<ValidOnlineType, string> = {
 };
 
 export default memo(function OnlineFilter({ filters, setFilters }: Props) {
-  const [selected, setSelected] = useState<Selection>(new Set(filters))
+  const selected = useMemo(() => new Set(filters), [filters]);
 
-  useEffect(() => {
-    const newFilters = [...selected] as ValidOnlineType[]
+  const update = useCallback((key: Selection) => {
+    const newFilters = [...key] as ValidOnlineType[];
     setFilters({
       on_offline: newFilters.length > 0 ? newFilters : null,
     });
-  }, [selected])
+  }, []);
 
   return (
     <Menu>
-      <Button appearance="outline">Physical</Button>
+      <Button appearance="outline" className={filters?.length ? "border-primary": ""}>Physical</Button>
       <Menu.Content
         placement="bottom"
         selectionMode="multiple"
         selectedKeys={selected}
-        onSelectionChange={setSelected}
+        onSelectionChange={update}
         items={Object.values(validOnlineTypes).map((value) => ({ value }))}
       >
         {(item) => (

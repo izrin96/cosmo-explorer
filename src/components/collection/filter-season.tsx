@@ -3,30 +3,30 @@
 import { type Selection } from "@react-types/shared"
 import { PropsWithFilters } from "@/hooks/use-cosmo-filters";
 import { ValidSeason, validSeasons } from "@/lib/universal/cosmo/common";
-import { useState, useEffect } from "react";
+import { useMemo, useCallback } from "react";
 import { Button } from "../ui/button";
 import { Menu } from "../ui";
 
 type Props = PropsWithFilters<"season">;
 
 export default function FilterSeason({ filters, setFilters }: Props) {
-  const [selected, setSelected] = useState<Selection>(new Set(filters))
+  const selected = useMemo(() => new Set(filters), [filters]);
 
-  useEffect(() => {
-    const newFilters = [...selected] as ValidSeason[]
+  const update = useCallback((key: Selection) => {
+    const newFilters = [...key] as ValidSeason[];
     setFilters({
       season: newFilters.length > 0 ? newFilters : null,
     });
-  }, [selected])
+  }, []);
 
   return (
     <Menu>
-      <Button appearance="outline">Season</Button>
+      <Button appearance="outline" className={filters?.length ? "border-primary": ""}>Season</Button>
       <Menu.Content
         placement="bottom"
         selectionMode="multiple"
         selectedKeys={selected}
-        onSelectionChange={setSelected}
+        onSelectionChange={update}
         items={Object.values(validSeasons).map((value) => ({ value }))}
       >
         {(item) => (

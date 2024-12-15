@@ -23,7 +23,7 @@ export default function MemberFilter({ filters, setFilters, artists }: Props) {
 
   return (
     <Menu>
-      <Button appearance="outline">Member</Button>
+      <Button appearance="outline" className={filters ? "border-primary": ""}>Member</Button>
       <Menu.Content
         selectionMode="single"
         selectedKeys={selected}
