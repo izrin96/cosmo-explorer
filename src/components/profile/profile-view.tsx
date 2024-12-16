@@ -102,7 +102,7 @@ export default function ProfileView({ profile, artists }: Props) {
       );
     });
     return rows;
-  }, [objektsFiltered, columns]);
+  }, [objektsFiltered, filters.grouped, columns]);
 
   // const css = {
   //   "--grid-columns": columns,
