@@ -60,7 +60,7 @@ export default function IndexView({ objekts, artists }: Props) {
       <FilterView artists={artists} />
       <span className="font-bold">{objektsFiltered.length} total</span>
 
-      <WindowVirtualizer>{virtualList}</WindowVirtualizer>
+      <WindowVirtualizer key={columns}>{virtualList}</WindowVirtualizer>
     </div>
   );
 }

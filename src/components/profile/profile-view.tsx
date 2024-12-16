@@ -15,7 +15,6 @@ import { WindowVirtualizer } from "virtua";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { fetchOwnedObjektsParallel } from "@/lib/cosmo-request";
 import { OwnedObjektsResult } from "@/lib/universal/cosmo/objekts";
-// import { Virtuoso } from "react-virtuoso";
 
 type Props = {
   artists: CosmoArtistWithMembers[];
@@ -120,16 +119,7 @@ export default function ProfileView({ profile, artists, initialData }: Props) {
         <span className="font-bold">{objektsFiltered.length} total</span>
       </div>
 
-      {/* <Virtuoso
-        useWindowScroll
-        overscan={900}
-        totalCount={virtualList.length}
-        itemContent={(i) => {
-          return virtualList[i]
-        }}
-      /> */}
-
-      <WindowVirtualizer>{virtualList}</WindowVirtualizer>
+      <WindowVirtualizer key={columns}>{virtualList}</WindowVirtualizer>
     </div>
   );
 }
