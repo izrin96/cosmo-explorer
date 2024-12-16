@@ -37,21 +37,17 @@ export default function IndexView({ objekts, artists }: Props) {
     var rows = Array.from({
       length: Math.ceil(objektsFiltered.length / columns),
     }).map((_, i) => {
-      const from = i * columns;
-      const to = from + columns;
-      const cols = objektsFiltered.slice(from, to);
       return (
         <div key={i} className="flex gap-3 md:gap-4 pb-4">
-          {cols.map((objekt) => (
-            <div
-              style={{
-                flex: 1 / columns,
-              }}
-              key={objekt.id}
-            >
-              <ObjektView objekts={[objekt]} />
-            </div>
-          ))}
+          {Array.from({ length: columns }).map((_, j) => {
+            const index = i * columns + j;
+            const objekt = objektsFiltered[index];
+            return (
+              <div className="flex-1" key={j}>
+                {objekt && <ObjektView objekts={[objekt]} />}
+              </div>
+            );
+          })}
         </div>
       );
     });

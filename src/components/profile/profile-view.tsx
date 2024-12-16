@@ -81,25 +81,23 @@ export default function ProfileView({ profile, artists }: Props) {
     var rows = Array.from({
       length: Math.ceil(objektsFiltered.length / columns),
     }).map((_, i) => {
-      const from = i * columns;
-      const to = from + columns;
-      const cols = objektsFiltered.slice(from, to);
       return (
         <div key={i} className="flex gap-4 pb-4">
-          {cols.map((objekts) => (
-            <div
-              style={{
-                flex: 1 / columns,
-              }}
-              key={objekts[0].tokenId}
-            >
-              <ObjektView
-                objekts={objekts}
-                showSerial={!(filters.grouped ?? false)}
-                isOwned
-              />
-            </div>
-          ))}
+          {Array.from({ length: columns }).map((_, j) => {
+            const index = i * columns + j;
+            const objekts = objektsFiltered[index];
+            return (
+              <div className="flex-1" key={j}>
+                {objekts && (
+                  <ObjektView
+                    objekts={objekts}
+                    showSerial={!(filters.grouped ?? false)}
+                    isOwned
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
       );
     });
