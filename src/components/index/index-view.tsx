@@ -1,6 +1,6 @@
 "use client";
 
-import { getCollectionShortId, IndexedObjekt } from "@/lib/universal/objekts";
+import { IndexedObjekt } from "@/lib/universal/objekts";
 import { CSSProperties, useMemo } from "react";
 import FilterView from "../collection/filter-view";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
@@ -20,20 +20,13 @@ export default function IndexView({ objekts, artists }: Props) {
   const [filters] = useCosmoFilters();
 
   const isDesktop = useMediaQuery();
-  const columns = isDesktop ? filters.column ?? GRID_COLUMNS : GRID_COLUMNS_MOBILE;
-
-  const objektsMap = useMemo(() => {
-    return objekts.map((objekt) => {
-      return {
-        ...objekt,
-        collectionShortId: getCollectionShortId(objekt),
-      };
-    });
-  }, [objekts]);
+  const columns = isDesktop
+    ? filters.column ?? GRID_COLUMNS
+    : GRID_COLUMNS_MOBILE;
 
   const objektsFiltered = useMemo(() => {
-    return filterObjektsIndexed(filters, objektsMap);
-  }, [filters, objektsMap]);
+    return filterObjektsIndexed(filters, objekts);
+  }, [filters, objekts]);
 
   const virtualList = useMemo(() => {
     var rows = Array.from({
@@ -46,7 +39,9 @@ export default function IndexView({ objekts, artists }: Props) {
             const objekt = objektsFiltered[index];
             return (
               <div className="flex-1" key={j}>
-                {objekt && <ObjektView objekts={[objekt]} />}
+                {objekt && (
+                  <ObjektView objekts={[objekt]} priority={j < columns * 3} />
+                )}
               </div>
             );
           })}

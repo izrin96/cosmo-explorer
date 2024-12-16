@@ -1,8 +1,4 @@
-import { OwnedObjekt } from "@/lib/universal/cosmo/objekts";
 import { ValidObjekt } from "@/lib/universal/objekts";
-
-export type ValidObjektWithId = ValidObjekt & { collectionShortId: string };
-export type OwnedObjektWithId = OwnedObjekt & { collectionShortId: string };
 
 /**
  * Parse a valid key from an ambiguous objekt.
@@ -49,4 +45,38 @@ export function getObjektType(objekt: ValidObjekt) {
   }
 
   throw new Error("Invalid objekt");
+}
+
+/**
+ * Parse a valid slug from an ambiguous objekt.
+ */
+export function getObjektSlug(objekt: ValidObjekt) {
+  const member = objekt.member.toLowerCase().replace(/[+()]+/g, "");
+  return `${objekt.season}-${member}-${objekt.collectionNo}`.toLowerCase();
+}
+
+/**
+ * Replaces the 4x suffix from an image URL.
+ */
+export function replaceUrlSize(url: string, size: "2x" | "thumbnail" = "2x") {
+  return url.replace(/4x$/i, size);
+}
+
+/**
+ * Replaces the 4x suffix from both image URLs.
+ */
+export function getObjektImageUrls(objekt: ValidObjekt) {
+  const front = replaceUrlSize(objekt.frontImage);
+  const back = replaceUrlSize(objekt.backImage);
+
+  return {
+    front: {
+      display: front,
+      download: objekt.frontImage,
+    },
+    back: {
+      display: back,
+      download: objekt.backImage,
+    },
+  };
 }

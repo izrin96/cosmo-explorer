@@ -1,9 +1,5 @@
 "use client";
 
-import { COSMO_ENDPOINT } from "@/lib/universal/cosmo/common";
-import { OwnedObjektsResult } from "@/lib/universal/cosmo/objekts";
-import { getCollectionShortId, parsePage } from "@/lib/universal/objekts";
-import { ofetch } from "ofetch";
 import { CSSProperties, useCallback, useEffect, useMemo } from "react";
 import { CosmoPublicUser } from "@/lib/universal/cosmo/auth";
 import FilterView from "../collection/filter-view";
@@ -17,38 +13,39 @@ import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
 import { Loader } from "../ui";
 import { WindowVirtualizer } from "virtua";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { fetchOwnedObjektsParallel } from "@/lib/cosmo-request";
+import { OwnedObjektsResult } from "@/lib/universal/cosmo/objekts";
 // import { Virtuoso } from "react-virtuoso";
 
 type Props = {
   artists: CosmoArtistWithMembers[];
   profile: CosmoPublicUser;
+  initialData: OwnedObjektsResult;
 };
 
-export default function ProfileView({ profile, artists }: Props) {
+export default function ProfileView({ profile, artists, initialData }: Props) {
   const [filters] = useCosmoFilters();
 
   const isDesktop = useMediaQuery();
-  const columns = isDesktop ? filters.column ?? GRID_COLUMNS : GRID_COLUMNS_MOBILE;
+  const columns = isDesktop
+    ? filters.column ?? GRID_COLUMNS
+    : GRID_COLUMNS_MOBILE;
 
   const queryFunction = useCallback(
     async ({ pageParam = 0 }: { pageParam?: number }) => {
-      const endpoint = `${COSMO_ENDPOINT}/objekt/v1/owned-by/${profile.address}`;
-      return await ofetch(endpoint, {
-        query: {
-          start_after: pageParam.toString(),
-          sort: "newest",
+      const pageCount = Math.ceil(initialData.total / 30);
+      const currentPage = pageParam / 30;
+      const requestCount = Math.min(pageCount - currentPage, 5);
+
+      return fetchOwnedObjektsParallel(
+        {
+          address: profile.address,
+          startAfter: pageParam,
         },
-      })
-        .then((res) => parsePage<OwnedObjektsResult>(res))
-        .then((res) => ({
-          ...res,
-          objekts: res.objekts.map((objekt) => ({
-            ...objekt,
-            collectionShortId: getCollectionShortId(objekt),
-          })),
-        }));
+        requestCount
+      );
     },
-    [profile.address]
+    [profile.address, initialData.total]
   );
 
   const { data, fetchNextPage, hasNextPage, isFetching } =
@@ -56,6 +53,10 @@ export default function ProfileView({ profile, artists }: Props) {
       queryKey: ["owned-objekts", profile.address],
       queryFn: queryFunction,
       initialPageParam: 0,
+      initialData: () => ({
+        pages: [{ ...initialData }],
+        pageParams: [0],
+      }),
       getNextPageParam: (lastPage) => lastPage.nextStartAfter,
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5, // 5 minutes
@@ -94,6 +95,7 @@ export default function ProfileView({ profile, artists }: Props) {
                   <ObjektView
                     objekts={objekts}
                     showSerial={!(filters.grouped ?? false)}
+                    priority={j < columns * 3}
                     isOwned
                   />
                 )}

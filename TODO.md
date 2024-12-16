@@ -19,7 +19,7 @@
 - [x] nextjs loading bar
 - [x] toggle dark/light mode
 - [x] if mobile, set default column to 3
-- [ ] parallel fetching user objekt for faster load
+- [x] parallel fetching user objekt for faster load
 - [ ] get all objekts from database
 - [ ] fetch metadata from apollo
 - [ ] user's trades history

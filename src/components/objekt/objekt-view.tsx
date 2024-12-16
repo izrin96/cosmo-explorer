@@ -1,18 +1,16 @@
 import { CSSProperties, memo, useState } from "react";
 import { default as NextImage } from "next/image";
-import { ValidObjekt } from "@/lib/universal/objekts";
+import { getCollectionShortId, ValidObjekt } from "@/lib/universal/objekts";
 import { OwnedObjekt } from "@/lib/universal/cosmo/objekts";
-import { getObjektArtist, getObjektType } from "./objekt-util";
+import { getObjektArtist, getObjektImageUrls, getObjektType } from "./objekt-util";
 import { Badge, GridList, Tabs } from "../ui";
 import { Modal } from "../ui";
 
-type ValidObjektWithId = ValidObjekt & { collectionShortId: string };
-type OwnedObjektWithId = OwnedObjekt & { collectionShortId: string };
-
 type Props = {
-  objekts: ValidObjektWithId[];
+  objekts: ValidObjekt[];
   isOwned?: boolean;
   showSerial?: boolean;
+  priority?: boolean
 };
 
 const MemoizedImage = memo(NextImage);
@@ -21,6 +19,7 @@ export default memo(function ObjektView({
   objekts,
   isOwned = false,
   showSerial = false,
+  priority = false,
 }: Props) {
   const [objekt] = objekts;
   const [flipped, setFlipped] = useState(false);
@@ -30,6 +29,8 @@ export default memo(function ObjektView({
     "--objekt-background-color": objekt.backgroundColor,
     "--objekt-text-color": objekt.textColor,
   } as CSSProperties;
+  
+  const { front } = getObjektImageUrls(objekt);
 
   return (
     <div style={css}>
@@ -37,8 +38,8 @@ export default memo(function ObjektView({
         <div className="relative overflow-hidden aspect-photocard drop-shadow">
           <MemoizedImage
             fill
-            priority={false}
-            src={objekt.thumbnailImage}
+            priority={priority}
+            src={front.display}
             alt={objekt.collectionId}
             onClick={() => setOpen(true)}
             className="cursor-pointer"
@@ -51,7 +52,7 @@ export default memo(function ObjektView({
         </div>
         <div className="flex justify-center text-sm text-center">
           <Badge intent="secondary" className="font-semibold" shape="square">
-            {objekt.collectionShortId}
+            {`${getCollectionShortId(objekt)}`}
             {showSerial && ` #${(objekt as OwnedObjekt).objektNo}`}
           </Badge>
         </div>
@@ -100,7 +101,7 @@ export default memo(function ObjektView({
               </Tabs.List>
               {isOwned && (
                 <Tabs.Panel id="owned">
-                  <OwnedListPanel objekts={objekts as OwnedObjektWithId[]} />
+                  <OwnedListPanel objekts={objekts as OwnedObjekt[]} />
                 </Tabs.Panel>
               )}
               <Tabs.Panel id="metadata">
@@ -116,7 +117,7 @@ export default memo(function ObjektView({
 });
 
 type AttributeProps = {
-  objekt: ValidObjektWithId;
+  objekt: ValidObjekt;
 };
 
 function AttributePanel({ objekt }: AttributeProps) {
@@ -151,7 +152,7 @@ function MetadataPanel() {
 }
 
 type OwnedListPanelProps = {
-  objekts: OwnedObjektWithId[];
+  objekts: OwnedObjekt[];
 };
 
 function OwnedListPanel({ objekts }: OwnedListPanelProps) {
