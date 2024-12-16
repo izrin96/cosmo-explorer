@@ -20,8 +20,7 @@ export default function IndexView({ objekts, artists }: Props) {
   const [filters] = useCosmoFilters();
 
   const isDesktop = useMediaQuery();
-  const defaultGridColumn = isDesktop ? GRID_COLUMNS : GRID_COLUMNS_MOBILE;
-  const columns = filters.column ?? defaultGridColumn;
+  const columns = isDesktop ? filters.column ?? GRID_COLUMNS : GRID_COLUMNS_MOBILE;
 
   const objektsMap = useMemo(() => {
     return objekts.map((objekt) => {

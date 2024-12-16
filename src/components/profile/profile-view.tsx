@@ -28,8 +28,7 @@ export default function ProfileView({ profile, artists }: Props) {
   const [filters] = useCosmoFilters();
 
   const isDesktop = useMediaQuery();
-  const defaultGridColumn = isDesktop ? GRID_COLUMNS : GRID_COLUMNS_MOBILE;
-  const columns = filters.column ?? defaultGridColumn;
+  const columns = isDesktop ? filters.column ?? GRID_COLUMNS : GRID_COLUMNS_MOBILE;
 
   const queryFunction = useCallback(
     async ({ pageParam = 0 }: { pageParam?: number }) => {

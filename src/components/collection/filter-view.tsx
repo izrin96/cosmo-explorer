@@ -13,6 +13,7 @@ import MemberFilter from "./filter-member";
 import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
 import ArtistFilter from "./filter-artist";
 import ColumnFilter from "./filter-column";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 type Props = {
   artists: CosmoArtistWithMembers[];
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export default function FilterView({ isOwned, artists }: Props) {
+  const isDesktop = useMediaQuery();
   const [filters, setFilters] = useCosmoFilters();
 
   return (
@@ -69,7 +71,9 @@ export default function FilterView({ isOwned, artists }: Props) {
           Combine duplicate
         </Toggle>
       )}
-      <ColumnFilter filters={filters.column} setFilters={setFilters} />
+      {isDesktop && (
+        <ColumnFilter filters={filters.column} setFilters={setFilters} />
+      )}
     </div>
   );
 }
