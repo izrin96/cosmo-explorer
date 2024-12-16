@@ -20,6 +20,10 @@ export function getBaseURL() {
   if (!isServer) {
     return ''
   }
+  const scheme = env.NEXT_PUBLIC_VERCEL_ENV === "development" ? "http" : "https";
+  if (env.NEXT_PUBLIC_VERCEL_URL) {
+    return `${scheme}://${env.NEXT_PUBLIC_VERCEL_URL}`
+  }
   if (env.NEXT_PUBLIC_URL) {
     return `${env.NEXT_PUBLIC_URL}`
   }

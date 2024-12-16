@@ -20,9 +20,13 @@ export const env = createEnv({
     COSMO_REFRESH_TOKEN: z.string(),
   },
   client: {
-    NEXT_PUBLIC_URL: z.string().min(1),
+    NEXT_PUBLIC_URL: z.string(),
+    NEXT_PUBLIC_VERCEL_URL: z.string(),
+    NEXT_PUBLIC_VERCEL_ENV: z.string(),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
+    NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
+    NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
   }
 });
