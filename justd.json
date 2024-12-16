@@ -1,7 +1,7 @@
 {
   "$schema": "https://getjustd.com",
   "ui": "src/components/ui",
-  "classes": "utils",
+  "classes": "src/utils",
   "theme": "Default",
   "css": "src/app/globals.css",
   "created_at": "2024-10-07T20:54:32.660Z"

@@ -44,6 +44,7 @@ export default function UserSearch() {
         inputValue={query}
         onInputChange={setQuery}
         allowsEmptyCollection
+        shouldFocusWrap
         onSelectionChange={(key) => navigateTo(key?.toString() ?? "")}
       >
         <ComboBox.Input />

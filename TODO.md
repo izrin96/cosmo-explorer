@@ -16,7 +16,8 @@
 - [x] debounced delay search when typing
 - [x] column adjust
 - [x] virtualize
-- [ ] nextjs loading bar
+- [x] nextjs loading bar
+- [x] toggle dark/light mode
 - [ ] parallel fetching user objekt for faster load
 - [ ] get all objekts from database
 - [ ] fetch metadata from apollo
@@ -30,6 +31,7 @@
 - [ ] suspense
 - [ ] utilize zustand
 - [ ] prefetch
+- [ ] search user change component to cmdk
 
 ## features
 

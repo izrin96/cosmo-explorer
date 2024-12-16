@@ -1,3 +1,4 @@
+import { ThemeSwitcher } from "../theme-switcher";
 import { Container } from "../ui";
 import UserSearch from "../user-search";
 import Link from "next/link";
@@ -12,6 +13,7 @@ export default async function Navbar() {
           </Link>
         </div>
         <div className="flex items-center gap-2">
+          <ThemeSwitcher />
           <UserSearch />
         </div>
       </Container>

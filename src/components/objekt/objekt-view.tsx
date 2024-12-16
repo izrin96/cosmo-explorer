@@ -50,8 +50,10 @@ export default memo(function ObjektView({
           )}
         </div>
         <div className="flex justify-center text-sm">
-          {objekt.collectionShortId}
-          {showSerial && ` #${(objekt as OwnedObjekt).objektNo}`}
+          <Badge intent="secondary" className="font-semibold" shape="square">
+            {objekt.collectionShortId}
+            {showSerial && ` #${(objekt as OwnedObjekt).objektNo}`}
+          </Badge>
         </div>
       </div>
 

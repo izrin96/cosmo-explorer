@@ -76,13 +76,47 @@
 }
 
 @layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
   * {
     @apply border-border;
     font-feature-settings: 'cv11', 'ss01';
     font-variation-settings: 'opsz' 850;
+    text-rendering: optimizeLegibility;
+    scrollbar-width: thin;
   }
- 
+
   body {
     @apply bg-bg text-fg;
+  }
+
+  /* dark mode */
+  .dark {
+    scrollbar-width: thin;
+
+    @media (prefers-color-scheme: dark) {
+      * {
+        scrollbar-width: thin;
+      }
+    }
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 5px;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    @apply bg-muted;
+    border-radius: 14px;
+    border: 3px solid transparent;
   }
 }
