@@ -13,6 +13,7 @@ export type PropsWithClassName<T> = T & { className?: string };
  * default grid columns
  */
 export const GRID_COLUMNS = 7;
+export const GRID_COLUMNS_MOBILE = 3;
 
 export const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 

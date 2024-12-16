@@ -8,7 +8,7 @@ import { CSSProperties, useCallback, useEffect, useMemo } from "react";
 import { CosmoPublicUser } from "@/lib/universal/cosmo/auth";
 import FilterView from "../collection/filter-view";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
-import { GRID_COLUMNS } from "@/lib/utils";
+import { GRID_COLUMNS, GRID_COLUMNS_MOBILE } from "@/lib/utils";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import ObjektView from "../objekt/objekt-view";
 import { filterObjektsOwned } from "@/lib/filter-utils";
@@ -16,6 +16,7 @@ import { groupBy, prop } from "remeda";
 import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
 import { Loader } from "../ui";
 import { WindowVirtualizer } from "virtua";
+import { useMediaQuery } from "@/hooks/use-media-query";
 // import { Virtuoso } from "react-virtuoso";
 
 type Props = {
@@ -26,7 +27,9 @@ type Props = {
 export default function ProfileView({ profile, artists }: Props) {
   const [filters] = useCosmoFilters();
 
-  const columns = filters.column ?? GRID_COLUMNS;
+  const isDesktop = useMediaQuery();
+  const defaultGridColumn = isDesktop ? GRID_COLUMNS : GRID_COLUMNS_MOBILE;
+  const columns = filters.column ?? defaultGridColumn;
 
   const queryFunction = useCallback(
     async ({ pageParam = 0 }: { pageParam?: number }) => {

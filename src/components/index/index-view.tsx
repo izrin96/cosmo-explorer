@@ -4,11 +4,12 @@ import { getCollectionShortId, IndexedObjekt } from "@/lib/universal/objekts";
 import { CSSProperties, useMemo } from "react";
 import FilterView from "../collection/filter-view";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
-import { GRID_COLUMNS } from "@/lib/utils";
+import { GRID_COLUMNS, GRID_COLUMNS_MOBILE } from "@/lib/utils";
 import ObjektView from "../objekt/objekt-view";
 import { filterObjektsIndexed } from "@/lib/filter-utils";
 import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
 import { WindowVirtualizer } from "virtua";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 type Props = {
   artists: CosmoArtistWithMembers[];
@@ -18,7 +19,9 @@ type Props = {
 export default function IndexView({ objekts, artists }: Props) {
   const [filters] = useCosmoFilters();
 
-  const columns = filters.column ?? GRID_COLUMNS;
+  const isDesktop = useMediaQuery();
+  const defaultGridColumn = isDesktop ? GRID_COLUMNS : GRID_COLUMNS_MOBILE;
+  const columns = filters.column ?? defaultGridColumn;
 
   const objektsMap = useMemo(() => {
     return objekts.map((objekt) => {

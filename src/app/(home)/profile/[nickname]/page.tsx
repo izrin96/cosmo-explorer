@@ -20,8 +20,9 @@ export default async function UserCollectionPage(props: Props) {
 
   return (
     <>
-      <div>User: {params.nickname}</div>
-      <div className="overflow-auto">Address: {targetUser.address}</div>
+      <div className="text-xl font-semibold">{params.nickname}</div>
+      <div className="overflow-auto text-xs text-muted-fg">{targetUser.address}</div>
+      <div className="py-2"></div>
       <ProfileView profile={targetUser} artists={artists} />
     </>
   );

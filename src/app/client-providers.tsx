@@ -6,6 +6,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { PropsWithChildren } from "react";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { MediaQueryProvider } from "@/hooks/use-media-query";
 
 type Props = PropsWithChildren;
 
@@ -15,7 +16,9 @@ export default function ClientProviders({ children }: Props) {
   return (
     <NuqsAdapter>
       <QueryClientProvider client={queryClient}>
-        <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
+        <ReactQueryStreamedHydration>
+          <MediaQueryProvider>{children}</MediaQueryProvider>
+        </ReactQueryStreamedHydration>
         <ReactQueryDevtools />
       </QueryClientProvider>
     </NuqsAdapter>

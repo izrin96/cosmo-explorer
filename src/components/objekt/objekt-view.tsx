@@ -49,7 +49,7 @@ export default memo(function ObjektView({
             </div>
           )}
         </div>
-        <div className="flex justify-center text-sm">
+        <div className="flex justify-center text-sm text-center">
           <Badge intent="secondary" className="font-semibold" shape="square">
             {objekt.collectionShortId}
             {showSerial && ` #${(objekt as OwnedObjekt).objektNo}`}

@@ -3,15 +3,19 @@
 import { PropsWithFilters } from "@/hooks/use-cosmo-filters";
 import { memo } from "react";
 import { NumberField } from "../ui";
-import { GRID_COLUMNS } from "@/lib/utils";
+import { GRID_COLUMNS, GRID_COLUMNS_MOBILE } from "@/lib/utils";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 type Props = PropsWithFilters<"column">;
 
 export default memo(function ColumnFilter({ filters, setFilters }: Props) {
+  const isDesktop = useMediaQuery();
+  const defaultGridColumn = isDesktop ? GRID_COLUMNS : GRID_COLUMNS_MOBILE;
+
   function update(value: number) {
     if (isNaN(value)) return;
     setFilters({
-      column: value === GRID_COLUMNS ? null : value,
+      column: value === defaultGridColumn ? null : value,
     });
   }
 
@@ -21,7 +25,7 @@ export default memo(function ColumnFilter({ filters, setFilters }: Props) {
       aria-label="Column"
       placeholder="Grid Column"
       onChange={update}
-      value={filters ?? GRID_COLUMNS}
+      value={filters ?? defaultGridColumn}
       minValue={3}
     />
   );

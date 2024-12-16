@@ -16,5 +16,10 @@ export default async function Home() {
     getArtistsWithMembers(),
   ]);
 
-  return <IndexView objekts={objekts} artists={artists} />;
+  return (
+    <>
+      <div className="py-1"></div>
+      <IndexView objekts={objekts} artists={artists} />
+    </>
+  );
 }
