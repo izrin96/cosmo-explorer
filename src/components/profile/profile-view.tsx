@@ -87,7 +87,12 @@ export default function ProfileView({ profile, artists }: Props) {
       return (
         <div key={i} className="flex gap-4 pb-4">
           {cols.map((objekts) => (
-            <div className="flex-1" key={objekts[0].tokenId}>
+            <div
+              style={{
+                flex: 1 / columns,
+              }}
+              key={objekts[0].tokenId}
+            >
               <ObjektView
                 objekts={objekts}
                 showSerial={!(filters.grouped ?? false)}

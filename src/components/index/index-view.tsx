@@ -43,7 +43,12 @@ export default function IndexView({ objekts, artists }: Props) {
       return (
         <div key={i} className="flex gap-3 md:gap-4 pb-4">
           {cols.map((objekt) => (
-            <div className="flex-1" key={objekt.id}>
+            <div
+              style={{
+                flex: 1 / columns,
+              }}
+              key={objekt.id}
+            >
               <ObjektView objekts={[objekt]} />
             </div>
           ))}
