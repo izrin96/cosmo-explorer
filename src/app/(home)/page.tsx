@@ -4,11 +4,13 @@ import { getBaseURL } from "@/lib/utils";
 import { ofetch } from "ofetch";
 import { getArtistsWithMembers } from "../data-fetching";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const getObjekts = async () => {
     return await ofetch<IndexedObjekt[]>(`${getBaseURL()}/objekts.json`);
   };
-  
+
   const [objekts, artists] = await Promise.all([
     getObjekts(),
     getArtistsWithMembers(),
