@@ -16,8 +16,10 @@
 - [x] debounced delay search when typing
 - [x] column adjust
 - [x] virtualize
-- [ ] fetch metadata from apollo
+- [ ] nextjs loading bar
+- [ ] parallel fetching user objekt for faster load
 - [ ] get all objekts from database
+- [ ] fetch metadata from apollo
 - [ ] user's trades history
 - [ ] objekt's trades history
 - [ ] user's como, user's profile picture
