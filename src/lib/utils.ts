@@ -20,12 +20,12 @@ export function getBaseURL() {
   if (!isServer) {
     return ''
   }
+  if (env.NEXT_PUBLIC_URL) {
+    return `${env.NEXT_PUBLIC_URL}`
+  }
   const scheme = env.NEXT_PUBLIC_VERCEL_ENV === "development" ? "http" : "https";
   if (env.NEXT_PUBLIC_VERCEL_URL) {
     return `${scheme}://${env.NEXT_PUBLIC_VERCEL_URL}`
-  }
-  if (env.NEXT_PUBLIC_URL) {
-    return `${env.NEXT_PUBLIC_URL}`
   }
   return 'http://localhost:3000'
 }
