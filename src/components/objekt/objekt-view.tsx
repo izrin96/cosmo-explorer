@@ -1,4 +1,4 @@
-import React, { CSSProperties, memo, useState } from "react";
+import { CSSProperties, memo, useState } from "react";
 import { default as NextImage } from "next/image";
 import { ValidObjekt } from "@/lib/universal/objekts";
 import { OwnedObjekt } from "@/lib/universal/cosmo/objekts";
@@ -37,6 +37,7 @@ export default memo(function ObjektView({
         <div className="relative overflow-hidden aspect-photocard drop-shadow">
           <MemoizedImage
             fill
+            priority={false}
             src={objekt.thumbnailImage}
             alt={objekt.collectionId}
             onClick={() => setOpen(true)}

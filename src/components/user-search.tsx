@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { ComboBox, Loader } from "./ui";
 import { CosmoSearchResult } from "@/lib/universal/cosmo/auth";
 import { useDebounceValue } from "usehooks-ts";
@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 
 export default function UserSearch() {
   const [query, setQuery] = useState<string>("");
-  const [debouncedQuery] = useDebounceValue<string>(query, 500);
+  const [debouncedQuery] = useDebounceValue<string>(query, 200);
 
   const queryIsAddress = isAddress(debouncedQuery);
 

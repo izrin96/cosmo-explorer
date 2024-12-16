@@ -15,7 +15,7 @@
 - [x] search users
 - [x] debounced delay search when typing
 - [x] column adjust
-- [ ] virtualize
+- [x] virtualize
 - [ ] fetch metadata from apollo
 - [ ] get all objekts from database
 - [ ] user's trades history

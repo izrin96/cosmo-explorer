@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
 import FilterSeason from "./filter-season";
 import FilterSort from "./filter-sort";

@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
  */
 export async function fetchUserByIdentifier(
     identifier: string,
-    token?: string
+    token: string
 ): Promise<CosmoPublicUser> {
     const identifierIsAddress = isAddress(identifier);
 
@@ -23,7 +23,7 @@ export async function fetchUserByIdentifier(
     }
 
     // fall back to cosmo
-    const user = await fetchByNickname(token ?? '', identifier);
+    const user = await fetchByNickname(token, identifier);
     if (!user) {
         notFound();
     }

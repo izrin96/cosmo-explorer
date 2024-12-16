@@ -1,5 +1,5 @@
 import { Container } from "@/components/ui";
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 
 type Props = PropsWithChildren;
 

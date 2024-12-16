@@ -9,6 +9,7 @@ type Props = PropsWithFilters<"column">;
 
 export default memo(function ColumnFilter({ filters, setFilters }: Props) {
   function update(value: number) {
+    if (isNaN(value)) return;
     setFilters({
       column: value === GRID_COLUMNS ? null : value,
     });
@@ -16,7 +17,7 @@ export default memo(function ColumnFilter({ filters, setFilters }: Props) {
 
   return (
     <NumberField
-      className="w-20"
+      className="w-32"
       aria-label="Column"
       placeholder="Grid Column"
       onChange={update}

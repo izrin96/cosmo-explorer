@@ -4,12 +4,7 @@ import { COSMO_ENDPOINT } from "@/lib/universal/cosmo/common";
 import { OwnedObjektsResult } from "@/lib/universal/cosmo/objekts";
 import { getCollectionShortId, parsePage } from "@/lib/universal/objekts";
 import { ofetch } from "ofetch";
-import React, {
-  CSSProperties,
-  useCallback,
-  useEffect,
-  useMemo,
-} from "react";
+import { CSSProperties, useCallback, useEffect, useMemo } from "react";
 import { CosmoPublicUser } from "@/lib/universal/cosmo/auth";
 import FilterView from "../collection/filter-view";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
@@ -20,6 +15,8 @@ import { filterObjektsOwned } from "@/lib/filter-utils";
 import { groupBy, prop } from "remeda";
 import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
 import { Loader } from "../ui";
+import { WindowVirtualizer } from "virtua";
+// import { Virtuoso } from "react-virtuoso";
 
 type Props = {
   artists: CosmoArtistWithMembers[];
@@ -28,6 +25,8 @@ type Props = {
 
 export default function ProfileView({ profile, artists }: Props) {
   const [filters] = useCosmoFilters();
+
+  const columns = filters.column ?? GRID_COLUMNS;
 
   const queryFunction = useCallback(
     async ({ pageParam = 0 }: { pageParam?: number }) => {
@@ -78,9 +77,33 @@ export default function ProfileView({ profile, artists }: Props) {
     }
   }, [hasNextPage, fetchNextPage, isFetching]);
 
-  const css = {
-    "--grid-columns": filters.column ?? GRID_COLUMNS,
-  } as CSSProperties;
+  const virtualList = useMemo(() => {
+    var rows = Array.from({
+      length: Math.ceil(objektsFiltered.length / columns),
+    }).map((_, i) => {
+      const from = i * columns;
+      const to = from + columns;
+      const cols = objektsFiltered.slice(from, to);
+      return (
+        <div key={i} className="flex gap-4 pb-4">
+          {cols.map((objekts) => (
+            <div className="flex-1" key={objekts[0].tokenId}>
+              <ObjektView
+                objekts={objekts}
+                showSerial={!(filters.grouped ?? false)}
+                isOwned
+              />
+            </div>
+          ))}
+        </div>
+      );
+    });
+    return rows;
+  }, [objektsFiltered, columns]);
+
+  // const css = {
+  //   "--grid-columns": columns,
+  // } as CSSProperties;
 
   return (
     <div className="flex flex-col gap-2">
@@ -89,19 +112,17 @@ export default function ProfileView({ profile, artists }: Props) {
         {hasNextPage && <Loader />}
         <span className="font-bold">{objektsFiltered.length} total</span>
       </div>
-      <div
-        style={css}
-        className="relative grid grid-cols-3 gap-4 py-2 w-full md:grid-cols-[repeat(var(--grid-columns),_minmax(0,_1fr))]"
-      >
-        {objektsFiltered.map((objekts) => (
-          <ObjektView
-            objekts={objekts}
-            key={objekts[0].tokenId}
-            showSerial={!(filters.grouped ?? false)}
-            isOwned
-          />
-        ))}
-      </div>
+
+      {/* <Virtuoso
+        useWindowScroll
+        overscan={900}
+        totalCount={virtualList.length}
+        itemContent={(i) => {
+          return virtualList[i]
+        }}
+      /> */}
+
+      <WindowVirtualizer>{virtualList}</WindowVirtualizer>
     </div>
   );
 }
