@@ -4,6 +4,7 @@ import { withTV } from 'tailwind-variants/transformer'
 import ta from 'tailwindcss-animate'
 import trac from 'tailwindcss-react-aria-components'
 import plugin from 'tailwindcss/plugin';
+import { fontFamily } from 'tailwindcss/defaultTheme'
 
 const flipUtilities = plugin(function ({ addUtilities }) {
 	addUtilities({
@@ -29,6 +30,9 @@ export default withTV({
 	plugins: [ta, trac, flipUtilities],
 	theme: {
 		extend: {
+			fontFamily: {
+				sans: ['var(--font-sans)', ...fontFamily.sans],
+			},
 			aspectRatio: { 'photocard': '5.5 / 8.5' },
 			colors: {
 				light: "hsl(var(--light))",

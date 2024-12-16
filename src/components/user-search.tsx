@@ -7,7 +7,7 @@ import { useDebounceValue } from "usehooks-ts";
 import { ofetch } from "ofetch";
 import { useQuery } from "@tanstack/react-query";
 import { isAddress } from "viem";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 
 export default function UserSearch() {
   const [query, setQuery] = useState<string>("");
