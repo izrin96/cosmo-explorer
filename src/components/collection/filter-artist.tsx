@@ -20,7 +20,7 @@ export default function ArtistFilter({ filters, setFilters, artists }: Props) {
       artist: newFilters.length > 0 ? newFilters[0] : null,
       member: null,
     });
-  }, []);
+  }, [setFilters]);
 
   return (
     <Menu>

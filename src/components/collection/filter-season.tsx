@@ -17,7 +17,7 @@ export default function FilterSeason({ filters, setFilters }: Props) {
     setFilters({
       season: newFilters.length > 0 ? newFilters : null,
     });
-  }, []);
+  }, [setFilters]);
 
   return (
     <Menu>
