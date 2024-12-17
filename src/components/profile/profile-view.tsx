@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { CosmoPublicUser } from "@/lib/universal/cosmo/auth";
 import FilterView from "../collection/filter-view";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
@@ -49,7 +49,7 @@ export default function ProfileView({ profile, artists, initialData }: Props) {
 
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useSuspenseInfiniteQuery({
-      queryKey: ["owned-objekts", profile.address],
+      queryKey: ["owned-collections", profile.address],
       queryFn: queryFunction,
       initialPageParam: 0,
       initialData: () => ({
@@ -106,10 +106,6 @@ export default function ProfileView({ profile, artists, initialData }: Props) {
     });
     return rows;
   }, [objektsFiltered, filters.grouped, columns]);
-
-  // const css = {
-  //   "--grid-columns": columns,
-  // } as CSSProperties;
 
   return (
     <div className="flex flex-col gap-2">

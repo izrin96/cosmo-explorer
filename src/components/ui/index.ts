@@ -25,3 +25,4 @@ export * from './number-field';
 export * from './search-field';
 export * from './combo-box';
 export * from './command-menu';
+export * from './skeleton';

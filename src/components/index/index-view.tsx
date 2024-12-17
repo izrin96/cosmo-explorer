@@ -1,7 +1,7 @@
 "use client";
 
 import { IndexedObjekt } from "@/lib/universal/objekts";
-import { CSSProperties, useMemo } from "react";
+import { useMemo } from "react";
 import FilterView from "../collection/filter-view";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
 import { GRID_COLUMNS, GRID_COLUMNS_MOBILE } from "@/lib/utils";
@@ -50,10 +50,6 @@ export default function IndexView({ objekts, artists }: Props) {
     });
     return rows;
   }, [objektsFiltered, columns]);
-
-  // const css = {
-  //   "--grid-columns": filters.column ?? GRID_COLUMNS,
-  // } as CSSProperties;
 
   return (
     <div className="flex flex-col gap-2">

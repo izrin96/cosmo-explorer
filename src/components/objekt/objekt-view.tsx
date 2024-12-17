@@ -1,14 +1,29 @@
-import { CSSProperties, memo, useState } from "react";
+import {
+  CSSProperties,
+  memo,
+  PropsWithChildren,
+  useState,
+} from "react";
 import { default as NextImage } from "next/image";
-import { getCollectionShortId, ValidObjekt } from "@/lib/universal/objekts";
+import {
+  getCollectionShortId,
+  ObjektMetadata,
+  ValidObjekt,
+} from "@/lib/universal/objekts";
 import { OwnedObjekt } from "@/lib/universal/cosmo/objekts";
 import {
   getObjektArtist,
   getObjektImageUrls,
+  getObjektSlug,
   getObjektType,
 } from "./objekt-util";
-import { Badge, GridList, Tabs } from "../ui";
+import { Badge, Button, GridList, Skeleton, Tabs } from "../ui";
 import { Modal } from "../ui";
+import {
+  useQuery,
+} from "@tanstack/react-query";
+import { ofetch } from "ofetch";
+import { IconBrokenChainLink } from "justd-icons";
 
 type Props = {
   objekts: ValidObjekt[];
@@ -26,7 +41,6 @@ export default memo(function ObjektView({
   priority = false,
 }: Props) {
   const [objekt] = objekts;
-  const [flipped, setFlipped] = useState(false);
   const [open, setOpen] = useState(false);
 
   const css = {
@@ -67,64 +81,109 @@ export default memo(function ObjektView({
           <Modal.Title>Objekt display</Modal.Title>
         </Modal.Header>
         <Modal.Body className="flex flex-col sm:flex-row p-2 sm:p-4 min-h-dvh sm:min-h-full sm:overflow-y-hidden overflow-y-auto">
-          <div className="flex h-[23rem] sm:h-[28rem] aspect-photocard self-center flex-none">
-            <div
-              onClick={() => setFlipped((prev) => !prev)}
-              data-flipped={flipped}
-              className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform preserve-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
-            >
-              <div className="absolute inset-0 backface-hidden drop-shadow">
-                <MemoizedImage
-                  fill
-                  src={objekt.frontImage}
-                  alt={objekt.collectionId}
-                />
-              </div>
-              <div className="absolute inset-0 backface-hidden rotate-y-180 drop-shadow">
-                <MemoizedImage
-                  fill
-                  src={objekt.backImage}
-                  alt={objekt.collectionId}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col h-full sm:h-[28rem]">
-            <AttributePanel objekt={objekt} />
-            {/* <Separator orientation="horizontal" /> */}
-            <Tabs
-              aria-label="Objekt tab"
-              defaultSelectedKey={isOwned ? "owned" : "metadata"}
-              className="p-3"
-            >
-              <Tabs.List>
-                {isOwned && <Tabs.Tab id="owned">Owned</Tabs.Tab>}
-                <Tabs.Tab id="metadata">Metadata</Tabs.Tab>
-                <Tabs.Tab id="trades">Trades</Tabs.Tab>
-              </Tabs.List>
-              {isOwned && (
-                <Tabs.Panel id="owned">
-                  <OwnedListPanel objekts={objekts as OwnedObjekt[]} />
-                </Tabs.Panel>
-              )}
-              <Tabs.Panel id="metadata">
-                <MetadataPanel />
-              </Tabs.Panel>
-              <Tabs.Panel id="trades">Not yet available</Tabs.Panel>
-            </Tabs>
-          </div>
+          <ObjektDetail isOwned={isOwned} objekts={objekts} />
         </Modal.Body>
       </Modal.Content>
     </div>
   );
 });
 
-type AttributeProps = {
-  objekt: ValidObjekt;
+type ObjektDetailProps = {
+  isOwned: boolean;
+  objekts: ValidObjekt[];
 };
 
-function AttributePanel({ objekt }: AttributeProps) {
+function ObjektDetail({ objekts, isOwned }: ObjektDetailProps) {
+  const [objekt] = objekts;
+  const [flipped, setFlipped] = useState(false);
+
+  const slug = getObjektSlug(objekt);
+  const { data, status, refetch } = useQuery({
+    queryKey: ["collection-metadata", slug],
+    queryFn: async () => {
+      return await ofetch<ObjektMetadata>(`/api/objekts/metadata/${slug}`);
+    },
+    retry: 1,
+  });
+
+  return (
+    <>
+      <div className="flex h-[23rem] sm:h-[28rem] aspect-photocard self-center flex-none">
+        <div
+          onClick={() => setFlipped((prev) => !prev)}
+          data-flipped={flipped}
+          className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform preserve-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
+        >
+          <div className="absolute inset-0 backface-hidden drop-shadow">
+            <MemoizedImage
+              fill
+              src={objekt.frontImage}
+              alt={objekt.collectionId}
+            />
+          </div>
+          <div className="absolute inset-0 backface-hidden rotate-y-180 drop-shadow">
+            <MemoizedImage
+              fill
+              src={objekt.backImage}
+              alt={objekt.collectionId}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col h-full sm:h-[28rem]">
+        <AttributePanel objekt={objekt}>
+          {status === "pending" && <Skeleton className="w-20 h-6" />}
+          {status === "error" && <Badge intent="danger">Error</Badge>}
+          {status === "success" && (
+            <Pill label="Copies" value={data.total.toLocaleString()} />
+          )}
+        </AttributePanel>
+        <Tabs
+          aria-label="Objekt tab"
+          defaultSelectedKey={isOwned ? "owned" : "metadata"}
+          className="p-3"
+        >
+          <Tabs.List>
+            {isOwned && <Tabs.Tab id="owned">Owned</Tabs.Tab>}
+            <Tabs.Tab id="metadata">Description</Tabs.Tab>
+            <Tabs.Tab id="trades">Trades</Tabs.Tab>
+          </Tabs.List>
+          {isOwned && (
+            <Tabs.Panel id="owned">
+              <OwnedListPanel objekts={objekts as OwnedObjekt[]} />
+            </Tabs.Panel>
+          )}
+          <Tabs.Panel id="metadata">
+            {status === "pending" && (
+              <div className="space-y-2">
+                <Skeleton className="w-full h-4" />
+                <Skeleton className="w-56 h-4" />
+              </div>
+            )}
+            {status === "error" && (
+              <div className="flex flex-col justify-center gap-3 items-center">
+                <IconBrokenChainLink className="size-12" />
+                <p>Error loading metadata</p>
+                <Button intent="secondary" onPress={() => refetch()}>
+                  Retry
+                </Button>
+              </div>
+            )}
+            {status === "success" && <MetadataPanel metadata={data} />}
+          </Tabs.Panel>
+          <Tabs.Panel id="trades">Not yet available</Tabs.Panel>
+        </Tabs>
+      </div>
+    </>
+  );
+}
+
+type AttributeProps = {
+  objekt: ValidObjekt;
+} & PropsWithChildren;
+
+function AttributePanel({ objekt, children }: AttributeProps) {
   const artist = getObjektArtist(objekt);
   const onOffline = getObjektType(objekt);
   return (
@@ -147,12 +206,17 @@ function AttributePanel({ objekt }: AttributeProps) {
         objekt={objekt}
       />
       <Pill label="Text Color" value={objekt.textColor} />
+      {children}
     </div>
   );
 }
 
-function MetadataPanel() {
-  return <div>Not yet available</div>;
+type MetadataPanelProps = {
+  metadata?: ObjektMetadata;
+};
+
+function MetadataPanel({ metadata }: MetadataPanelProps) {
+  return <p>{metadata?.metadata?.description}</p>;
 }
 
 type OwnedListPanelProps = {

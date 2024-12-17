@@ -2,7 +2,7 @@
 
 import { type Selection } from "@react-types/shared"
 import { ValidClass, validClasses } from "@/lib/universal/cosmo/common";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { PropsWithFilters } from "@/hooks/use-cosmo-filters";
 import { Button } from "../ui/button";
 import { Menu } from "../ui";

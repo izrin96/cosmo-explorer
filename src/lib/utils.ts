@@ -17,6 +17,8 @@ export const GRID_COLUMNS_MOBILE = 3;
 
 export const NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 
+export const APOLLO_ENDPOINT = "https://apollo.cafe";
+
 export function getBaseURL() {
   if (!isServer) {
     return ''

@@ -6,7 +6,7 @@ import {
   ValidOnlineType,
   validOnlineTypes,
 } from "@/lib/universal/cosmo/common";
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { Menu } from "../ui";
 import { Button } from "../ui/button";
 
