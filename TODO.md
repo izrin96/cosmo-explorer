@@ -20,8 +20,10 @@
 - [x] toggle dark/light mode
 - [x] if mobile, set default column to 3
 - [x] parallel fetching user objekt for faster load
+- [ ] refresh token when expired and store it
+- [ ] get objekt copies from database
 - [ ] get all objekts from database
-- [ ] fetch metadata from apollo
+- [ ] fetch description metadata from apollo
 - [ ] user's trades history
 - [ ] objekt's trades history
 - [ ] user's como, user's profile picture

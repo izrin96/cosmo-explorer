@@ -14,6 +14,7 @@ import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
 import ArtistFilter from "./filter-artist";
 import ColumnFilter from "./filter-column";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { useEffect, useState } from "react";
 
 type Props = {
   artists: CosmoArtistWithMembers[];
@@ -21,8 +22,15 @@ type Props = {
 };
 
 export default function FilterView({ isOwned, artists }: Props) {
+  const [mounted, setMounted] = useState(false);
   const isDesktop = useMediaQuery();
   const [filters, setFilters] = useCosmoFilters();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null
 
   return (
     <div className="flex gap-2 items-center flex-wrap justify-center">

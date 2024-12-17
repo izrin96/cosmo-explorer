@@ -2,7 +2,11 @@ import { CSSProperties, memo, useState } from "react";
 import { default as NextImage } from "next/image";
 import { getCollectionShortId, ValidObjekt } from "@/lib/universal/objekts";
 import { OwnedObjekt } from "@/lib/universal/cosmo/objekts";
-import { getObjektArtist, getObjektImageUrls, getObjektType } from "./objekt-util";
+import {
+  getObjektArtist,
+  getObjektImageUrls,
+  getObjektType,
+} from "./objekt-util";
 import { Badge, GridList, Tabs } from "../ui";
 import { Modal } from "../ui";
 
@@ -10,7 +14,7 @@ type Props = {
   objekts: ValidObjekt[];
   isOwned?: boolean;
   showSerial?: boolean;
-  priority?: boolean
+  priority?: boolean;
 };
 
 const MemoizedImage = memo(NextImage);
@@ -29,7 +33,7 @@ export default memo(function ObjektView({
     "--objekt-background-color": objekt.backgroundColor,
     "--objekt-text-color": objekt.textColor,
   } as CSSProperties;
-  
+
   const { front } = getObjektImageUrls(objekt);
 
   return (
@@ -62,8 +66,8 @@ export default memo(function ObjektView({
         <Modal.Header className="hidden">
           <Modal.Title>Objekt display</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="flex flex-col md:flex-row my-4">
-          <div className="flex h-[23rem] md:h-[28rem] aspect-photocard self-center">
+        <Modal.Body className="flex flex-col sm:flex-row p-2 sm:p-4 min-h-dvh sm:min-h-full sm:overflow-y-hidden overflow-y-auto">
+          <div className="flex h-[23rem] sm:h-[28rem] aspect-photocard self-center flex-none">
             <div
               onClick={() => setFlipped((prev) => !prev)}
               data-flipped={flipped}
@@ -86,13 +90,13 @@ export default memo(function ObjektView({
             </div>
           </div>
 
-          <div className="flex flex-col grow h-[23rem] md:h-[28rem] overflow-y-auto">
+          <div className="flex flex-col h-full sm:h-[28rem]">
             <AttributePanel objekt={objekt} />
             {/* <Separator orientation="horizontal" /> */}
             <Tabs
               aria-label="Objekt tab"
               defaultSelectedKey={isOwned ? "owned" : "metadata"}
-              className="m-3"
+              className="p-3"
             >
               <Tabs.List>
                 {isOwned && <Tabs.Tab id="owned">Owned</Tabs.Tab>}
@@ -124,7 +128,7 @@ function AttributePanel({ objekt }: AttributeProps) {
   const artist = getObjektArtist(objekt);
   const onOffline = getObjektType(objekt);
   return (
-    <div className="flex flex-wrap gap-2 m-3">
+    <div className="flex flex-wrap gap-2 p-2">
       <Pill label="Artist" value={artist} />
       <Pill label="Member" value={objekt.member} />
       <Pill label="Season" value={objekt.season} />
@@ -161,7 +165,7 @@ function OwnedListPanel({ objekts }: OwnedListPanelProps) {
       selectionMode="multiple"
       items={objekts}
       aria-label="Select your favorite bands"
-      className="min-w-64"
+      className="min-w-64 max-h-full sm:max-h-[17.5rem]"
     >
       {(item) => (
         <GridList.Item textValue={"" + item.objektNo} id={item.tokenId}>
