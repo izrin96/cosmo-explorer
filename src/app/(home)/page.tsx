@@ -8,7 +8,8 @@ export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const getObjekts = async () => {
-    return await ofetch<IndexedObjekt[]>(`${getBaseURL()}/objekts.json`);
+    const url = new URL("/objekts.json", getBaseURL());
+    return await ofetch<IndexedObjekt[]>(url.toString());
   };
 
   const [objekts, artists] = await Promise.all([

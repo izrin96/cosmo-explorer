@@ -28,8 +28,8 @@
 - [ ] user's trades history
 - [ ] objekt's trades history
 - [ ] user's como, user's profile picture
-- [ ] progress
-- [ ] leaderboard
+- [ ] progress *
+- [ ] leaderboard *
 - [ ] login
 - [ ] transfer objekt, can select multiple
 - [ ] suspense
