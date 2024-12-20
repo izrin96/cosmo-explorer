@@ -18,9 +18,6 @@ export const env = createEnv({
     // indexer db http proxy
     INDEXER_PROXY_KEY: z.string(),
     INDEXER_PROXY_URL: z.string(),
-    // my cosmo token (temporary)
-    COSMO_ACCESS_TOKEN: z.string(),
-    COSMO_REFRESH_TOKEN: z.string(),
   },
   client: {
     NEXT_PUBLIC_URL: z.string().optional(),

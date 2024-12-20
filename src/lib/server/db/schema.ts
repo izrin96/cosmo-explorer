@@ -1,7 +1,6 @@
-import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import { pgTable, varchar } from "drizzle-orm/pg-core";
 
 export const accessToken = pgTable("access_token", {
-  id: serial("id").primaryKey(),
   accessToken: varchar("access_token").notNull(),
   refreshToken: varchar("refresh_token").notNull(),
 });

@@ -67,7 +67,7 @@ export async function search(token: string, term: string) {
   });
 }
 
-type RefreshTokenResult = {
+export type RefreshTokenResult = {
   refreshToken: string;
   accessToken: string;
 };

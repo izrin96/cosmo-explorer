@@ -23,8 +23,8 @@
 - [x] get objekt copies from database (temporary fetch from apollo)
 - [x] fetch description metadata from apollo
 - [x] get all objekts from indexer database
-- [ ] setup main database
-- [ ] refresh token when expired and store it
+- [x] setup main database
+- [x] refresh token when expired and store it
 - [ ] user's trades history
 - [ ] objekt's trades history
 - [ ] user's como, user's profile picture
