@@ -59,7 +59,7 @@ export function getObjektSlug(objekt: ValidObjekt) {
  * Replaces the 4x suffix from an image URL.
  */
 export function replaceUrlSize(url: string, size: "2x" | "thumbnail" = "2x") {
-  return url.replace(/4x$/i, size);
+  return url.replace(/(4x|3x|original)$/i, size);
 }
 
 /**
