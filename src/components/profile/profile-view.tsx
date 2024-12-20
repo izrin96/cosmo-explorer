@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from "react";
 import { CosmoPublicUser } from "@/lib/universal/cosmo/auth";
 import FilterView from "../collection/filter-view";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
@@ -14,7 +20,7 @@ import { Loader } from "../ui";
 import { WindowVirtualizer } from "virtua";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { fetchOwnedObjektsParallel } from "@/lib/cosmo-request";
-import { OwnedObjektsResult } from "@/lib/universal/cosmo/objekts";
+import { OwnedObjekt, OwnedObjektsResult } from "@/lib/universal/cosmo/objekts";
 
 type Props = {
   artists: CosmoArtistWithMembers[];
@@ -29,6 +35,10 @@ export default function ProfileView({ profile, artists, initialData }: Props) {
   const columns = isDesktop
     ? filters.column ?? GRID_COLUMNS
     : GRID_COLUMNS_MOBILE;
+
+  const [objektsFiltered, setObjektsFiltered] = useState<OwnedObjekt[][]>([]);
+
+  const [_, startTransition] = useTransition();
 
   const queryFunction = useCallback(
     async ({ pageParam = 0 }: { pageParam?: number }) => {
@@ -65,20 +75,6 @@ export default function ProfileView({ profile, artists, initialData }: Props) {
     return data?.pages?.flatMap((page) => page.objekts) ?? [];
   }, [data]);
 
-  const objektsFiltered = useMemo(() => {
-    const objekts = filterObjektsOwned(filters, objektsOwned);
-    if (filters.grouped) {
-      return Object.values(groupBy(objekts, prop("collectionId")));
-    }
-    return objekts.map((objekt) => [objekt]);
-  }, [filters, objektsOwned]);
-
-  useEffect(() => {
-    if (hasNextPage && isFetching === false) {
-      fetchNextPage();
-    }
-  }, [hasNextPage, fetchNextPage, isFetching]);
-
   const virtualList = useMemo(() => {
     var rows = Array.from({
       length: Math.ceil(objektsFiltered.length / columns),
@@ -106,6 +102,25 @@ export default function ProfileView({ profile, artists, initialData }: Props) {
     });
     return rows;
   }, [objektsFiltered, filters.grouped, columns]);
+
+  useEffect(() => {
+    startTransition(() => {
+      const objekts = filterObjektsOwned(filters, objektsOwned);
+      if (filters.grouped) {
+        setObjektsFiltered(
+          Object.values(groupBy(objekts, prop("collectionId")))
+        );
+      } else {
+        setObjektsFiltered(objekts.map((objekt) => [objekt]));
+      }
+    });
+  }, [filters, objektsOwned]);
+
+  useEffect(() => {
+    if (hasNextPage && isFetching === false) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, fetchNextPage, isFetching]);
 
   return (
     <div className="flex flex-col gap-2">

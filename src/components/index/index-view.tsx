@@ -1,7 +1,7 @@
 "use client";
 
 import { IndexedObjekt } from "@/lib/universal/objekts";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import FilterView from "../collection/filter-view";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
 import { GRID_COLUMNS, GRID_COLUMNS_MOBILE } from "@/lib/utils";
@@ -10,6 +10,7 @@ import { filterObjektsIndexed } from "@/lib/filter-utils";
 import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
 import { WindowVirtualizer } from "virtua";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { Loader } from "../ui";
 
 type Props = {
   artists: CosmoArtistWithMembers[];
@@ -24,9 +25,9 @@ export default function IndexView({ objekts, artists }: Props) {
     ? filters.column ?? GRID_COLUMNS
     : GRID_COLUMNS_MOBILE;
 
-  const objektsFiltered = useMemo(() => {
-    return filterObjektsIndexed(filters, objekts);
-  }, [filters, objekts]);
+  const [objektsFiltered, setObjektsFiltered] = useState<IndexedObjekt[]>([]);
+
+  const [_, startTransition] = useTransition();
 
   const virtualList = useMemo(() => {
     var rows = Array.from({
@@ -50,6 +51,13 @@ export default function IndexView({ objekts, artists }: Props) {
     });
     return rows;
   }, [objektsFiltered, columns]);
+
+  useEffect(() => {
+    startTransition(() => {
+      const filtered = filterObjektsIndexed(filters, objekts);
+      setObjektsFiltered(filtered);
+    });
+  }, [filters, objekts]);
 
   return (
     <div className="flex flex-col gap-2">
