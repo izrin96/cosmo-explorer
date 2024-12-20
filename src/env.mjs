@@ -15,7 +15,10 @@ export const env = createEnv({
     JWT_SECRET: z.string(),
     // neon db
     DATABASE_URL: z.string(),
-    // my cosmo token
+    // indexer db http proxy
+    INDEXER_PROXY_KEY: z.string(),
+    INDEXER_PROXY_URL: z.string(),
+    // my cosmo token (temporary)
     COSMO_ACCESS_TOKEN: z.string(),
     COSMO_REFRESH_TOKEN: z.string(),
   },

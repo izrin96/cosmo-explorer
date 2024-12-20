@@ -22,9 +22,9 @@
 - [x] parallel fetching user objekt for faster load
 - [x] get objekt copies from database (temporary fetch from apollo)
 - [x] fetch description metadata from apollo
-- [ ] setup database
+- [x] get all objekts from indexer database
+- [ ] setup main database
 - [ ] refresh token when expired and store it
-- [ ] get all objekts from database
 - [ ] user's trades history
 - [ ] objekt's trades history
 - [ ] user's como, user's profile picture
