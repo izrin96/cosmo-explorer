@@ -136,7 +136,7 @@ function ObjektDetail({ objekts, isOwned }: ObjektDetailProps) {
           {status === "pending" && <Skeleton className="w-20 h-6" />}
           {status === "error" && <Badge intent="danger">Error</Badge>}
           {status === "success" && (
-            <Pill label="Copies" value={data.total.toLocaleString()} />
+            <Pill label={objekt.collectionNo?.toLowerCase()?.endsWith('z') ? "Copies" : "Scanned Copies"} value={data.total.toLocaleString()} />
           )}
         </AttributePanel>
         <Tabs
