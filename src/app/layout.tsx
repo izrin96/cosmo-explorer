@@ -6,6 +6,7 @@ import ClientProviders from "./client-providers";
 import { Toast } from "@/components/ui/toast";
 import Navbar from "@/components/navbar/navbar";
 import NextTopLoader from "nextjs-toploader";
+import { Suspense } from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   title: {
     template: "%s · Lunar Cosmo",
     default: "Lunar Cosmo",
-    absolute: "Lunar Cosmo"
+    absolute: "Lunar Cosmo",
   },
   description: "Another Cosmo objekts explorer",
 };
@@ -37,18 +38,24 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark">
-          <NextTopLoader color="hsl(var(--primary))" height={2} showSpinner={false} />
-          <ClientProviders>
-            <div className="relative flex min-h-dvh flex-col">
-              <Navbar />
-              <div className="flex min-w-full flex-col items-center">
-                {children}
+        <Suspense>
+          <ThemeProvider attribute="class" defaultTheme="dark">
+            <NextTopLoader
+              color="hsl(var(--primary))"
+              height={2}
+              showSpinner={false}
+            />
+            <ClientProviders>
+              <div className="relative flex min-h-dvh flex-col">
+                <Navbar />
+                <div className="flex min-w-full flex-col items-center">
+                  {children}
+                </div>
               </div>
-            </div>
-            <Toast />
-          </ClientProviders>
-        </ThemeProvider>
+              <Toast />
+            </ClientProviders>
+          </ThemeProvider>
+        </Suspense>
       </body>
     </html>
   );
