@@ -21,7 +21,7 @@ export default function FilterSeason({ filters, setFilters }: Props) {
 
   return (
     <Menu>
-      <Button appearance="outline" className={filters?.length ? "border-primary": ""}>Season</Button>
+      <Button appearance="outline" className={filters?.length ? "data-pressed:border-primary data-hovered:border-primary border-primary": ""}>Season</Button>
       <Menu.Content
         placement="bottom"
         selectionMode="multiple"

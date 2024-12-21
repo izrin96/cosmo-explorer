@@ -5,13 +5,13 @@ import React from "react"
 import { IconChevronLgDown, IconX } from "justd-icons"
 import type { InputProps } from "react-aria-components"
 import {
-  ComboBox as ComboboxPrimitive,
   ComboBoxContext,
-  type ComboBoxProps as ComboboxPrimitiveProps,
   ComboBoxStateContext,
+  ComboBox as ComboboxPrimitive,
+  type ComboBoxProps as ComboboxPrimitiveProps,
   type PopoverProps as PopoverPrimitiveProps,
+  type ValidationResult,
   useSlottedContext,
-  type ValidationResult
 } from "react-aria-components"
 import { tv } from "tailwind-variants"
 
@@ -20,17 +20,17 @@ import { DropdownItem, DropdownSection } from "./dropdown"
 import { Description, FieldError, FieldGroup, Input, Label } from "./field"
 import { ListBox } from "./list-box"
 import { Popover } from "./popover"
-import { ctr } from "./primitive"
+import { composeTailwindRenderProps } from "./primitive"
 
 const comboboxStyles = tv({
   slots: {
     base: "group w-full flex flex-col gap-y-1.5",
     chevronButton:
-      "h-7 w-8 [&_[data-slot=icon]]:text-muted-fg hover:[&_[data-slot=icon]]:text-fg pressed:[&_[data-slot=icon]]:text-fg rounded outline-offset-0 active:bg-transparent hover:bg-transparent pressed:bg-transparent",
+      "h-7 w-8 **:data-[slot=icon]:text-muted-fg **:data-[slot=icon]:hover:text-fg **:data-[slot=icon]:data-pressed:text-fg rounded outline-offset-0 active:bg-transparent data-hovered:bg-transparent data-pressed:bg-transparent",
     chevronIcon: "transition shrink-0 size-4 duration-200 group-open:rotate-180 group-open:text-fg",
     clearButton:
-      "focus:outline-none absolute inset-y-0 right-0 flex items-center pr-2 text-muted-fg hover:text-fg"
-  }
+      "data-focused:outline-hidden absolute inset-y-0 right-0 flex items-center pr-2 text-muted-fg data-hovered:text-fg",
+  },
 })
 
 const { base, chevronButton, chevronIcon, clearButton } = comboboxStyles()
@@ -52,9 +52,9 @@ const ComboBox = <T extends object>({
   ...props
 }: ComboBoxProps<T>) => {
   return (
-    <ComboboxPrimitive {...props} className={ctr(className, base())}>
+    <ComboboxPrimitive {...props} className={composeTailwindRenderProps(className, base())}>
       {label && <Label>{label}</Label>}
-      <>{children}</>
+      {children}
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
     </ComboboxPrimitive>
@@ -80,7 +80,7 @@ const List = <T extends object>({ children, items, ...props }: ListProps<T>) => 
 const ComboBoxInput = (props: InputProps) => {
   const context = useSlottedContext(ComboBoxContext)!
   return (
-    <FieldGroup className="pl-0 relative">
+    <FieldGroup className="relative pl-0">
       <Input {...props} placeholder={props?.placeholder} />
       <Button size="square-petite" appearance="plain" className={chevronButton()}>
         {!context?.inputValue && <IconChevronLgDown className={chevronIcon()} />}
@@ -91,7 +91,7 @@ const ComboBoxInput = (props: InputProps) => {
 }
 
 const ComboBoxClearButton = () => {
-  const state = React.useContext(ComboBoxStateContext)
+  const state = React.use(ComboBoxStateContext)
 
   return (
     <ButtonPrimitive

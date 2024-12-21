@@ -1,31 +1,31 @@
 "use client"
 
-import * as React from "react"
+import { createContext, use } from "react"
 
 import type { ToggleButtonGroupProps, ToggleButtonProps } from "react-aria-components"
-import { ToggleButton, ToggleButtonGroup } from "react-aria-components"
+import { ToggleButton, ToggleButtonGroup, composeRenderProps } from "react-aria-components"
 import type { VariantProps } from "tailwind-variants"
 import { tv } from "tailwind-variants"
 
-import { cr, focusButtonStyles } from "./primitive"
+import { focusButtonStyles } from "./primitive"
 
 interface ToggleGroupContextProps {
   appearance?: "outline" | "plain" | "solid"
 }
 
-const ToggleGroupContext = React.createContext<ToggleGroupContextProps>({
-  appearance: "plain"
+const ToggleGroupContext = createContext<ToggleGroupContextProps>({
+  appearance: "plain",
 })
 
 const toggleGroupStyles = tv({
-  base: ["flex gap-1"],
+  base: "flex gap-1",
   variants: {
     orientation: {
       horizontal:
         "flex-row [&::-webkit-scrollbar]:hidden [scrollbar-width:none] [-ms-overflow-style:none]",
-      vertical: "flex-col items-start"
-    }
-  }
+      vertical: "flex-col items-start",
+    },
+  },
 })
 
 const ToggleGroup = ({
@@ -38,12 +38,12 @@ const ToggleGroup = ({
     <ToggleGroupContext.Provider value={{ appearance }}>
       <ToggleButtonGroup
         orientation={orientation}
-        className={cr(className, (className, renderProps) =>
+        className={composeRenderProps(className, (className, renderProps) =>
           toggleGroupStyles({
             ...renderProps,
             orientation,
-            className
-          })
+            className,
+          }),
         )}
         {...props}
       />
@@ -55,61 +55,61 @@ const toggleStyles = tv({
   extend: focusButtonStyles,
   base: [
     "inline-flex relative items-center gap-x-2 bg-transparent justify-center border border-transparent rounded-lg text-sm font-medium ring-offset-bg transition-colors",
-    "enabled:hover:bg-secondary enabled:hover:text-secondary-fg",
+    "data-hovered:bg-secondary data-hovered:text-secondary-fg",
     "forced-colors:[--button-icon:ButtonText] forced-colors:hover:[--button-icon:ButtonText]",
-    "[&>[data-slot=icon]]:-mx-0.5 [&>[data-slot=icon]]:my-1 [&>[data-slot=icon]]:size-4 [&>[data-slot=icon]]:shrink-0 [&>[data-slot=icon]]:text-[--button-icon]"
+    "*:data-[slot=icon]:-mx-0.5 *:data-[slot=icon]:my-1 *:data-[slot=icon]:size-4 *:data-[slot=icon]:shrink-0 *:data-[slot=icon]:text-(--button-icon)",
   ],
   variants: {
     isDisabled: {
-      true: "opacity-50 cursor-default forced-colors:border-[GrayText]"
+      true: "opacity-50 cursor-default forced-colors:border-[GrayText]",
     },
     appearance: {
       plain: [
-        "selected:bg-secondary selected:text-secondary-fg",
-        "[--button-icon:theme(colors.secondary.fg/60%)] selected:[--button-icon:theme(colors.secondary.fg)] enabled:hover:[--button-icon:theme(colors.secondary.fg/80%)]"
+        "data-selected:bg-secondary data-selected:text-secondary-fg",
+        "[--button-icon:var(--color-secondary-fg)]/60 data-selected:[--button-icon:var(--color-secondary-fg)] data-hovered:[--button-icon:var(--color-secondary-fg)]/80",
       ],
       solid: [
-        "bg-white border-border selected:border-primary enabled:hover:bg-white/95 enabled:hover:text-black text-black selected:bg-primary selected:text-primary-fg",
-        "[--button-icon:theme(colors.black/60%)] selected:[--button-icon:theme(colors.white)] enabled:hover:[--button-icon:theme(colors.black/80%)]"
+        "bg-white border-border data-selected:border-primary data-hovered:bg-white/95 data-hovered:text-black text-black data-selected:bg-primary data-selected:text-primary-fg",
+        "[--button-icon:var(--color-black)]/60 data-selected:[--button-icon:var(--color-white)] data-hovered:[--button-icon:var(--color-black)]/80",
       ],
       outline: [
-        "border-border selected:bg-secondary selected:backdrop-blur-sm selected:text-secondary-fg enabled:hover:bg-secondary/50 enabled:hover:text-secondary-fg",
-        "[--button-icon:theme(colors.secondary.fg/60%)] selected:[--button-icon:theme(colors.secondary.fg)] enabled:hover:[--button-icon:theme(colors.secondary.fg/80%)]"
-      ]
+        "border-border data-hovered:border-secondary-fg/10 data-pressed:border-secondary-fg/10 data-selected:border-secondary-fg/10 data-selected:bg-secondary/90 data-selected:backdrop-blur-sm data-selected:text-secondary-fg data-hovered:bg-secondary/90 data-hovered:text-secondary-fg",
+        "[--button-icon:var(--color-secondary-fg)]/60 data-selected:[--button-icon:var(--color-secondary-fg)] data-hovered:[--button-icon:var(--color-secondary-fg)]/80",
+      ],
     },
     size: {
       small: "h-9 px-3.5",
       medium: "h-10 px-4",
       large: "h-11 px-5",
-      "square-petite": "size-9 shrink-0"
+      "square-petite": "size-9 shrink-0",
     },
     shape: {
       square: "rounded-lg",
-      circle: "rounded-full"
-    }
+      circle: "rounded-full",
+    },
   },
   defaultVariants: {
     appearance: "plain",
     size: "small",
-    shape: "square"
-  }
+    shape: "square",
+  },
 })
 
 type ToggleProps = ToggleButtonProps & VariantProps<typeof toggleStyles>
 
 const Toggle = ({ className, appearance, ...props }: ToggleProps) => {
-  const { appearance: groupAppearance } = React.useContext(ToggleGroupContext)
+  const { appearance: groupAppearance } = use(ToggleGroupContext)
   return (
     <ToggleButton
       {...props}
-      className={cr(className, (className, renderProps) =>
+      className={composeRenderProps(className, (className, renderProps) =>
         toggleStyles({
           ...renderProps,
           appearance: appearance ?? groupAppearance,
           size: props.size,
           shape: props.shape,
-          className
-        })
+          className,
+        }),
       )}
     />
   )

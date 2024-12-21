@@ -24,7 +24,7 @@ export default function ArtistFilter({ filters, setFilters, artists }: Props) {
 
   return (
     <Menu>
-      <Button appearance="outline" className={filters ? "border-primary": ""}>Artist</Button>
+      <Button appearance="outline" className={filters ? "data-pressed:border-primary data-hovered:border-primary border-primary": ""}>Artist</Button>
       <Menu.Content
         selectionMode="single"
         selectedKeys={selected}

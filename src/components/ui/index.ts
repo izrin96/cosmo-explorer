@@ -26,3 +26,6 @@ export * from './search-field';
 export * from './combo-box';
 export * from './command-menu';
 export * from './skeleton';
+export * from './primitive';
+export * from './card';
+export * from './heading';

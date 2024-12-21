@@ -29,7 +29,7 @@ export default memo(function OnlineFilter({ filters, setFilters }: Props) {
 
   return (
     <Menu>
-      <Button appearance="outline" className={filters?.length ? "border-primary": ""}>Physical</Button>
+      <Button appearance="outline" className={filters?.length ? "data-pressed:border-primary data-hovered:border-primary border-primary": ""}>Physical</Button>
       <Menu.Content
         placement="bottom"
         selectionMode="multiple"

@@ -21,7 +21,7 @@ export default memo(function ClassFilter({ filters, setFilters }: Props) {
 
   return (
     <Menu>
-      <Button appearance="outline" className={filters?.length ? "border-primary": ""}>Class</Button>
+      <Button appearance="outline" className={filters?.length ? "data-pressed:border-primary data-hovered:border-primary border-primary": ""}>Class</Button>
       <Menu.Content
         placement="bottom"
         selectionMode="multiple"

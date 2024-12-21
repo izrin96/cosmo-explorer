@@ -25,6 +25,7 @@
 - [x] get all objekts from indexer database
 - [x] setup main database
 - [x] refresh token when expired and store it
+- [x] update justd components to 2.0
 - [ ] user's trades history
 - [ ] objekt's trades history
 - [ ] user's como, user's profile picture

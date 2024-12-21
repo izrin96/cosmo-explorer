@@ -1,9 +1,4 @@
-import {
-  CSSProperties,
-  memo,
-  PropsWithChildren,
-  useState,
-} from "react";
+import { CSSProperties, memo, PropsWithChildren, useState } from "react";
 import { default as NextImage } from "next/image";
 import {
   getCollectionShortId,
@@ -19,9 +14,7 @@ import {
 } from "./objekt-util";
 import { Badge, Button, GridList, Skeleton, Tabs } from "../ui";
 import { Modal } from "../ui";
-import {
-  useQuery,
-} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { ofetch } from "ofetch";
 import { IconBrokenChainLink } from "justd-icons";
 
@@ -80,7 +73,7 @@ export default memo(function ObjektView({
         <Modal.Header className="hidden">
           <Modal.Title>Objekt display</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="flex flex-col sm:flex-row p-2 sm:p-4 min-h-dvh sm:min-h-full sm:overflow-y-hidden overflow-y-auto">
+        <Modal.Body className="flex flex-col sm:flex-row p-2 sm:p-4 min-h-dvh sm:min-h-full sm:overflow-y-hidden overflow-y-auto gap-2">
           <ObjektDetail isOwned={isOwned} objekts={objekts} />
         </Modal.Body>
       </Modal.Content>
@@ -112,7 +105,7 @@ function ObjektDetail({ objekts, isOwned }: ObjektDetailProps) {
         <div
           onClick={() => setFlipped((prev) => !prev)}
           data-flipped={flipped}
-          className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform preserve-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
+          className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform transform-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
         >
           <div className="absolute inset-0 backface-hidden drop-shadow">
             <MemoizedImage
@@ -134,9 +127,20 @@ function ObjektDetail({ objekts, isOwned }: ObjektDetailProps) {
       <div className="flex flex-col h-full sm:h-[28rem]">
         <AttributePanel objekt={objekt}>
           {status === "pending" && <Skeleton className="w-20 h-6" />}
-          {status === "error" && <Badge intent="danger">Error</Badge>}
+          {status === "error" && (
+            <Badge shape="square" intent="danger">
+              Error
+            </Badge>
+          )}
           {status === "success" && (
-            <Pill label={objekt.collectionNo?.toLowerCase()?.endsWith('z') ? "Copies" : "Scanned Copies"} value={data.total.toLocaleString()} />
+            <Pill
+              label={
+                objekt.collectionNo?.toLowerCase()?.endsWith("z")
+                  ? "Copies"
+                  : "Scanned Copies"
+              }
+              value={data.total.toLocaleString()}
+            />
           )}
         </AttributePanel>
         <Tabs
@@ -226,13 +230,13 @@ type OwnedListPanelProps = {
 function OwnedListPanel({ objekts }: OwnedListPanelProps) {
   return (
     <GridList
-      selectionMode="multiple"
       items={objekts}
-      aria-label="Select your favorite bands"
+      aria-label="Select objekt"
+      selectionMode="single"
       className="min-w-64 max-h-full sm:max-h-[17.5rem]"
     >
       {(item) => (
-        <GridList.Item textValue={"" + item.objektNo} id={item.tokenId}>
+        <GridList.Item textValue={`${item.objektNo}`} id={item.tokenId}>
           #{item.objektNo}
         </GridList.Item>
       )}
@@ -248,7 +252,7 @@ type PillProps = {
 
 function Pill({ label, value }: PillProps) {
   return (
-    <Badge intent="secondary" className="">
+    <Badge intent="secondary" className="" shape="square">
       <span className="font-semibold">{label}</span>
       <span>{value}</span>
     </Badge>
@@ -259,7 +263,7 @@ function PillColor({ label, value, objekt }: PillProps) {
   return (
     <div>
       <Badge
-        shape="circle"
+        shape="square"
         style={
           {
             "--objekt-accent-color": objekt?.accentColor,

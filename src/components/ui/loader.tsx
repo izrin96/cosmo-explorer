@@ -1,13 +1,10 @@
 "use client"
 
-import * as React from "react"
-
+import { cn } from "@/utils/classes"
 import { IconLoader } from "justd-icons"
 import { ProgressBar } from "react-aria-components"
 import type { VariantProps } from "tailwind-variants"
 import { tv } from "tailwind-variants"
-
-import { cn } from "./primitive"
 
 const loaderStyles = tv({
   base: "relative",
@@ -18,19 +15,19 @@ const loaderStyles = tv({
       secondary: "text-muted-fg",
       success: "text-success",
       warning: "text-warning",
-      danger: "text-danger"
+      danger: "text-danger",
     },
     size: {
       small: "size-4",
       medium: "size-6",
       large: "size-8",
-      "extra-large": "size-10"
-    }
+      "extra-large": "size-10",
+    },
   },
   defaultVariants: {
     intent: "current",
-    size: "small"
-  }
+    size: "small",
+  },
 })
 
 type LoaderVariantProps = VariantProps<typeof loaderStyles>
@@ -170,7 +167,7 @@ const Spin = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
 const LOADERS = {
   bars: Bars,
   ring: Ring,
-  spin: Spin
+  spin: Spin,
 }
 
 const DEFAULT_SPINNER = "ring"
@@ -182,37 +179,35 @@ interface LoaderProps
   percentage?: number
   isIndeterminate?: boolean
   formatOptions?: Intl.NumberFormatOptions
+  ref?: React.RefObject<SVGSVGElement>
 }
 
-const Loader = React.forwardRef<SVGSVGElement, LoaderProps>(
-  ({ isIndeterminate = true, ...props }, ref) => {
-    const { className, variant = DEFAULT_SPINNER, intent, size, ...spinnerProps } = props
-    const LoaderPrimitive = LOADERS[variant in LOADERS ? variant : DEFAULT_SPINNER]
+const Loader = ({ isIndeterminate = true, ref, ...props }: LoaderProps) => {
+  const { className, variant = DEFAULT_SPINNER, intent, size, ...spinnerProps } = props
+  const LoaderPrimitive = LOADERS[variant in LOADERS ? variant : DEFAULT_SPINNER]
 
-    return (
-      <ProgressBar
-        aria-label={props["aria-label"] ?? "Loading..."}
-        formatOptions={props.formatOptions}
-        isIndeterminate={isIndeterminate}
-      >
-        <LoaderPrimitive
-          role="presentation"
-          className={loaderStyles({
-            intent,
-            size,
-            className: cn([
-              ["ring"].includes(variant) && "animate-spin",
-              variant === "spin" && "stroke-current",
-              className
-            ])
-          })}
-          ref={ref}
-          {...spinnerProps}
-        />
-      </ProgressBar>
-    )
-  }
-)
-Loader.displayName = "Loader"
+  return (
+    <ProgressBar
+      aria-label={props["aria-label"] ?? "Loading..."}
+      formatOptions={props.formatOptions}
+      isIndeterminate={isIndeterminate}
+    >
+      <LoaderPrimitive
+        role="presentation"
+        className={loaderStyles({
+          intent,
+          size,
+          className: cn([
+            ["ring"].includes(variant) && "animate-spin",
+            variant === "spin" && "stroke-current",
+            className,
+          ]),
+        })}
+        ref={ref}
+        {...spinnerProps}
+      />
+    </ProgressBar>
+  )
+}
 
 export { Loader }

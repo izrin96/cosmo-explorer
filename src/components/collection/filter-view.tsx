@@ -67,8 +67,9 @@ export default function FilterView({ isOwned, artists }: Props) {
       />
       {isOwned && (
         <Toggle
-          className="selected:border-primary"
+          className="data-selected:border-primary"
           appearance="outline"
+          size="medium"
           isSelected={filters.grouped ?? false}
           onChange={(v) =>
             setFilters({

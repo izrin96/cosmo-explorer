@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./globals.css";
-import { ThemeProvider } from "next-themes";
 import ClientProviders from "./client-providers";
 import { Toast } from "@/components/ui/toast";
 import Navbar from "@/components/navbar/navbar";
-import NextTopLoader from "nextjs-toploader";
 import { Suspense } from "react";
+
+import "./globals.css";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -39,22 +38,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
       >
         <Suspense>
-          <ThemeProvider attribute="class" defaultTheme="dark">
-            <NextTopLoader
-              color="hsl(var(--primary))"
-              height={2}
-              showSpinner={false}
-            />
-            <ClientProviders>
-              <div className="relative flex min-h-dvh flex-col">
-                <Navbar />
-                <div className="flex min-w-full flex-col items-center">
-                  {children}
-                </div>
+          <ClientProviders>
+            <div className="relative flex min-h-dvh flex-col">
+              <Navbar />
+              <div className="flex min-w-full flex-col items-center">
+                {children}
               </div>
-              <Toast />
-            </ClientProviders>
-          </ThemeProvider>
+            </div>
+          </ClientProviders>
+          <Toast />
         </Suspense>
       </body>
     </html>

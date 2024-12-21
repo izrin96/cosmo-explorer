@@ -9,7 +9,8 @@ type Props = PropsWithFilters<"gridable">;
 export default memo(function GridableFilter({ filters, setFilters }: Props) {
   return (
     <Toggle
-      className="selected:border-primary"
+      className="data-selected:border-primary"
+      size="medium"
       appearance="outline"
       isSelected={filters ?? false}
       onChange={(v) =>
