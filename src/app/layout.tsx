@@ -25,6 +25,24 @@ export const metadata: Metadata = {
     absolute: "Lunar Cosmo",
   },
   description: "Another Cosmo objekts explorer",
+  keywords: [
+    "kpop",
+    "korea",
+    "modhaus",
+    "모드하우스",
+    "cosmo",
+    "objekt",
+    "tripleS",
+    "트리플에스",
+    "artms",
+    "artemis",
+    "아르테미스",
+    "아르테미스 스트래티지",
+    "odd eye circle",
+    "오드아이써클",
+    "loona",
+    "이달의 소녀",
+  ],
 };
 
 export default function RootLayout({
