@@ -1,4 +1,10 @@
-import { CSSProperties, memo, PropsWithChildren, useState } from "react";
+import {
+  CSSProperties,
+  memo,
+  PropsWithChildren,
+  useCallback,
+  useState,
+} from "react";
 import { default as NextImage } from "next/image";
 import {
   getCollectionShortId,
@@ -47,6 +53,13 @@ export default memo(function ObjektView({
 
   const { front } = getObjektImageUrls(objekt);
 
+  const onClick = useCallback(() => {
+    setOpen(true);
+    if (setActive) {
+      setActive(slug);
+    }
+  }, [setOpen, setActive, slug]);
+
   return (
     <div style={css}>
       <div className="flex flex-col gap-2">
@@ -56,12 +69,7 @@ export default memo(function ObjektView({
             priority={priority}
             src={front.display}
             alt={objekt.collectionId}
-            onClick={() => {
-              setOpen(true);
-              if (setActive) {
-                setActive(slug);
-              }
-            }}
+            onClick={onClick}
             className="cursor-pointer"
           />
           {objekts.length > 1 && (
@@ -71,7 +79,12 @@ export default memo(function ObjektView({
           )}
         </div>
         <div className="flex justify-center text-sm text-center">
-          <Badge intent="secondary" className="font-semibold" shape="square">
+          <Badge
+            intent="secondary"
+            className="font-semibold cursor-pointer"
+            shape="square"
+            onClick={onClick}
+          >
             {`${getCollectionShortId(objekt)}`}
             {showSerial && ` #${(objekt as OwnedObjekt).objektNo}`}
           </Badge>
@@ -148,7 +161,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
         <div
           onClick={() => setFlipped((prev) => !prev)}
           data-flipped={flipped}
-          className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform transform-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
+          className="relative h-full select-none aspect-photocard cursor-pointer touch-manipulation transition-transform transform-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
         >
           <div className="absolute inset-0 backface-hidden drop-shadow">
             <MemoizedImage
@@ -168,6 +181,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
       </div>
 
       <div className="flex flex-col h-full sm:h-[28rem]">
+        <div className="px-2 font-semibold">{getCollectionShortId(objekt)}</div>
         <AttributePanel objekt={objekt}>
           {status === "pending" && <Skeleton className="w-20 h-6" />}
           {status === "error" && (
@@ -304,94 +318,20 @@ function Pill({ label, value }: PillProps) {
 
 function PillColor({ label, value, objekt }: PillProps) {
   return (
-    <div>
-      <Badge
-        shape="square"
-        style={
-          {
-            "--objekt-accent-color": objekt?.accentColor,
-            "--objekt-text-color": objekt?.textColor,
-          } as CSSProperties
-        }
-        className="!bg-[var(--objekt-accent-color)] !text-[var(--objekt-text-color)]"
-      >
-        <span className="font-semibold">{label}</span>
-        <span>{value}</span>
-      </Badge>
-    </div>
-  );
-}
-
-const rarityMap = {
-  // grey - consumer
-  common: {
-    label: "Common",
-    color: "#afafaf",
-  },
-  // light blue - industrial
-  // uncommon: {
-  //   label: "Uncommon",
-  //   color: "#6496e1",
-  // },
-  // blue - milspec
-  uncommon: {
-    label: "Uncommon",
-    color: "#4b69cd",
-  },
-  // purple - restricted
-  rare: {
-    label: "Rare",
-    color: "#8847ff",
-  },
-  // pink - classified
-  "very-rare": {
-    label: "Very Rare",
-    color: "#d32ce6",
-  },
-  // red - covert
-  "extremely-rare": {
-    label: "Extremely Rare",
-    color: "#eb4b4b",
-  },
-  // gold - contraband
-  impossible: {
-    label: "Impossible",
-    color: "#e3c427",
-  },
-};
-type Rarity = keyof typeof rarityMap;
-
-export function RarityPill({ rarity }: { rarity: Rarity }) {
-  const { label, color } = rarityMap[rarity];
-
-  return (
-    <div
-      style={{ backgroundColor: color }}
-      className="flex items-center gap-1 rounded-full px-2 py-1 text-sm text-white w-fit"
+    <Badge
+      shape="square"
+      style={
+        {
+          "--objekt-accent-color": objekt?.accentColor,
+          "--objekt-text-color": objekt?.textColor,
+        } as CSSProperties
+      }
+      className="!bg-[var(--objekt-accent-color)] !text-[var(--objekt-text-color)]"
     >
       <span className="font-semibold">{label}</span>
-    </div>
+      <span>{value}</span>
+    </Badge>
   );
-}
-
-// counter-strike style rarity system
-function getRarity(copies: number): Rarity {
-  if (copies <= 10) {
-    return "impossible";
-  }
-  if (copies <= 25) {
-    return "extremely-rare";
-  }
-  if (copies <= 50) {
-    return "very-rare";
-  }
-  if (copies <= 100) {
-    return "rare";
-  }
-  if (copies <= 350) {
-    return "uncommon";
-  }
-  return "common";
 }
 
 function getEdition(collectionNo: string): string {
