@@ -26,6 +26,7 @@
 - [x] setup main database
 - [x] refresh token when expired and store it
 - [x] update justd components to 2.0
+- [x] modal open on load if query id exists
 - [ ] user's trades history
 - [ ] objekt's trades history
 - [ ] user's como, user's profile picture

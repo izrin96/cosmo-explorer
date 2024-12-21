@@ -23,6 +23,7 @@ type Props = {
   isOwned?: boolean;
   showSerial?: boolean;
   priority?: boolean;
+  setActive?: (slug: string | null) => void;
 };
 
 const MemoizedImage = memo(NextImage);
@@ -32,6 +33,7 @@ export default memo(function ObjektView({
   isOwned = false,
   showSerial = false,
   priority = false,
+  setActive,
 }: Props) {
   const [objekt] = objekts;
   const [open, setOpen] = useState(false);
@@ -40,6 +42,8 @@ export default memo(function ObjektView({
     "--objekt-background-color": objekt.backgroundColor,
     "--objekt-text-color": objekt.textColor,
   } as CSSProperties;
+
+  const slug = getObjektSlug(objekt);
 
   const { front } = getObjektImageUrls(objekt);
 
@@ -52,7 +56,12 @@ export default memo(function ObjektView({
             priority={priority}
             src={front.display}
             alt={objekt.collectionId}
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              setOpen(true);
+              if (setActive) {
+                setActive(slug);
+              }
+            }}
             className="cursor-pointer"
           />
           {objekts.length > 1 && (
@@ -69,30 +78,64 @@ export default memo(function ObjektView({
         </div>
       </div>
 
-      <Modal.Content isOpen={open} onOpenChange={setOpen} size="3xl">
-        <Modal.Header className="hidden">
-          <Modal.Title>Objekt display</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="flex flex-col sm:flex-row p-2 sm:p-4 min-h-dvh sm:min-h-full sm:overflow-y-hidden overflow-y-auto gap-2">
-          <ObjektDetail isOwned={isOwned} objekts={objekts} />
-        </Modal.Body>
-      </Modal.Content>
+      <ObjektModal
+        open={open}
+        isOwned={isOwned}
+        objekts={objekts}
+        onClose={() => {
+          setOpen(false);
+          if (setActive) {
+            setActive(null);
+          }
+        }}
+      />
     </div>
   );
 });
 
+export function ObjektModal({
+  open,
+  objekts,
+  onClose,
+  isOwned = false,
+}: {
+  open: boolean;
+  objekts: ValidObjekt[];
+  onClose?: () => void;
+  isOwned?: boolean;
+}) {
+  return (
+    <Modal.Content
+      isOpen={open}
+      onOpenChange={(state) => {
+        if (state === false && onClose) {
+          onClose();
+        }
+      }}
+      size="3xl"
+    >
+      <Modal.Header className="hidden">
+        <Modal.Title>Objekt display</Modal.Title>
+      </Modal.Header>
+      <Modal.Body className="flex flex-col sm:flex-row p-2 sm:p-4 min-h-dvh sm:min-h-full sm:overflow-y-hidden overflow-y-auto gap-2">
+        <ObjektDetail isOwned={isOwned} objekts={objekts} />
+      </Modal.Body>
+    </Modal.Content>
+  );
+}
+
 type ObjektDetailProps = {
-  isOwned: boolean;
+  isOwned?: boolean;
   objekts: ValidObjekt[];
 };
 
-function ObjektDetail({ objekts, isOwned }: ObjektDetailProps) {
+function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
   const [objekt] = objekts;
   const [flipped, setFlipped] = useState(false);
 
   const slug = getObjektSlug(objekt);
   const { data, status, refetch } = useQuery({
-    queryKey: ["collection-metadata", slug],
+    queryKey: ["collection-metadata", "metadata", slug],
     queryFn: async () => {
       return await ofetch<ObjektMetadata>(`/api/objekts/metadata/${slug}`);
     },

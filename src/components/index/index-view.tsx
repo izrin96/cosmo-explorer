@@ -5,12 +5,12 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import FilterView from "../collection/filter-view";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
 import { GRID_COLUMNS, GRID_COLUMNS_MOBILE } from "@/lib/utils";
-import ObjektView from "../objekt/objekt-view";
+import ObjektView, { ObjektModal } from "../objekt/objekt-view";
 import { filterObjektsIndexed } from "@/lib/filter-utils";
 import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
 import { WindowVirtualizer } from "virtua";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { Loader } from "../ui";
+import { parseAsString, useQueryState } from "nuqs";
 
 type Props = {
   artists: CosmoArtistWithMembers[];
@@ -19,6 +19,8 @@ type Props = {
 
 export default function IndexView({ objekts, artists }: Props) {
   const [filters] = useCosmoFilters();
+  const [activeObjekt, setActiveObjekt] = useQueryState("id", parseAsString);
+  const [open, setOpen] = useState(!!activeObjekt);
 
   const isDesktop = useMediaQuery();
   const columns = isDesktop
@@ -41,7 +43,11 @@ export default function IndexView({ objekts, artists }: Props) {
             return (
               <div className="flex-1" key={j}>
                 {objekt && (
-                  <ObjektView objekts={[objekt]} priority={j < columns * 3} />
+                  <ObjektView
+                    objekts={[objekt]}
+                    priority={j < columns * 3}
+                    setActive={setActiveObjekt}
+                  />
                 )}
               </div>
             );
@@ -50,7 +56,7 @@ export default function IndexView({ objekts, artists }: Props) {
       );
     });
     return rows;
-  }, [objektsFiltered, columns]);
+  }, [objektsFiltered, columns, setActiveObjekt]);
 
   useEffect(() => {
     startTransition(() => {
@@ -65,6 +71,17 @@ export default function IndexView({ objekts, artists }: Props) {
       <span className="font-bold">{objektsFiltered.length} total</span>
 
       <WindowVirtualizer key={columns}>{virtualList}</WindowVirtualizer>
+
+      {open && (
+        <ObjektModal
+          open={true}
+          objekts={objekts.filter((objekt) => objekt.slug === activeObjekt)}
+          onClose={() => {
+            setOpen(false);
+            setActiveObjekt(null);
+          }}
+        />
+      )}
     </div>
   );
 }
