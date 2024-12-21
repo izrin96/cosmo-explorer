@@ -30,7 +30,7 @@ export default function ClientProviders({ children }: Props) {
     <RouterProvider navigate={router.push}>
       <ThemeProvider attribute="class" defaultTheme="dark">
         <NextTopLoader
-          color="hsl(var(--primary))"
+          color="var(--primary)"
           height={2}
           showSpinner={false}
         />
