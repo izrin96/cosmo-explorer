@@ -8,9 +8,9 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { MediaQueryProvider } from "@/hooks/use-media-query";
-import { ThemeProvider } from "next-themes";
 import NextTopLoader from "nextjs-toploader";
 import { RouterProvider } from "react-aria-components";
+import { ThemeProvider } from "@/components/theme-provider";
 
 type Props = PropsWithChildren;
 
@@ -28,7 +28,7 @@ export default function ClientProviders({ children }: Props) {
 
   return (
     <RouterProvider navigate={router.push}>
-      <ThemeProvider attribute="class" defaultTheme="dark">
+      <ThemeProvider attribute="class">
         <NextTopLoader
           color="var(--primary)"
           height={2}

@@ -1,6 +1,6 @@
 "use client"
 
-import { useTheme } from "next-themes"
+import { useTheme } from "@/components/theme-provider"
 import { cn } from "@/utils/classes"
 import {
   IconCircleCheckFill,
@@ -70,4 +70,5 @@ const Toast = ({ ...props }: ToasterProps) => {
   )
 }
 
+export type { ToasterProps }
 export { Toast }
