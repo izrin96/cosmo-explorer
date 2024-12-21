@@ -4,6 +4,7 @@ import {
   PropsWithChildren,
   useCallback,
   useState,
+  useTransition,
 } from "react";
 import { default as NextImage } from "next/image";
 import {
@@ -43,6 +44,7 @@ export default memo(function ObjektView({
 }: Props) {
   const [objekt] = objekts;
   const [open, setOpen] = useState(false);
+  const [_, startTransition] = useTransition();
 
   const css = {
     "--objekt-background-color": objekt.backgroundColor,
@@ -54,10 +56,12 @@ export default memo(function ObjektView({
   const { front } = getObjektImageUrls(objekt);
 
   const onClick = useCallback(() => {
-    setOpen(true);
-    if (setActive) {
-      setActive(slug);
-    }
+    startTransition(() => {
+      setOpen(true);
+      if (setActive) {
+        setActive(slug);
+      }
+    });
   }, [setOpen, setActive, slug]);
 
   return (
@@ -96,10 +100,12 @@ export default memo(function ObjektView({
         isOwned={isOwned}
         objekts={objekts}
         onClose={() => {
-          setOpen(false);
-          if (setActive) {
-            setActive(null);
-          }
+          startTransition(() => {
+            setOpen(false);
+            if (setActive) {
+              setActive(null);
+            }
+          });
         }}
       />
     </div>
@@ -233,7 +239,9 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
             )}
             {status === "success" && <MetadataPanel metadata={data} />}
           </Tabs.Panel>
-          <Tabs.Panel id="trades">Not yet available</Tabs.Panel>
+          <Tabs.Panel id="trades">
+            <TradePanel objekt={objekt} isOwned={isOwned} />
+          </Tabs.Panel>
         </Tabs>
       </div>
     </>
@@ -347,4 +355,13 @@ function getEdition(collectionNo: string): string {
     return "3rd";
   }
   return "Unknown";
+}
+
+type TradePanelProps = {
+  objekt: ValidObjekt;
+  isOwned: boolean;
+};
+
+function TradePanel({ objekt, isOwned }: TradePanelProps) {
+  return <div>Not yet available</div>;
 }
