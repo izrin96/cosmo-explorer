@@ -24,6 +24,7 @@ import { Modal } from "../ui";
 import { useQuery } from "@tanstack/react-query";
 import { ofetch } from "ofetch";
 import { IconBrokenChainLink } from "justd-icons";
+import Tilt from "react-parallax-tilt";
 
 type Props = {
   objekts: ValidObjekt[];
@@ -67,21 +68,29 @@ export default memo(function ObjektView({
   return (
     <div style={css}>
       <div className="flex flex-col gap-2">
-        <div className="relative overflow-hidden aspect-photocard drop-shadow">
-          <MemoizedImage
-            fill
-            priority={priority}
-            src={front.display}
-            alt={objekt.collectionId}
-            onClick={onClick}
-            className="cursor-pointer"
-          />
-          {objekts.length > 1 && (
-            <div className="flex absolute top-2 left-2 rounded-full px-2 py-1 justify-center items-center font-bold text-[var(--objekt-text-color)] bg-[var(--objekt-background-color)] text-xs">
-              {objekts.length}
-            </div>
-          )}
-        </div>
+        <Tilt
+          tiltReverse
+          scale={1.08}
+          transitionSpeed={2000}
+          glareEnable
+          glarePosition="bottom"
+        >
+          <div className="relative overflow-hidden aspect-photocard drop-shadow">
+            <MemoizedImage
+              fill
+              priority={priority}
+              src={front.display}
+              alt={objekt.collectionId}
+              onClick={onClick}
+              className="cursor-pointer"
+            />
+            {objekts.length > 1 && (
+              <div className="flex absolute top-2 left-2 rounded-full px-2 py-1 justify-center items-center font-bold text-[var(--objekt-text-color)] bg-[var(--objekt-background-color)] text-xs">
+                {objekts.length}
+              </div>
+            )}
+          </div>
+        </Tilt>
         <div className="flex justify-center text-sm text-center">
           <Badge
             intent="secondary"
@@ -164,26 +173,28 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
   return (
     <>
       <div className="flex h-[23rem] sm:h-[28rem] aspect-photocard self-center flex-none">
-        <div
-          onClick={() => setFlipped((prev) => !prev)}
-          data-flipped={flipped}
-          className="relative h-full select-none aspect-photocard cursor-pointer touch-manipulation transition-transform transform-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
-        >
-          <div className="absolute inset-0 backface-hidden drop-shadow">
-            <MemoizedImage
-              fill
-              src={objekt.frontImage}
-              alt={objekt.collectionId}
-            />
+        <Tilt tiltReverse transitionSpeed={5000}>
+          <div
+            onClick={() => setFlipped((prev) => !prev)}
+            data-flipped={flipped}
+            className="relative h-full select-none aspect-photocard cursor-pointer touch-manipulation transition-transform transform-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
+          >
+            <div className="absolute inset-0 backface-hidden drop-shadow">
+              <MemoizedImage
+                fill
+                src={objekt.frontImage}
+                alt={objekt.collectionId}
+              />
+            </div>
+            <div className="absolute inset-0 backface-hidden rotate-y-180 drop-shadow">
+              <MemoizedImage
+                fill
+                src={objekt.backImage}
+                alt={objekt.collectionId}
+              />
+            </div>
           </div>
-          <div className="absolute inset-0 backface-hidden rotate-y-180 drop-shadow">
-            <MemoizedImage
-              fill
-              src={objekt.backImage}
-              alt={objekt.collectionId}
-            />
-          </div>
-        </div>
+        </Tilt>
       </div>
 
       <div className="flex flex-col h-full sm:h-[28rem]">
