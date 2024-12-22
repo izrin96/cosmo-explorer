@@ -173,7 +173,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
   return (
     <>
       <div className="flex h-[23rem] sm:h-[28rem] aspect-photocard self-center flex-none">
-        <Tilt tiltReverse transitionSpeed={5000}>
+        <Tilt tiltReverse transitionSpeed={5000} gyroscope trackOnWindow>
           <div
             onClick={() => setFlipped((prev) => !prev)}
             data-flipped={flipped}
