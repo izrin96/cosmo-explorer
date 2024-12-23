@@ -74,6 +74,7 @@ export default memo(function ObjektView({
           transitionSpeed={2000}
           glareEnable
           glarePosition="bottom"
+          glareBorderRadius="12px"
         >
           <div className="relative overflow-hidden aspect-photocard drop-shadow">
             <MemoizedImage
