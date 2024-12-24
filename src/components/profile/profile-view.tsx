@@ -11,7 +11,10 @@ import { CosmoPublicUser } from "@/lib/universal/cosmo/auth";
 import FilterView from "../collection/filter-view";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
 import { GRID_COLUMNS, GRID_COLUMNS_MOBILE } from "@/lib/utils";
-import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
+import {
+  QueryErrorResetBoundary,
+  useSuspenseInfiniteQuery,
+} from "@tanstack/react-query";
 import ObjektView from "../objekt/objekt-view";
 import { filterObjektsOwned } from "@/lib/filter-utils";
 import { groupBy, prop } from "remeda";
@@ -21,6 +24,8 @@ import { WindowVirtualizer } from "virtua";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { fetchOwnedObjektsParallel } from "@/lib/cosmo-request";
 import { OwnedObjekt, OwnedObjektsResult } from "@/lib/universal/cosmo/objekts";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallbackRender from "../error-fallback";
 
 type Props = {
   artists: CosmoArtistWithMembersBFF[];
@@ -28,7 +33,19 @@ type Props = {
   initialData: OwnedObjektsResult;
 };
 
-export default function ProfileView({ profile, artists, initialData }: Props) {
+export default function ProfileView({ ...props }: Props) {
+  return (
+    <QueryErrorResetBoundary>
+      {({ reset }) => (
+        <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallbackRender}>
+          <ProfileViewRender {...props} />
+        </ErrorBoundary>
+      )}
+    </QueryErrorResetBoundary>
+  );
+}
+
+function ProfileViewRender({ profile, artists, initialData }: Props) {
   const [filters] = useCosmoFilters();
 
   const isDesktop = useMediaQuery();
@@ -42,18 +59,14 @@ export default function ProfileView({ profile, artists, initialData }: Props) {
 
   const queryFunction = useCallback(
     ({ pageParam = 0 }: { pageParam?: number }) => {
-      return fetchOwnedObjektsParallel(
-        {
-          address: profile.address,
-          startAfter: pageParam,
-        },
-        5
-      );
+      return fetchOwnedObjektsParallel({
+        address: profile.address,
+        startAfter: pageParam,
+      });
     },
     [profile.address]
   );
 
-  // todo: suspense
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useSuspenseInfiniteQuery({
       queryKey: ["owned-collections", profile.address],

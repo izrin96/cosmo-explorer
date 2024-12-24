@@ -1,12 +1,21 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import {
+  QueryErrorResetBoundary,
+  useQuery,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import { ofetch } from "ofetch";
-import React, { useMemo, useState } from "react";
+import React, { Suspense, useMemo, useState } from "react";
 import { Badge, Button, Card, Loader, NumberField, Table } from "../ui";
-import { IconArrowLeft, IconArrowRight } from "justd-icons";
+import {
+  IconArrowLeft,
+  IconArrowRight,
+} from "justd-icons";
 import { format } from "date-fns";
 import Link from "next/link";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallbackRender from "../error-fallback";
 
 type TradeViewProps = {
   slug: string;
@@ -29,9 +38,28 @@ type ObjektTransfers = {
   };
 };
 
-export default function TradeView({ slug, initialSerial }: TradeViewProps) {
-  // todo: suspense
-  const { data } = useQuery({
+export default function TradeView({ ...props }: TradeViewProps) {
+  return (
+    <QueryErrorResetBoundary>
+      {({ reset }) => (
+        <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallbackRender}>
+          <Suspense
+            fallback={
+              <div className="flex justify-center">
+                <Loader />
+              </div>
+            }
+          >
+            <TradeViewRender {...props} />
+          </Suspense>
+        </ErrorBoundary>
+      )}
+    </QueryErrorResetBoundary>
+  );
+}
+
+function TradeViewRender({ slug, initialSerial }: TradeViewProps) {
+  const { data } = useSuspenseQuery({
     queryKey: ["objekts", "list", slug],
     queryFn: async ({ signal }) =>
       await ofetch<{ objekts: Objekts[] }>(`/api/objekts/list/${slug}`, {
@@ -135,14 +163,27 @@ function Trades({
         </div>
       )}
 
-      <TradeTable slug={slug} serial={serial} />
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallbackRender}>
+            <Suspense
+              fallback={
+                <div className="self-center">
+                  <Loader />
+                </div>
+              }
+            >
+              <TradeTable slug={slug} serial={serial} />
+            </Suspense>
+          </ErrorBoundary>
+        )}
+      </QueryErrorResetBoundary>
     </div>
   );
 }
 
 function TradeTable({ slug, serial }: { slug: string; serial: number }) {
-  // todo: suspense
-  const { data, isFetching } = useQuery({
+  const { data } = useSuspenseQuery({
     queryFn: async ({ signal }) =>
       await ofetch<{ transfers: ObjektTransfers[] }>(
         `/api/objekts/transfers/${slug}/${serial}`,
@@ -151,42 +192,31 @@ function TradeTable({ slug, serial }: { slug: string; serial: number }) {
         }
       ).then((res) => res.transfers),
     queryKey: ["objekts", "transfer", slug, serial],
-    enabled: serial > 0,
   });
 
   return (
-    <>
-      {isFetching && (
-        <div className="self-center">
-          <Loader />
-        </div>
-      )}
-
-      {!isFetching && (
-        <Card>
-          <Table allowResize aria-label="Trades">
-            <Table.Header>
-              <Table.Column isRowHeader isResizable>
-                Owner
-              </Table.Column>
-              <Table.Column>Date</Table.Column>
-            </Table.Header>
-            <Table.Body items={data}>
-              {(item) => (
-                <Table.Row id={item.id}>
-                  <Table.Cell>
-                    <UserLink address={item.to} />
-                  </Table.Cell>
-                  <Table.Cell>
-                    {format(item.timestamp, "MMMM do, yyyy hh:mm:ss a")}
-                  </Table.Cell>
-                </Table.Row>
-              )}
-            </Table.Body>
-          </Table>
-        </Card>
-      )}
-    </>
+    <Card>
+      <Table allowResize aria-label="Trades">
+        <Table.Header>
+          <Table.Column isRowHeader isResizable>
+            Owner
+          </Table.Column>
+          <Table.Column>Date</Table.Column>
+        </Table.Header>
+        <Table.Body items={data}>
+          {(item) => (
+            <Table.Row id={item.id}>
+              <Table.Cell>
+                <UserLink address={item.to} />
+              </Table.Cell>
+              <Table.Cell>
+                {format(item.timestamp, "MMMM do, yyyy hh:mm:ss a")}
+              </Table.Cell>
+            </Table.Row>
+          )}
+        </Table.Body>
+      </Table>
+    </Card>
   );
 }
 
@@ -198,7 +228,6 @@ type FetchUserByAddressResult = {
 };
 
 function UserLink({ address }: { address: string }) {
-  // todo: suspense
   const { data, isPending } = useQuery({
     queryFn: async ({ signal }) =>
       await ofetch<FetchUserByAddressResult>(

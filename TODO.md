@@ -28,7 +28,7 @@
 - [x] update justd components to 2.0
 - [x] modal open on load if query id exists
 - [x] objekt's trades history
-- [ ] suspense
+- [x] suspense
 - [ ] utilize zustand
 - [ ] login
 - [ ] transfer objekt, can select multiple

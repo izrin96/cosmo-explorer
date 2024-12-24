@@ -5,6 +5,7 @@ import { OwnedObjektsResult } from "./universal/cosmo/objekts";
 import { parsePage } from "./universal/objekts";
 
 const RESULT_OBJEKTS_COUNT = 30;
+const PARALLEL_REQUEST_COUNT = 5;
 
 type OwnedObjektRequest = {
   address: string;
@@ -24,12 +25,12 @@ export async function fetchOwnedObjekts({
   }).then((res) => parsePage<OwnedObjektsResult>(res));
 }
 
-export async function fetchOwnedObjektsParallel(
-  { address, startAfter }: OwnedObjektRequest,
-  requestCount: number
-) {
+export async function fetchOwnedObjektsParallel({
+  address,
+  startAfter,
+}: OwnedObjektRequest) {
   const results = await Promise.all(
-    Array.from({ length: requestCount }).map((_, i) =>
+    Array.from({ length: PARALLEL_REQUEST_COUNT }).map((_, i) =>
       fetchOwnedObjekts({
         address: address,
         startAfter: startAfter + RESULT_OBJEKTS_COUNT * i,

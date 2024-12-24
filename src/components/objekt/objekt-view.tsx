@@ -19,14 +19,14 @@ import {
   getObjektSlug,
   getObjektType,
 } from "./objekt-util";
-import { Badge, Button, GridList, Skeleton, Tabs } from "../ui";
+import { Badge, GridList, Skeleton, Tabs } from "../ui";
 import { Modal } from "../ui";
 import { useQuery } from "@tanstack/react-query";
 import { ofetch } from "ofetch";
-import { IconBrokenChainLink } from "justd-icons";
 import Tilt from "react-parallax-tilt";
 import TradeView from "./trade-view";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import ErrorFallbackRender from "../error-fallback";
 
 type Props = {
   objekts: ValidObjekt[];
@@ -168,8 +168,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
   const [flipped, setFlipped] = useState(false);
 
   const slug = getObjektSlug(objekt);
-  
-  // todo: suspense
+
   const { data, status, refetch } = useQuery({
     queryKey: ["collection-metadata", "metadata", slug],
     queryFn: async ({ signal }) => {
@@ -253,13 +252,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
                 </div>
               )}
               {status === "error" && (
-                <div className="flex flex-col justify-center gap-3 items-center">
-                  <IconBrokenChainLink className="size-12" />
-                  <p>Error loading metadata</p>
-                  <Button intent="secondary" onPress={() => refetch()}>
-                    Retry
-                  </Button>
-                </div>
+                <ErrorFallbackRender resetErrorBoundary={() => refetch()} />
               )}
               {status === "success" && <MetadataPanel metadata={data} />}
             </Tabs.Panel>
