@@ -7,11 +7,16 @@ import {
 } from "@tanstack/react-query";
 import { ofetch } from "ofetch";
 import React, { Suspense, useMemo, useState } from "react";
-import { Badge, Button, Card, Loader, NumberField, Table } from "../ui";
 import {
-  IconArrowLeft,
-  IconArrowRight,
-} from "justd-icons";
+  Badge,
+  Button,
+  Card,
+  Loader,
+  NumberField,
+  Skeleton,
+  Table,
+} from "../ui";
+import { IconArrowLeft, IconArrowRight } from "justd-icons";
 import { format } from "date-fns";
 import Link from "next/link";
 import { ErrorBoundary } from "react-error-boundary";
@@ -163,27 +168,13 @@ function Trades({
         </div>
       )}
 
-      <QueryErrorResetBoundary>
-        {({ reset }) => (
-          <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallbackRender}>
-            <Suspense
-              fallback={
-                <div className="self-center">
-                  <Loader />
-                </div>
-              }
-            >
-              <TradeTable slug={slug} serial={serial} />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-      </QueryErrorResetBoundary>
+      <TradeTable slug={slug} serial={serial} />
     </div>
   );
 }
 
 function TradeTable({ slug, serial }: { slug: string; serial: number }) {
-  const { data } = useSuspenseQuery({
+  const { data, status, refetch } = useQuery({
     queryFn: async ({ signal }) =>
       await ofetch<{ transfers: ObjektTransfers[] }>(
         `/api/objekts/transfers/${slug}/${serial}`,
@@ -192,7 +183,18 @@ function TradeTable({ slug, serial }: { slug: string; serial: number }) {
         }
       ).then((res) => res.transfers),
     queryKey: ["objekts", "transfer", slug, serial],
+    retry: 1,
   });
+
+  if (status === "pending")
+    return (
+      <div className="self-center">
+        <Loader />
+      </div>
+    );
+
+  if (status === "error")
+    return <ErrorFallbackRender resetErrorBoundary={() => refetch()} />;
 
   return (
     <Card>
@@ -239,7 +241,7 @@ function UserLink({ address }: { address: string }) {
     queryKey: ["user-link", address],
   });
 
-  if (isPending) return <Loader />;
+  if (isPending) return <Skeleton className="w-10 h-3" />;
 
   return (
     <Link href={`/@${data?.nickname ?? address}`}>
