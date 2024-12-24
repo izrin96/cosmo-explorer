@@ -10,14 +10,14 @@ import FilterClass from "./filter-class";
 import FilterCollectionNo from "./filter-collection-no";
 import { Toggle } from "../ui/toggle";
 import MemberFilter from "./filter-member";
-import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
+import { CosmoArtistWithMembersBFF } from "@/lib/universal/cosmo/artists";
 import ArtistFilter from "./filter-artist";
 import ColumnFilter from "./filter-column";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useEffect, useState } from "react";
 
 type Props = {
-  artists: CosmoArtistWithMembers[];
+  artists: CosmoArtistWithMembersBFF[];
   isOwned?: boolean;
 };
 

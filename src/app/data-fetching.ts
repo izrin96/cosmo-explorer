@@ -1,6 +1,7 @@
 import { fetchUserByIdentifier } from "@/lib/server/auth";
-import { fetchArtistsWithMembers } from "@/lib/server/cosmo/artists";
+import { fetchArtistBff } from "@/lib/server/cosmo/artists";
 import { fetchAccessToken } from "@/lib/server/token";
+import { validArtists } from "@/lib/universal/cosmo/common";
 import { cache } from "react";
 
 /**
@@ -15,5 +16,7 @@ export const getUserByIdentifier = cache(async (identifier: string) => {
  * Fetch artists with all members from Cosmo.
  */
 export const getArtistsWithMembers = cache(async () => {
-  return await fetchArtistsWithMembers();
+  return await Promise.all(
+    validArtists.map((artist) => fetchArtistBff(artist))
+  );
 });

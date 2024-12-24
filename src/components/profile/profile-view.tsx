@@ -15,7 +15,7 @@ import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import ObjektView from "../objekt/objekt-view";
 import { filterObjektsOwned } from "@/lib/filter-utils";
 import { groupBy, prop } from "remeda";
-import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
+import { CosmoArtistWithMembersBFF } from "@/lib/universal/cosmo/artists";
 import { Loader } from "../ui";
 import { WindowVirtualizer } from "virtua";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -23,7 +23,7 @@ import { fetchOwnedObjektsParallel } from "@/lib/cosmo-request";
 import { OwnedObjekt, OwnedObjektsResult } from "@/lib/universal/cosmo/objekts";
 
 type Props = {
-  artists: CosmoArtistWithMembers[];
+  artists: CosmoArtistWithMembersBFF[];
   profile: CosmoPublicUser;
   initialData: OwnedObjektsResult;
 };

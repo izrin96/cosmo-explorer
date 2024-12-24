@@ -3,11 +3,11 @@
 import type { Selection } from "react-aria-components";
 import { PropsWithFilters } from "@/hooks/use-cosmo-filters";
 import { Button, Menu } from "../ui";
-import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
+import { CosmoArtistWithMembersBFF } from "@/lib/universal/cosmo/artists";
 import { useCallback, useMemo } from "react";
 
 type Props = PropsWithFilters<"member"> & {
-  artists: CosmoArtistWithMembers[];
+  artists: CosmoArtistWithMembersBFF[];
 };
 
 export default function MemberFilter({ filters, setFilters, artists }: Props) {
@@ -34,7 +34,7 @@ export default function MemberFilter({ filters, setFilters, artists }: Props) {
         {(artist) => (
           <Menu.Section
             title={artist.title}
-            items={artist.members}
+            items={artist.artistMembers}
             id={artist.name}
           >
             {(member) => (

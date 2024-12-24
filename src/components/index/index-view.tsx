@@ -7,13 +7,13 @@ import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
 import { GRID_COLUMNS, GRID_COLUMNS_MOBILE } from "@/lib/utils";
 import ObjektView, { ObjektModal } from "../objekt/objekt-view";
 import { filterObjektsIndexed } from "@/lib/filter-utils";
-import { CosmoArtistWithMembers } from "@/lib/universal/cosmo/artists";
+import { CosmoArtistWithMembersBFF } from "@/lib/universal/cosmo/artists";
 import { WindowVirtualizer } from "virtua";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { parseAsString, useQueryState } from "nuqs";
 
 type Props = {
-  artists: CosmoArtistWithMembers[];
+  artists: CosmoArtistWithMembersBFF[];
   objekts: IndexedObjekt[];
 };
 
