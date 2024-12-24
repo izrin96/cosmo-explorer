@@ -21,8 +21,8 @@ export default function UserSearch() {
 
   const { status, data } = useQuery({
     queryKey: ["user-search", debouncedQuery],
-    queryFn: async () => {
-      return await ofetch<CosmoSearchResult>(`/api/cosmo/user/search`, {
+    queryFn: () => {
+      return ofetch<CosmoSearchResult>(`/api/user/search`, {
         query: { query: query },
       }).then((res) => res.results);
     },

@@ -1,7 +1,7 @@
 export type OwnedObjektsResult = {
   hasNext: boolean;
   nextStartAfter?: number;
-  total: number;
+  // total: number;
   objekts: OwnedObjekt[];
 };
 

@@ -1,5 +1,5 @@
 import { indexer } from "@/lib/server/db/indexer";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { collections, objekts } from "@/lib/server/db/indexer/schema";
 
 export const runtime = "nodejs";
@@ -21,9 +21,8 @@ export async function GET(_: Request, props: Params) {
     })
     .from(objekts)
     .leftJoin(collections, eq(objekts.collectionId, collections.id))
-    .where(eq(collections.slug, params.collectionSlug));
+    .where(eq(collections.slug, params.collectionSlug))
+    .orderBy(asc(objekts.serial));
 
-  return Response.json({
-    results,
-  });
+  return Response.json({ objekts: results });
 }

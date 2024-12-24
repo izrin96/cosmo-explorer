@@ -41,20 +41,16 @@ export default function ProfileView({ profile, artists, initialData }: Props) {
   const [_, startTransition] = useTransition();
 
   const queryFunction = useCallback(
-    async ({ pageParam = 0 }: { pageParam?: number }) => {
-      const pageCount = Math.ceil(initialData.total / 30);
-      const currentPage = pageParam / 30;
-      const requestCount = Math.min(pageCount - currentPage, 5);
-
+    ({ pageParam = 0 }: { pageParam?: number }) => {
       return fetchOwnedObjektsParallel(
         {
           address: profile.address,
           startAfter: pageParam,
         },
-        requestCount
+        5
       );
     },
-    [profile.address, initialData.total]
+    [profile.address]
   );
 
   const { data, fetchNextPage, hasNextPage, isFetching } =

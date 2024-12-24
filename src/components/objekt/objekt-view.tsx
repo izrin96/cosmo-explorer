@@ -122,17 +122,19 @@ export default memo(function ObjektView({
   );
 });
 
+type ObjektModalProps = {
+  open: boolean;
+  objekts: ValidObjekt[];
+  onClose?: () => void;
+  isOwned?: boolean;
+};
+
 export function ObjektModal({
   open,
   objekts,
   onClose,
   isOwned = false,
-}: {
-  open: boolean;
-  objekts: ValidObjekt[];
-  onClose?: () => void;
-  isOwned?: boolean;
-}) {
+}: ObjektModalProps) {
   return (
     <Modal.Content
       isOpen={open}
@@ -375,5 +377,11 @@ type TradePanelProps = {
 };
 
 function TradePanel({ objekt, isOwned }: TradePanelProps) {
-  return <div>Not yet available</div>;
+  // const slug = getObjektSlug(objekt);
+  return (
+    <div>
+      Not yet available
+      {/* <TradeView slug={slug} /> */}
+    </div>
+  );
 }
