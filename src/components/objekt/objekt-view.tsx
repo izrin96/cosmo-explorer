@@ -26,6 +26,7 @@ import { ofetch } from "ofetch";
 import { IconBrokenChainLink } from "justd-icons";
 import Tilt from "react-parallax-tilt";
 import TradeView from "./trade-view";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 type Props = {
   objekts: ValidObjekt[];
@@ -144,12 +145,12 @@ export function ObjektModal({
           onClose();
         }
       }}
-      size="4xl"
+      size="5xl"
     >
       <Modal.Header className="hidden">
         <Modal.Title>Objekt display</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="flex flex-col sm:flex-row p-2 sm:p-3 min-h-dvh sm:min-h-full gap-2">
+      <Modal.Body className="overflow-y-auto p-0 sm:p-0">
         <ObjektDetail isOwned={isOwned} objekts={objekts} />
       </Modal.Body>
     </Modal.Content>
@@ -162,6 +163,7 @@ type ObjektDetailProps = {
 };
 
 function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
+  const isDesktop = useMediaQuery();
   const [objekt] = objekts;
   const [flipped, setFlipped] = useState(false);
 
@@ -177,9 +179,9 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
   });
 
   return (
-    <>
-      <div className="flex h-[21rem] sm:h-[28rem] aspect-photocard self-center flex-none">
-        <Tilt tiltReverse transitionSpeed={3000} gyroscope>
+    <div className="flex flex-col sm:flex-row p-2 sm:p-3 gap-2">
+      <div className="flex h-[21rem] sm:h-[32rem] aspect-photocard self-center flex-none">
+        <Tilt tiltReverse transitionSpeed={3000} tiltEnable={isDesktop}>
           <div
             onClick={() => setFlipped((prev) => !prev)}
             data-flipped={flipped}
@@ -203,65 +205,72 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
         </Tilt>
       </div>
 
-      <div className="flex flex-col h-full sm:h-[28rem] overflow-y-auto">
-        <div className="px-2 font-semibold">{getCollectionShortId(objekt)}</div>
-        <AttributePanel objekt={objekt}>
-          {status === "pending" && <Skeleton className="w-20 h-6" />}
-          {status === "error" && (
-            <Badge shape="square" intent="danger">
-              Error
-            </Badge>
-          )}
-          {status === "success" && (
-            <Pill
-              label={
-                objekt.collectionNo?.toLowerCase()?.endsWith("z")
-                  ? "Copies"
-                  : "Scanned Copies"
-              }
-              value={data.total.toLocaleString()}
-            />
-          )}
-        </AttributePanel>
-        <Tabs
-          aria-label="Objekt tab"
-          defaultSelectedKey={isOwned ? "owned" : "metadata"}
-          className="p-3"
-        >
-          <Tabs.List>
-            {isOwned && <Tabs.Tab id="owned">Owned</Tabs.Tab>}
-            <Tabs.Tab id="metadata">Description</Tabs.Tab>
-            <Tabs.Tab id="trades">Trades</Tabs.Tab>
-          </Tabs.List>
-          {isOwned && (
-            <Tabs.Panel id="owned">
-              <OwnedListPanel objekts={objekts as OwnedObjekt[]} />
-            </Tabs.Panel>
-          )}
-          <Tabs.Panel id="metadata">
-            {status === "pending" && (
-              <div className="space-y-2">
-                <Skeleton className="w-full h-4" />
-                <Skeleton className="w-56 h-4" />
-              </div>
-            )}
+      <div className="flex flex-col h-screen sm:h-[32rem]">
+        <div className="overflow-y-auto">
+          <div className="px-2 font-semibold">
+            {getCollectionShortId(objekt)}
+          </div>
+          <AttributePanel objekt={objekt}>
+            {status === "pending" && <Skeleton className="w-20 h-6" />}
             {status === "error" && (
-              <div className="flex flex-col justify-center gap-3 items-center">
-                <IconBrokenChainLink className="size-12" />
-                <p>Error loading metadata</p>
-                <Button intent="secondary" onPress={() => refetch()}>
-                  Retry
-                </Button>
-              </div>
+              <Badge shape="square" intent="danger">
+                Error
+              </Badge>
             )}
-            {status === "success" && <MetadataPanel metadata={data} />}
-          </Tabs.Panel>
-          <Tabs.Panel id="trades">
-            <TradeView slug={slug} />
-          </Tabs.Panel>
-        </Tabs>
+            {status === "success" && (
+              <Pill
+                label={
+                  objekt.collectionNo?.toLowerCase()?.endsWith("z")
+                    ? "Copies"
+                    : "Scanned Copies"
+                }
+                value={data.total.toLocaleString()}
+              />
+            )}
+          </AttributePanel>
+          <Tabs
+            aria-label="Objekt tab"
+            defaultSelectedKey={isOwned ? "owned" : "metadata"}
+            className="p-2"
+          >
+            <Tabs.List>
+              {isOwned && <Tabs.Tab id="owned">Owned</Tabs.Tab>}
+              <Tabs.Tab id="metadata">Description</Tabs.Tab>
+              <Tabs.Tab id="trades">Trades</Tabs.Tab>
+            </Tabs.List>
+            {isOwned && (
+              <Tabs.Panel id="owned">
+                <OwnedListPanel objekts={objekts as OwnedObjekt[]} />
+              </Tabs.Panel>
+            )}
+            <Tabs.Panel id="metadata">
+              {status === "pending" && (
+                <div className="space-y-2">
+                  <Skeleton className="w-full h-4" />
+                  <Skeleton className="w-56 h-4" />
+                </div>
+              )}
+              {status === "error" && (
+                <div className="flex flex-col justify-center gap-3 items-center">
+                  <IconBrokenChainLink className="size-12" />
+                  <p>Error loading metadata</p>
+                  <Button intent="secondary" onPress={() => refetch()}>
+                    Retry
+                  </Button>
+                </div>
+              )}
+              {status === "success" && <MetadataPanel metadata={data} />}
+            </Tabs.Panel>
+            <Tabs.Panel id="trades">
+              <TradeView
+                slug={slug}
+                initialSerial={(objekt as OwnedObjekt).objektNo}
+              />
+            </Tabs.Panel>
+          </Tabs>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 

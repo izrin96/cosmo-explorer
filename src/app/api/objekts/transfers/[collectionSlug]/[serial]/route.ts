@@ -4,9 +4,7 @@ import {
   transfers,
   collections,
 } from "@/lib/server/db/indexer/schema";
-import { APOLLO_ENDPOINT } from "@/lib/utils";
-import { and, eq } from "drizzle-orm";
-import { ofetch } from "ofetch";
+import { and, eq, asc } from "drizzle-orm";
 
 export const runtime = "nodejs";
 
@@ -41,24 +39,8 @@ export async function GET(_: Request, props: Params) {
         eq(collections.slug, params.collectionSlug),
         eq(objekts.serial, parseInt(params.serial))
       )
-    );
-
-  const users = (
-    await Promise.all(
-      results.map((user) =>
-        ofetch<FetchUserByAddressResult>(
-          `${APOLLO_ENDPOINT}/api/user/by-address/${user.to}`
-        ).then((res) => res.result)
-      )
     )
-  ).filter((user) => user);
+    .orderBy(asc(transfers.timestamp));
 
-  const newResults = results.map((res) => {
-    return {
-      ...res,
-      user: users.find((user) => user.address.toLowerCase() == res.to),
-    };
-  });
-
-  return Response.json({ transfers: newResults });
+  return Response.json({ transfers: results });
 }

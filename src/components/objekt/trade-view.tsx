@@ -3,9 +3,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { ofetch } from "ofetch";
 import React, { useMemo, useState } from "react";
-import { Button, Card, Loader, NumberField, Table } from "../ui";
+import { Badge, Button, Card, Loader, NumberField, Table } from "../ui";
 import { IconArrowLeft, IconArrowRight } from "justd-icons";
 import { format } from "date-fns";
+import Link from "next/link";
 
 type TradeViewProps = {
   slug: string;
@@ -42,7 +43,7 @@ export default function TradeView({ slug, initialSerial }: TradeViewProps) {
   return (
     <>
       {objekts.length > 0 && (
-        <TradeTable
+        <Trades
           objekts={objekts}
           initialSerial={initialSerial ?? objekts[0].serial}
           slug={slug}
@@ -52,7 +53,7 @@ export default function TradeView({ slug, initialSerial }: TradeViewProps) {
   );
 }
 
-function TradeTable({
+function Trades({
   objekts,
   initialSerial,
   slug,
@@ -62,17 +63,11 @@ function TradeTable({
   slug: string;
 }) {
   const [serial, setSerial] = useState(initialSerial);
-  const { data, isFetching } = useQuery({
-    queryFn: async ({ signal }) =>
-      await ofetch<{ transfers: ObjektTransfers[] }>(
-        `/api/objekts/transfers/${slug}/${serial}`,
-        {
-          signal,
-        }
-      ).then((res) => res.transfers),
-    queryKey: ["collection-metadata", "transfers", slug, serial],
-    enabled: serial > 0,
-  });
+
+  const objekt = useMemo(
+    () => objekts.find((objekt) => objekt.serial === serial),
+    [serial, objekts]
+  );
 
   return (
     <div className="flex flex-col gap-2">
@@ -94,6 +89,7 @@ function TradeTable({
           <IconArrowLeft />
         </Button>
         <NumberField
+          autoFocus
           minValue={1}
           className="grow"
           aria-label="Serial no."
@@ -117,6 +113,47 @@ function TradeTable({
         </Button>
       </div>
 
+      {objekt && (
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-3">
+            <span className="font-semibold text-sm">Owner</span>
+            <span>
+              <UserLink address={objekt.owner} />
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="font-semibold text-sm">Transferable</span>
+            <Badge
+              className="text-sm"
+              shape="square"
+              intent={objekt.transferable ? "primary" : "danger"}
+            >
+              {objekt.transferable ? "Yes" : "No"}
+            </Badge>
+          </div>
+        </div>
+      )}
+
+      <TradeTable slug={slug} serial={serial} />
+    </div>
+  );
+}
+
+function TradeTable({ slug, serial }: { slug: string; serial: number }) {
+  const { data, isFetching } = useQuery({
+    queryFn: async ({ signal }) =>
+      await ofetch<{ transfers: ObjektTransfers[] }>(
+        `/api/objekts/transfers/${slug}/${serial}`,
+        {
+          signal,
+        }
+      ).then((res) => res.transfers),
+    queryKey: ["collection-metadata", "transfers", slug, serial],
+    enabled: serial > 0,
+  });
+
+  return (
+    <>
       {isFetching && (
         <div className="self-center">
           <Loader />
@@ -135,7 +172,9 @@ function TradeTable({
             <Table.Body items={data}>
               {(item) => (
                 <Table.Row id={item.id}>
-                  <Table.Cell>{item.user?.nickname ?? item.to}</Table.Cell>
+                  <Table.Cell>
+                    <UserLink address={item.to} />
+                  </Table.Cell>
                   <Table.Cell>
                     {format(item.timestamp, "MMMM do, yyyy hh:mm:ss a")}
                   </Table.Cell>
@@ -145,6 +184,34 @@ function TradeTable({
           </Table>
         </Card>
       )}
-    </div>
+    </>
+  );
+}
+
+type FetchUserByAddressResult = {
+  result: {
+    nickname: string;
+    address: string;
+  };
+};
+
+function UserLink({ address }: { address: string }) {
+  const { data, isPending } = useQuery({
+    queryFn: async ({ signal }) =>
+      await ofetch<FetchUserByAddressResult>(
+        `/api/user/by-address/${address}`,
+        {
+          signal,
+        }
+      ).then((res) => res.result),
+    queryKey: ["collection-metadata", "transfers", "user", address],
+  });
+
+  if (isPending) return <Loader />;
+
+  return (
+    <Link href={`/@${data?.nickname ?? address}`}>
+      {data?.nickname ?? address}
+    </Link>
   );
 }
