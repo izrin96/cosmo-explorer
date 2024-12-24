@@ -25,6 +25,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ofetch } from "ofetch";
 import { IconBrokenChainLink } from "justd-icons";
 import Tilt from "react-parallax-tilt";
+import TradeView from "./trade-view";
 
 type Props = {
   objekts: ValidObjekt[];
@@ -143,12 +144,12 @@ export function ObjektModal({
           onClose();
         }
       }}
-      size="3xl"
+      size="4xl"
     >
       <Modal.Header className="hidden">
         <Modal.Title>Objekt display</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="flex flex-col sm:flex-row p-2 sm:p-4 min-h-dvh sm:min-h-full sm:overflow-y-hidden overflow-y-auto gap-2">
+      <Modal.Body className="flex flex-col sm:flex-row p-2 sm:p-3 min-h-dvh sm:min-h-full gap-2">
         <ObjektDetail isOwned={isOwned} objekts={objekts} />
       </Modal.Body>
     </Modal.Content>
@@ -167,15 +168,17 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
   const slug = getObjektSlug(objekt);
   const { data, status, refetch } = useQuery({
     queryKey: ["collection-metadata", "metadata", slug],
-    queryFn: async () => {
-      return await ofetch<ObjektMetadata>(`/api/objekts/metadata/${slug}`);
+    queryFn: async ({ signal }) => {
+      return await ofetch<ObjektMetadata>(`/api/objekts/metadata/${slug}`, {
+        signal,
+      });
     },
     retry: 1,
   });
 
   return (
     <>
-      <div className="flex h-[23rem] sm:h-[28rem] aspect-photocard self-center flex-none">
+      <div className="flex h-[21rem] sm:h-[28rem] aspect-photocard self-center flex-none">
         <Tilt tiltReverse transitionSpeed={3000} gyroscope>
           <div
             onClick={() => setFlipped((prev) => !prev)}
@@ -200,7 +203,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
         </Tilt>
       </div>
 
-      <div className="flex flex-col h-full sm:h-[28rem]">
+      <div className="flex flex-col h-full sm:h-[28rem] overflow-y-auto">
         <div className="px-2 font-semibold">{getCollectionShortId(objekt)}</div>
         <AttributePanel objekt={objekt}>
           {status === "pending" && <Skeleton className="w-20 h-6" />}
@@ -254,7 +257,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
             {status === "success" && <MetadataPanel metadata={data} />}
           </Tabs.Panel>
           <Tabs.Panel id="trades">
-            <TradePanel objekt={objekt} isOwned={isOwned} />
+            <TradeView slug={slug} />
           </Tabs.Panel>
         </Tabs>
       </div>
@@ -369,19 +372,4 @@ function getEdition(collectionNo: string): string {
     return "3rd";
   }
   return "Unknown";
-}
-
-type TradePanelProps = {
-  objekt: ValidObjekt;
-  isOwned: boolean;
-};
-
-function TradePanel({ objekt, isOwned }: TradePanelProps) {
-  // const slug = getObjektSlug(objekt);
-  return (
-    <div>
-      Not yet available
-      {/* <TradeView slug={slug} /> */}
-    </div>
-  );
 }

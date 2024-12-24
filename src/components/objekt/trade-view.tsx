@@ -2,9 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { ofetch } from "ofetch";
-import React, { useEffect, useMemo, useState } from "react";
-import { Button, Card, NumberField, Table } from "../ui";
-import { IconArrowLeft, IconArrowRight, IconSearch } from "justd-icons";
+import React, { useMemo, useState } from "react";
+import { Button, Card, Loader, NumberField, Table } from "../ui";
+import { IconArrowLeft, IconArrowRight } from "justd-icons";
 import { format } from "date-fns";
 
 type TradeViewProps = {
@@ -29,21 +29,50 @@ type ObjektTransfers = {
 };
 
 export default function TradeView({ slug, initialSerial }: TradeViewProps) {
-  const [currentSerial, setCurrentSerial] = useState(initialSerial ?? 1);
   const { data } = useQuery({
     queryKey: ["collection-metadata", "list", slug],
-    queryFn: async () =>
-      await ofetch<{ objekts: Objekts[] }>(`/api/objekts/list/${slug}`).then(
-        (res) => res.objekts
-      ),
+    queryFn: async ({ signal }) =>
+      await ofetch<{ objekts: Objekts[] }>(`/api/objekts/list/${slug}`, {
+        signal,
+      }).then((res) => res.objekts),
   });
 
   const objekts = useMemo(() => data ?? [], [data]);
 
-  useEffect(() => {
-    if (!initialSerial && objekts.length > 0)
-      setCurrentSerial(objekts[0].serial);
-  }, [objekts, initialSerial]);
+  return (
+    <>
+      {objekts.length > 0 && (
+        <TradeTable
+          objekts={objekts}
+          initialSerial={initialSerial ?? objekts[0].serial}
+          slug={slug}
+        />
+      )}
+    </>
+  );
+}
+
+function TradeTable({
+  objekts,
+  initialSerial,
+  slug,
+}: {
+  objekts: Objekts[];
+  initialSerial: number;
+  slug: string;
+}) {
+  const [serial, setSerial] = useState(initialSerial);
+  const { data, isFetching } = useQuery({
+    queryFn: async ({ signal }) =>
+      await ofetch<{ transfers: ObjektTransfers[] }>(
+        `/api/objekts/transfers/${slug}/${serial}`,
+        {
+          signal,
+        }
+      ).then((res) => res.transfers),
+    queryKey: ["collection-metadata", "transfers", slug, serial],
+    enabled: serial > 0,
+  });
 
   return (
     <div className="flex flex-col gap-2">
@@ -53,7 +82,7 @@ export default function TradeView({ slug, initialSerial }: TradeViewProps) {
           appearance="outline"
           className="flex-none"
           onPress={() =>
-            setCurrentSerial((prevSerial) => {
+            setSerial((prevSerial) => {
               const newSerial = objekts
                 .map((objekt) => objekt.serial)
                 .filter((serial) => serial < prevSerial)
@@ -68,18 +97,15 @@ export default function TradeView({ slug, initialSerial }: TradeViewProps) {
           minValue={1}
           className="grow"
           aria-label="Serial no."
-          value={currentSerial}
-          onChange={setCurrentSerial}
+          value={serial}
+          onChange={setSerial}
         />
-        {/* <Button size="square-petite" appearance="solid" className="flex-none">
-          <IconSearch />
-        </Button> */}
         <Button
           size="square-petite"
           appearance="outline"
           className="flex-none"
           onPress={() =>
-            setCurrentSerial((prevSerial) => {
+            setSerial((prevSerial) => {
               const newSerial = objekts
                 .map((objekt) => objekt.serial)
                 .filter((serial) => serial > prevSerial)?.[0];
@@ -91,41 +117,34 @@ export default function TradeView({ slug, initialSerial }: TradeViewProps) {
         </Button>
       </div>
 
-      <TradeTable serial={currentSerial} slug={slug} />
+      {isFetching && (
+        <div className="self-center">
+          <Loader />
+        </div>
+      )}
+
+      {!isFetching && (
+        <Card>
+          <Table allowResize aria-label="Trades">
+            <Table.Header>
+              <Table.Column isRowHeader isResizable>
+                Owner
+              </Table.Column>
+              <Table.Column>Date</Table.Column>
+            </Table.Header>
+            <Table.Body items={data}>
+              {(item) => (
+                <Table.Row id={item.id}>
+                  <Table.Cell>{item.user?.nickname ?? item.to}</Table.Cell>
+                  <Table.Cell>
+                    {format(item.timestamp, "MMMM do, yyyy hh:mm:ss a")}
+                  </Table.Cell>
+                </Table.Row>
+              )}
+            </Table.Body>
+          </Table>
+        </Card>
+      )}
     </div>
-  );
-}
-
-function TradeTable({ serial, slug }: { serial: number; slug: string }) {
-  const { data } = useQuery({
-    queryFn: async () =>
-      await ofetch<{ transfers: ObjektTransfers[] }>(
-        `/api/objekts/transfers/${slug}/${serial}`
-      ).then((res) => res.transfers),
-    queryKey: ["collection-metadata", "transfers", slug, serial],
-    enabled: serial > 0
-  });
-
-  return (
-    <Card>
-      <Table allowResize aria-label="Trades">
-        <Table.Header>
-          <Table.Column isRowHeader isResizable>
-            Owner
-          </Table.Column>
-          <Table.Column>Date</Table.Column>
-        </Table.Header>
-        <Table.Body items={data}>
-          {(item) => (
-            <Table.Row id={item.id}>
-              <Table.Cell>{item.user?.nickname ?? item.to}</Table.Cell>
-              <Table.Cell>
-                {format(item.timestamp, "MMMM do, yyyy hh:mm:ss a")}
-              </Table.Cell>
-            </Table.Row>
-          )}
-        </Table.Body>
-      </Table>
-    </Card>
   );
 }
