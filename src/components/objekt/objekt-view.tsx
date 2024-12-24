@@ -168,6 +168,8 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
   const [flipped, setFlipped] = useState(false);
 
   const slug = getObjektSlug(objekt);
+  
+  // todo: suspense
   const { data, status, refetch } = useQuery({
     queryKey: ["collection-metadata", "metadata", slug],
     queryFn: async ({ signal }) => {

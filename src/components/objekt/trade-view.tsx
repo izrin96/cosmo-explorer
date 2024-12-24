@@ -30,8 +30,9 @@ type ObjektTransfers = {
 };
 
 export default function TradeView({ slug, initialSerial }: TradeViewProps) {
+  // todo: suspense
   const { data } = useQuery({
-    queryKey: ["collection-metadata", "list", slug],
+    queryKey: ["objekts", "list", slug],
     queryFn: async ({ signal }) =>
       await ofetch<{ objekts: Objekts[] }>(`/api/objekts/list/${slug}`, {
         signal,
@@ -140,6 +141,7 @@ function Trades({
 }
 
 function TradeTable({ slug, serial }: { slug: string; serial: number }) {
+  // todo: suspense
   const { data, isFetching } = useQuery({
     queryFn: async ({ signal }) =>
       await ofetch<{ transfers: ObjektTransfers[] }>(
@@ -148,7 +150,7 @@ function TradeTable({ slug, serial }: { slug: string; serial: number }) {
           signal,
         }
       ).then((res) => res.transfers),
-    queryKey: ["collection-metadata", "transfers", slug, serial],
+    queryKey: ["objekts", "transfer", slug, serial],
     enabled: serial > 0,
   });
 
@@ -196,6 +198,7 @@ type FetchUserByAddressResult = {
 };
 
 function UserLink({ address }: { address: string }) {
+  // todo: suspense
   const { data, isPending } = useQuery({
     queryFn: async ({ signal }) =>
       await ofetch<FetchUserByAddressResult>(
@@ -204,7 +207,7 @@ function UserLink({ address }: { address: string }) {
           signal,
         }
       ).then((res) => res.result),
-    queryKey: ["collection-metadata", "transfers", "user", address],
+    queryKey: ["user-link", address],
   });
 
   if (isPending) return <Loader />;

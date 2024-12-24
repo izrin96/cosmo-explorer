@@ -53,6 +53,7 @@ export default function ProfileView({ profile, artists, initialData }: Props) {
     [profile.address]
   );
 
+  // todo: suspense
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useSuspenseInfiniteQuery({
       queryKey: ["owned-collections", profile.address],

@@ -27,15 +27,15 @@
 - [x] refresh token when expired and store it
 - [x] update justd components to 2.0
 - [x] modal open on load if query id exists
-- [ ] objekt's trades history
-- [ ] user's trades history
-- [ ] user's como, user's profile picture
-- [ ] progress *
-- [ ] leaderboard *
-- [ ] login
-- [ ] transfer objekt, can select multiple
+- [x] objekt's trades history
 - [ ] suspense
 - [ ] utilize zustand
+- [ ] login
+- [ ] transfer objekt, can select multiple
+- [ ] user's trades history
+- [ ] progress
+- [ ] leaderboard
+- [ ] user's como, user's profile picture
 - [ ] prefetch
 - [ ] search user change component to cmdk
 
