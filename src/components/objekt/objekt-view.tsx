@@ -206,7 +206,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
         </Tilt>
       </div>
 
-      <div className="flex flex-col h-screen sm:h-[32rem]">
+      <div className="flex flex-col h-full sm:h-[32rem]">
         <div className="overflow-y-auto">
           <div className="px-2 font-semibold">
             {getCollectionShortId(objekt)}
