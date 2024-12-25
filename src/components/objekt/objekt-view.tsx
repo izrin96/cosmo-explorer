@@ -147,7 +147,7 @@ export function ObjektModal({
       }}
       size="5xl"
     >
-      <Modal.Header className="hidden">
+      <Modal.Header hidden>
         <Modal.Title>Objekt display</Modal.Title>
       </Modal.Header>
       <Modal.Body className="overflow-y-auto p-0 sm:p-0">
@@ -206,7 +206,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
         </Tilt>
       </div>
 
-      <div className="flex flex-col h-full sm:h-[32rem]">
+      <div className="flex flex-col h-full min-h-screen sm:min-h-full sm:h-[32rem]">
         <div className="overflow-y-auto">
           <div className="px-2 font-semibold">
             {getCollectionShortId(objekt)}
@@ -308,7 +308,7 @@ type MetadataPanelProps = {
 function MetadataPanel({ metadata }: MetadataPanelProps) {
   return (
     <>
-      <p>{metadata?.metadata?.description}{' '}Source: Apollo</p>
+      <p>{metadata?.metadata?.description} Source: Apollo</p>
     </>
   );
 }

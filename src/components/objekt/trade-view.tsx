@@ -123,7 +123,6 @@ function Trades({
           <IconArrowLeft />
         </Button>
         <NumberField
-          autoFocus
           minValue={1}
           className="grow"
           aria-label="Serial no."
