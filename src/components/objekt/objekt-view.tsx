@@ -147,7 +147,7 @@ export function ObjektModal({
       }}
       size="5xl"
     >
-      <Modal.Header hidden>
+      <Modal.Header className="hidden">
         <Modal.Title>Objekt display</Modal.Title>
       </Modal.Header>
       <Modal.Body className="overflow-y-auto p-0 sm:p-0">
