@@ -323,7 +323,7 @@ function OwnedListPanel({ objekts }: OwnedListPanelProps) {
       items={objekts}
       aria-label="Select objekt"
       selectionMode="single"
-      className="min-w-64 max-h-full sm:max-h-[17.5rem]"
+      className="min-w-64 max-h-full"
     >
       {(item) => (
         <GridList.Item textValue={`${item.objektNo}`} id={item.tokenId}>
