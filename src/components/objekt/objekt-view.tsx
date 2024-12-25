@@ -308,7 +308,7 @@ type MetadataPanelProps = {
 function MetadataPanel({ metadata }: MetadataPanelProps) {
   return (
     <>
-      <p>{metadata?.metadata?.description} Source: Apollo</p>
+      <p>{metadata?.metadata?.description} (Source: Apollo)</p>
     </>
   );
 }

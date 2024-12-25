@@ -29,12 +29,14 @@
 - [x] modal open on load if query id exists
 - [x] objekt's trades history
 - [x] suspense
-- [ ] utilize zustand
-- [ ] login
-- [ ] transfer objekt, can select multiple
-- [ ] user's trades history
+- [ ] serial number and collection number printed on picture
 - [ ] progress
 - [ ] leaderboard
+- [ ] login
+- [ ] transfer objekt, can select multiple
+- [ ] index all user using cosmo's search api
+- [ ] utilize zustand
+- [ ] user's trades history
 - [ ] user's como, user's profile picture
 - [ ] prefetch
 - [ ] search user change component to cmdk

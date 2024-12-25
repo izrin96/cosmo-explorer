@@ -6,7 +6,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { ofetch } from "ofetch";
-import React, { Suspense, useMemo, useState } from "react";
+import React, { Suspense, useCallback, useMemo, useState } from "react";
 import {
   Badge,
   Button,
@@ -103,6 +103,22 @@ function Trades({
     [serial, objekts]
   );
 
+  const updateSerial = useCallback((mode: "prev" | "next") => {
+    setSerial((prevSerial) => {
+      if (mode == "prev") {
+        const newSerial = objekts
+          .filter((objekt) => objekt.serial < prevSerial)
+          .pop()?.serial;
+        return newSerial ?? prevSerial;
+      }
+
+      const newSerial = objekts.filter(
+        (objekt) => objekt.serial > prevSerial
+      )?.[0]?.serial;
+      return newSerial ?? prevSerial;
+    });
+  }, [objekts]);
+
   return (
     <div className="flex flex-col gap-2">
       <div className="flex gap-2 items-center">
@@ -110,15 +126,7 @@ function Trades({
           size="square-petite"
           appearance="outline"
           className="flex-none"
-          onPress={() =>
-            setSerial((prevSerial) => {
-              const newSerial = objekts
-                .map((objekt) => objekt.serial)
-                .filter((serial) => serial < prevSerial)
-                .pop();
-              return newSerial ?? prevSerial;
-            })
-          }
+          onPress={() => updateSerial("prev")}
         >
           <IconArrowLeft />
         </Button>
@@ -133,14 +141,7 @@ function Trades({
           size="square-petite"
           appearance="outline"
           className="flex-none"
-          onPress={() =>
-            setSerial((prevSerial) => {
-              const newSerial = objekts
-                .map((objekt) => objekt.serial)
-                .filter((serial) => serial > prevSerial)?.[0];
-              return newSerial ?? prevSerial;
-            })
-          }
+          onPress={() => updateSerial("next")}
         >
           <IconArrowRight />
         </Button>
