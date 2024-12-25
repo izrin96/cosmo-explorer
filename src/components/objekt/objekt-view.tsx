@@ -88,7 +88,7 @@ export default memo(function ObjektView({
               className="cursor-pointer"
             />
             {objekts.length > 1 && (
-              <div className="flex absolute top-2 left-2 rounded-full px-2 py-1 justify-center items-center font-bold text-[var(--objekt-text-color)] bg-[var(--objekt-background-color)] text-xs">
+              <div className="flex absolute bottom-2 left-2 rounded-full px-2 py-1 font-bold bg-bg text-fg text-xs">
                 {objekts.length}
               </div>
             )}
@@ -306,7 +306,11 @@ type MetadataPanelProps = {
 };
 
 function MetadataPanel({ metadata }: MetadataPanelProps) {
-  return <p>{metadata?.metadata?.description}</p>;
+  return (
+    <>
+      <p>{metadata?.metadata?.description}{' '}Source: Apollo</p>
+    </>
+  );
 }
 
 type OwnedListPanelProps = {

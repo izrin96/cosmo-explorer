@@ -231,12 +231,9 @@ type FetchUserByAddressResult = {
 
 function UserLink({ address }: { address: string }) {
   const { data, isPending } = useQuery({
-    queryFn: async ({ signal }) =>
+    queryFn: async () =>
       await ofetch<FetchUserByAddressResult>(
-        `/api/user/by-address/${address}`,
-        {
-          signal,
-        }
+        `/api/user/by-address/${address}`
       ).then((res) => res.result),
     queryKey: ["user-link", address],
   });
