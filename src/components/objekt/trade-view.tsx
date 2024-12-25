@@ -211,7 +211,7 @@ function TradeTable({ slug, serial }: { slug: string; serial: number }) {
                 <UserLink address={item.to} />
               </Table.Cell>
               <Table.Cell>
-                {format(item.timestamp, "MMMM do, yyyy hh:mm:ss a")}
+                {format(item.timestamp, "yyyy/MM/dd hh:mm:ss a")}
               </Table.Cell>
             </Table.Row>
           )}
