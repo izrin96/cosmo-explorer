@@ -158,7 +158,7 @@ export function ObjektModal({
       <Modal.Header className="hidden">
         <Modal.Title>Objekt display</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="p-0 sm:p-0">
+      <Modal.Body className="p-0 sm:p-0 overflow-hidden">
         <ObjektDetail isOwned={isOwned} objekts={objekts} />
       </Modal.Body>
     </Modal.Content>
@@ -174,6 +174,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
   const isDesktop = useMediaQuery();
   const [objekt] = objekts;
   const [flipped, setFlipped] = useState(false);
+  const [hide, setHide] = useState(false);
 
   const slug = getObjektSlug(objekt);
 
@@ -207,17 +208,17 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
             className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform transform-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
           >
             <div className="absolute inset-0 backface-hidden drop-shadow">
-              {/* low quality */}
               <MemoizedImage
                 fill
-                priority
+                loading="eager"
                 src={front.display}
                 alt={objekt.collectionId}
+                hidden={hide}
               />
-              {/* original quality */}
               <MemoizedImage
                 fill
-                priority
+                loading="eager"
+                onLoad={() => setHide(true)}
                 src={objekt.frontImage}
                 alt={objekt.collectionId}
               />
@@ -229,7 +230,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
             <div className="absolute inset-0 backface-hidden rotate-y-180 drop-shadow">
               <MemoizedImage
                 fill
-                priority
+                loading="eager"
                 src={objekt.backImage}
                 alt={objekt.collectionId}
               />
