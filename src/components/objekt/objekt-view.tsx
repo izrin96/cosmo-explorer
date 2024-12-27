@@ -27,6 +27,7 @@ import Tilt from "react-parallax-tilt";
 import TradeView from "./trade-view";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import ErrorFallbackRender from "../error-fallback";
+import ObjektSidebar from "./objekt-sidebar";
 
 type Props = {
   objekts: ValidObjekt[];
@@ -73,7 +74,7 @@ export default memo(function ObjektView({
         <Tilt
           tiltReverse
           scale={1.08}
-          transitionSpeed={2000}
+          transitionSpeed={1000}
           glareEnable
           glarePosition="bottom"
           glareBorderRadius="12px"
@@ -87,6 +88,12 @@ export default memo(function ObjektView({
               onClick={onClick}
               className="cursor-pointer"
             />
+
+            <ObjektSidebar
+              collection={objekt.collectionNo}
+              serial={(objekt as OwnedObjekt).objektNo}
+            />
+
             {objekts.length > 1 && (
               <div className="flex absolute bottom-2 left-2 rounded-full px-2 py-1 font-bold bg-bg text-fg text-xs">
                 {objekts.length}
@@ -150,7 +157,7 @@ export function ObjektModal({
       <Modal.Header className="hidden">
         <Modal.Title>Objekt display</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="overflow-y-auto p-0 sm:p-0">
+      <Modal.Body className="p-0 sm:p-0">
         <ObjektDetail isOwned={isOwned} objekts={objekts} />
       </Modal.Body>
     </Modal.Content>
@@ -179,10 +186,18 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
     retry: 1,
   });
 
+  const css = {
+    "--objekt-accent-color": objekt.accentColor,
+    "--objekt-text-color": objekt.textColor,
+  } as CSSProperties;
+
   return (
     <div className="flex flex-col sm:flex-row p-2 sm:p-3 gap-2">
-      <div className="flex h-[21rem] sm:h-[32rem] aspect-photocard self-center flex-none">
-        <Tilt tiltReverse transitionSpeed={3000} tiltEnable={isDesktop}>
+      <div
+        className="flex h-[21rem] sm:h-[32rem] aspect-photocard self-center flex-none"
+        style={css}
+      >
+        <Tilt tiltReverse transitionSpeed={1000} tiltEnable={isDesktop}>
           <div
             onClick={() => setFlipped((prev) => !prev)}
             data-flipped={flipped}
@@ -193,6 +208,10 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
                 fill
                 src={objekt.frontImage}
                 alt={objekt.collectionId}
+              />
+              <ObjektSidebar
+                collection={objekt.collectionNo}
+                serial={(objekt as OwnedObjekt).objektNo}
               />
             </div>
             <div className="absolute inset-0 backface-hidden rotate-y-180 drop-shadow">

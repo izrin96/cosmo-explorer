@@ -29,7 +29,7 @@
 - [x] modal open on load if query id exists
 - [x] objekt's trades history
 - [x] suspense
-- [ ] serial number and collection number printed on picture
+- [x] serial number and collection number printed on picture
 - [ ] progress
 - [ ] leaderboard
 - [ ] login

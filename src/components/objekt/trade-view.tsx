@@ -103,25 +103,35 @@ function Trades({
     [serial, objekts]
   );
 
-  const updateSerial = useCallback((mode: "prev" | "next") => {
-    setSerial((prevSerial) => {
-      if (mode == "prev") {
-        const newSerial = objekts
-          .filter((objekt) => objekt.serial < prevSerial)
-          .pop()?.serial;
-        return newSerial ?? prevSerial;
-      }
+  const updateSerial = useCallback(
+    (mode: "prev" | "next") => {
+      setSerial((prevSerial) => {
+        if (mode == "prev") {
+          const newSerial = objekts
+            .filter((objekt) => objekt.serial < prevSerial)
+            .pop()?.serial;
+          return newSerial ?? prevSerial;
+        }
 
-      const newSerial = objekts.filter(
-        (objekt) => objekt.serial > prevSerial
-      )?.[0]?.serial;
-      return newSerial ?? prevSerial;
-    });
-  }, [objekts]);
+        const newSerial = objekts.filter(
+          (objekt) => objekt.serial > prevSerial
+        )?.[0]?.serial;
+        return newSerial ?? prevSerial;
+      });
+    },
+    [objekts]
+  );
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex gap-2 items-center">
+        <NumberField
+          minValue={1}
+          className="grow"
+          aria-label="Serial no."
+          value={serial}
+          onChange={setSerial}
+        />
         <Button
           size="square-petite"
           appearance="outline"
@@ -130,13 +140,6 @@ function Trades({
         >
           <IconArrowLeft />
         </Button>
-        <NumberField
-          minValue={1}
-          className="grow"
-          aria-label="Serial no."
-          value={serial}
-          onChange={setSerial}
-        />
         <Button
           size="square-petite"
           appearance="outline"

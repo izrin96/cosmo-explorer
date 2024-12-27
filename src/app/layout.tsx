@@ -17,6 +17,11 @@ const geistMono = localFont({
   variable: "--font-mono",
   weight: "100 900",
 });
+const dotMatrix = localFont({
+  src: "./fonts/dot_matrix.woff2",
+  variable: "--font-dotmatrix",
+  weight: "400",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -53,7 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}
+        className={`${geistSans.variable} ${geistMono.variable} ${dotMatrix.variable} antialiased font-sans`}
       >
         <Suspense>
           <ClientProviders>
