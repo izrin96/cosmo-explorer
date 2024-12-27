@@ -79,7 +79,10 @@ export default memo(function ObjektView({
           glarePosition="bottom"
           glareBorderRadius="12px"
         >
-          <div className="cursor-pointer relative overflow-hidden aspect-photocard drop-shadow" onClick={onClick}>
+          <div
+            className="cursor-pointer relative overflow-hidden aspect-photocard drop-shadow"
+            onClick={onClick}
+          >
             <MemoizedImage
               fill
               priority={priority}
@@ -192,14 +195,14 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
   return (
     <div className="flex flex-col sm:flex-row p-2 sm:p-3 gap-2">
       <div
-        className="flex h-[21rem] sm:h-[32rem] aspect-photocard self-center flex-none"
+        onClick={() => setFlipped((prev) => !prev)}
+        className="flex h-[21rem] sm:h-[32rem] aspect-photocard self-center flex-none select-none"
         style={css}
       >
         <Tilt tiltReverse transitionSpeed={1000} tiltEnable={isDesktop}>
           <div
-            onClick={() => setFlipped((prev) => !prev)}
             data-flipped={flipped}
-            className="relative h-full select-none aspect-photocard cursor-pointer touch-manipulation transition-transform transform-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
+            className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform transform-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
           >
             <div className="absolute inset-0 backface-hidden drop-shadow">
               <MemoizedImage
