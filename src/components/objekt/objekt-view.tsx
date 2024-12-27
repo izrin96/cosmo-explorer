@@ -79,14 +79,12 @@ export default memo(function ObjektView({
           glarePosition="bottom"
           glareBorderRadius="12px"
         >
-          <div className="relative overflow-hidden aspect-photocard drop-shadow">
+          <div className="cursor-pointer relative overflow-hidden aspect-photocard drop-shadow" onClick={onClick}>
             <MemoizedImage
               fill
               priority={priority}
               src={front.display}
               alt={objekt.collectionId}
-              onClick={onClick}
-              className="cursor-pointer"
             />
 
             <ObjektSidebar
