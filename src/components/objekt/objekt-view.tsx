@@ -177,6 +177,8 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
 
   const slug = getObjektSlug(objekt);
 
+  const { front } = getObjektImageUrls(objekt);
+
   const { data, status, refetch } = useQuery({
     queryKey: ["collection-metadata", "metadata", slug],
     queryFn: async ({ signal }) => {
@@ -205,6 +207,13 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
             className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform transform-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
           >
             <div className="absolute inset-0 backface-hidden drop-shadow">
+              {/* low quality */}
+              <MemoizedImage
+                fill
+                src={front.display}
+                alt={objekt.collectionId}
+              />
+              {/* original quality */}
               <MemoizedImage
                 fill
                 src={objekt.frontImage}
