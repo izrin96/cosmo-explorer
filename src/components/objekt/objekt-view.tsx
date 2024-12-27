@@ -210,12 +210,14 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
               {/* low quality */}
               <MemoizedImage
                 fill
+                priority
                 src={front.display}
                 alt={objekt.collectionId}
               />
               {/* original quality */}
               <MemoizedImage
                 fill
+                priority
                 src={objekt.frontImage}
                 alt={objekt.collectionId}
               />
@@ -227,6 +229,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
             <div className="absolute inset-0 backface-hidden rotate-y-180 drop-shadow">
               <MemoizedImage
                 fill
+                priority
                 src={objekt.backImage}
                 alt={objekt.collectionId}
               />
