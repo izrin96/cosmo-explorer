@@ -23,14 +23,13 @@ import { Loader } from "../ui";
 import { WindowVirtualizer } from "virtua";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { fetchOwnedObjektsParallel } from "@/lib/cosmo-request";
-import { OwnedObjekt, OwnedObjektsResult } from "@/lib/universal/cosmo/objekts";
+import { OwnedObjekt } from "@/lib/universal/cosmo/objekts";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallbackRender from "../error-fallback";
 
 type Props = {
   artists: CosmoArtistWithMembersBFF[];
   profile: CosmoPublicUser;
-  initialData: OwnedObjektsResult;
 };
 
 export default function ProfileView({ ...props }: Props) {
@@ -45,7 +44,7 @@ export default function ProfileView({ ...props }: Props) {
   );
 }
 
-function ProfileViewRender({ profile, artists, initialData }: Props) {
+function ProfileViewRender({ profile, artists }: Props) {
   const [filters] = useCosmoFilters();
 
   const isDesktop = useMediaQuery();
@@ -72,10 +71,6 @@ function ProfileViewRender({ profile, artists, initialData }: Props) {
       queryKey: ["owned-collections", profile.address],
       queryFn: queryFunction,
       initialPageParam: 0,
-      initialData: () => ({
-        pages: [{ ...initialData }],
-        pageParams: [0],
-      }),
       getNextPageParam: (lastPage) => lastPage.nextStartAfter,
       refetchOnWindowFocus: false,
       staleTime: 1000 * 60 * 5, // 5 minutes

@@ -3,7 +3,6 @@ import {
   getUserByIdentifier,
 } from "@/app/data-fetching";
 import ProfileView from "@/components/profile/profile-view";
-import { fetchOwnedObjekts } from "@/lib/cosmo-request";
 import { Metadata } from "next";
 
 type Props = {
@@ -29,11 +28,6 @@ export default async function UserCollectionPage(props: Props) {
     getArtistsWithMembers(),
   ]);
 
-  const initialData = await fetchOwnedObjekts({
-    address: targetUser.address,
-    startAfter: 0,
-  });
-
   return (
     <>
       <div className="text-xl font-semibold">{params.nickname}</div>
@@ -44,7 +38,6 @@ export default async function UserCollectionPage(props: Props) {
       <ProfileView
         profile={targetUser}
         artists={artists}
-        initialData={initialData}
       />
     </>
   );
