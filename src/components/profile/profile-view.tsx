@@ -135,7 +135,7 @@ function ProfileViewRender({ profile, artists }: Props) {
         <span className="font-bold">{objektsFiltered.length} total</span>
       </div>
 
-      <WindowVirtualizer key={columns}>{virtualList}</WindowVirtualizer>
+      <WindowVirtualizer>{virtualList}</WindowVirtualizer>
     </div>
   );
 }
