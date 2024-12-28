@@ -158,7 +158,7 @@ export function ObjektModal({
       <Modal.Header className="hidden">
         <Modal.Title>Objekt display</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="p-0 sm:p-0 overflow-hidden">
+      <Modal.Body className="p-0 sm:p-0 overflow-y-auto sm:overflow-hidden">
         <ObjektDetail isOwned={isOwned} objekts={objekts} />
       </Modal.Body>
     </Modal.Content>
