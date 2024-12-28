@@ -16,8 +16,7 @@ import {
   useSuspenseInfiniteQuery,
 } from "@tanstack/react-query";
 import ObjektView from "../objekt/objekt-view";
-import { filterObjektsOwned } from "@/lib/filter-utils";
-import { groupBy, prop } from "remeda";
+import { filterAndGroupObjektsOwned } from "@/lib/filter-utils";
 import { CosmoArtistWithMembersBFF } from "@/lib/universal/cosmo/artists";
 import { Loader } from "../ui";
 import { WindowVirtualizer } from "virtua";
@@ -94,7 +93,6 @@ function ProfileViewRender({ profile, artists }: Props) {
                 {objekts && (
                   <ObjektView
                     objekts={objekts}
-                    showSerial={!(filters.grouped ?? false)}
                     priority={j < columns * 3}
                     isOwned
                   />
@@ -106,18 +104,11 @@ function ProfileViewRender({ profile, artists }: Props) {
       );
     });
     return rows;
-  }, [objektsFiltered, filters.grouped, columns]);
+  }, [objektsFiltered, columns]);
 
   useEffect(() => {
     startTransition(() => {
-      const objekts = filterObjektsOwned(filters, objektsOwned);
-      if (filters.grouped) {
-        setObjektsFiltered(
-          Object.values(groupBy(objekts, prop("collectionId")))
-        );
-      } else {
-        setObjektsFiltered(objekts.map((objekt) => [objekt]));
-      }
+      setObjektsFiltered(filterAndGroupObjektsOwned(filters, objektsOwned));
     });
   }, [filters, objektsOwned]);
 

@@ -5,7 +5,7 @@ import { ValidSort, validSorts } from "@/lib/universal/cosmo/common";
 import { Select } from "../ui";
 
 interface Props extends PropsWithFilters<"sort"> {
-  showSerial?: boolean;
+  isOwned?: boolean;
 }
 
 const map: Record<ValidSort, string> = {
@@ -15,21 +15,24 @@ const map: Record<ValidSort, string> = {
   noDescending: "Highest Collection No.",
   serialAsc: "Lowest Serial",
   serialDesc: "Highest Serial",
+  duplicateAsc: "Lowest Duplicate",
+  duplicateDesc: "Highest Duplicate",
 };
 
 export default function SortFilter({
   filters,
   setFilters,
-  showSerial = false,
+  isOwned = false,
 }: Props) {
   function update(value: ValidSort) {
-    setFilters({
+    setFilters((current) => ({
       sort: value === "newest" ? null : value,
-    });
+      grouped: value.startsWith("duplicate") ? true : current.grouped,
+    }));
   }
 
   const availableSorts = validSorts.filter((s) =>
-    showSerial ? true : !s.startsWith("serial")
+    isOwned ? true : !s.startsWith("serial") && !s.startsWith("duplicate")
   );
 
   return (

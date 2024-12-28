@@ -13,6 +13,8 @@ export const validSorts = [
   // should not be sent to cosmo
   "serialAsc",
   "serialDesc",
+  "duplicateAsc",
+  "duplicateDesc",
 ] as const;
 export type ValidSort = (typeof validSorts)[number];
 

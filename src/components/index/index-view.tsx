@@ -60,8 +60,7 @@ export default function IndexView({ objekts, artists }: Props) {
 
   useEffect(() => {
     startTransition(() => {
-      const filtered = filterObjektsIndexed(filters, objekts);
-      setObjektsFiltered(filtered);
+      setObjektsFiltered(filterObjektsIndexed(filters, objekts));
     });
   }, [filters, objekts]);
 

@@ -30,7 +30,7 @@ export default function FilterView({ isOwned, artists }: Props) {
     setMounted(true);
   }, []);
 
-  if (!mounted) return null
+  if (!mounted) return null;
 
   return (
     <div className="flex gap-2 items-center flex-wrap justify-center">
@@ -59,7 +59,7 @@ export default function FilterView({ isOwned, artists }: Props) {
       <FilterSort
         filters={filters.sort}
         setFilters={setFilters}
-        showSerial={isOwned}
+        isOwned={isOwned}
       />
       <FilterCollectionNo
         filters={filters.collection}

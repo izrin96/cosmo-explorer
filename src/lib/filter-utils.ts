@@ -2,42 +2,35 @@ import { CosmoFilters } from "@/hooks/use-cosmo-filters";
 import { ValidClass, ValidSeason } from "@/lib/universal/cosmo/common";
 import { getCollectionShortId, IndexedObjekt } from "./universal/objekts";
 import { OwnedObjekt } from "./universal/cosmo/objekts";
+import { groupBy, prop } from "remeda";
 
 export function filterObjektsIndexed(
   filters: CosmoFilters,
   objekts: IndexedObjekt[]
 ) {
-  let filteredObjekts = [...objekts];
-
   if (filters.member) {
-    filteredObjekts = filteredObjekts.filter(
-      (a) => a.member === filters.member
-    );
+    objekts = objekts.filter((a) => a.member === filters.member);
   }
   if (filters.artist) {
-    filteredObjekts = filteredObjekts.filter(
-      (a) => a.artist === filters.artist
-    );
+    objekts = objekts.filter((a) => a.artist === filters.artist);
   }
   if (filters.class) {
-    filteredObjekts = filteredObjekts.filter((a) =>
+    objekts = objekts.filter((a) =>
       filters.class?.includes(a.class as ValidClass)
     );
   }
   if (filters.season) {
-    filteredObjekts = filteredObjekts.filter((a) =>
+    objekts = objekts.filter((a) =>
       filters.season?.includes(a.season as ValidSeason)
     );
   }
   if (filters.on_offline) {
-    filteredObjekts = filteredObjekts.filter((a) =>
-      filters.on_offline?.includes(a.onOffline)
-    );
+    objekts = objekts.filter((a) => filters.on_offline?.includes(a.onOffline));
   }
 
   const collectionNo = filters.collection ?? "";
   if (collectionNo) {
-    filteredObjekts = filteredObjekts.filter((objekt) =>
+    objekts = objekts.filter((objekt) =>
       getCollectionShortId(objekt)
         ?.toLowerCase()
         ?.includes(collectionNo.toLowerCase())
@@ -47,60 +40,56 @@ export function filterObjektsIndexed(
   const sort = filters.sort ?? "newest";
   switch (sort) {
     case "newest":
-      filteredObjekts = filteredObjekts.toSorted(
+      objekts = objekts.toSorted(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       );
       break;
     case "oldest":
-      filteredObjekts = filteredObjekts.toSorted(
+      objekts = objekts.toSorted(
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
       break;
     case "noDescending":
-      filteredObjekts = filteredObjekts.toSorted((a, b) =>
+      objekts = objekts.toSorted((a, b) =>
         b.collectionNo.localeCompare(a.collectionNo)
       );
       break;
     case "noAscending":
-      filteredObjekts = filteredObjekts.toSorted((a, b) =>
+      objekts = objekts.toSorted((a, b) =>
         a.collectionNo.localeCompare(b.collectionNo)
       );
       break;
   }
 
-  return filteredObjekts;
+  return objekts;
 }
 
 export function filterObjektsOwned(
   filters: CosmoFilters,
   objekts: OwnedObjekt[]
 ) {
-  let filteredObjekts = [...objekts];
-
   if (filters.member) {
-    filteredObjekts = filteredObjekts.filter(
-      (a) => a.member === filters.member
-    );
+    objekts = objekts.filter((a) => a.member === filters.member);
   }
   if (filters.artist) {
-    filteredObjekts = filteredObjekts.filter((a) =>
+    objekts = objekts.filter((a) =>
       a.artists.includes(filters.artist ?? "tripleS")
     );
   }
   if (filters.class) {
-    filteredObjekts = filteredObjekts.filter((a) =>
+    objekts = objekts.filter((a) =>
       filters.class?.includes(a.class as ValidClass)
     );
   }
   if (filters.season) {
-    filteredObjekts = filteredObjekts.filter((a) =>
+    objekts = objekts.filter((a) =>
       filters.season?.includes(a.season as ValidSeason)
     );
   }
   if (filters.on_offline) {
-    filteredObjekts = filteredObjekts.filter(
+    objekts = objekts.filter(
       (a) =>
         (filters.on_offline?.includes("online")
           ? a.collectionNo.includes("Z")
@@ -111,17 +100,17 @@ export function filterObjektsOwned(
     );
   }
   if (filters.transferable) {
-    filteredObjekts = filteredObjekts.filter((a) => a.transferable === true);
+    objekts = objekts.filter((a) => a.transferable === true);
   }
   if (filters.gridable) {
-    filteredObjekts = filteredObjekts.filter(
+    objekts = objekts.filter(
       (a) => a.usedForGrid === false && a.class === "First"
     );
   }
 
   const collectionNo = filters.collection ?? "";
   if (collectionNo) {
-    filteredObjekts = filteredObjekts.filter((objekt) =>
+    objekts = objekts.filter((objekt) =>
       getCollectionShortId(objekt)
         ?.toLowerCase()
         ?.includes(collectionNo.toLowerCase())
@@ -131,38 +120,64 @@ export function filterObjektsOwned(
   const sort = filters.sort ?? "newest";
   switch (sort) {
     case "newest":
-      filteredObjekts = filteredObjekts.toSorted(
+      objekts = objekts.toSorted(
         (a, b) =>
           new Date(b.receivedAt).getTime() - new Date(a.receivedAt).getTime()
       );
       break;
     case "oldest":
-      filteredObjekts = filteredObjekts.toSorted(
+      objekts = objekts.toSorted(
         (a, b) =>
           new Date(a.receivedAt).getTime() - new Date(b.receivedAt).getTime()
       );
       break;
     case "noDescending":
-      filteredObjekts = filteredObjekts.toSorted((a, b) =>
+      objekts = objekts.toSorted((a, b) =>
         b.collectionNo.localeCompare(a.collectionNo)
       );
       break;
     case "noAscending":
-      filteredObjekts = filteredObjekts.toSorted((a, b) =>
+      objekts = objekts.toSorted((a, b) =>
         a.collectionNo.localeCompare(b.collectionNo)
       );
       break;
     case "serialDesc":
-      filteredObjekts = filteredObjekts.toSorted(
-        (a, b) => b.objektNo - a.objektNo
-      );
+      objekts = objekts.toSorted((a, b) => b.objektNo - a.objektNo);
       break;
     case "serialAsc":
-      filteredObjekts = filteredObjekts.toSorted(
-        (a, b) => a.objektNo - b.objektNo
-      );
+      objekts = objekts.toSorted((a, b) => a.objektNo - b.objektNo);
       break;
   }
 
-  return filteredObjekts;
+  return objekts;
+}
+
+export function filterGroupedObjektsOwned(
+  filters: CosmoFilters,
+  objekts: OwnedObjekt[][]
+) {
+  const sort = filters.sort ?? "newest";
+  switch (sort) {
+    case "duplicateDesc":
+      objekts = objekts.toSorted((a, b) => b.length - a.length);
+      break;
+    case "duplicateAsc":
+      objekts = objekts.toSorted((a, b) => a.length - b.length);
+      break;
+  }
+  return objekts;
+}
+
+export function filterAndGroupObjektsOwned(
+  filters: CosmoFilters,
+  objekts: OwnedObjekt[]
+) {
+  objekts = filterObjektsOwned(filters, objekts);
+  let groupedObjekts: OwnedObjekt[][];
+  if (filters.grouped) {
+    groupedObjekts = Object.values(groupBy(objekts, prop("collectionId")));
+  } else {
+    groupedObjekts = objekts.map((objekt) => [objekt]);
+  }
+  return filterGroupedObjektsOwned(filters, groupedObjekts);
 }

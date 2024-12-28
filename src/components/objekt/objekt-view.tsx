@@ -28,11 +28,11 @@ import TradeView from "./trade-view";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import ErrorFallbackRender from "../error-fallback";
 import ObjektSidebar from "./objekt-sidebar";
+import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
 
 type Props = {
   objekts: ValidObjekt[];
   isOwned?: boolean;
-  showSerial?: boolean;
   priority?: boolean;
   setActive?: (slug: string | null) => void;
 };
@@ -42,10 +42,10 @@ const MemoizedImage = memo(NextImage);
 export default memo(function ObjektView({
   objekts,
   isOwned = false,
-  showSerial = false,
   priority = false,
   setActive,
 }: Props) {
+  const [filters] = useCosmoFilters();
   const [objekt] = objekts;
   const [open, setOpen] = useState(false);
   const [_, startTransition] = useTransition();
@@ -110,7 +110,7 @@ export default memo(function ObjektView({
             onClick={onClick}
           >
             {`${getCollectionShortId(objekt)}`}
-            {showSerial && ` #${(objekt as OwnedObjekt).objektNo}`}
+            {!filters.grouped && ` #${(objekt as OwnedObjekt).objektNo}`}
           </Badge>
         </div>
       </div>
@@ -158,7 +158,7 @@ export function ObjektModal({
       <Modal.Header className="hidden">
         <Modal.Title>Objekt display</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="p-0 sm:p-0 overflow-y-auto sm:overflow-hidden">
+      <Modal.Body className="p-0 sm:p-0 overflow-y-auto sm:overflow-y-hidden">
         <ObjektDetail isOwned={isOwned} objekts={objekts} />
       </Modal.Body>
     </Modal.Content>

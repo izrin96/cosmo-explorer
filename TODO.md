@@ -30,6 +30,7 @@
 - [x] objekt's trades history
 - [x] suspense
 - [x] serial number and collection number printed on picture
+- [x] highest/lowest number of duplicates
 - [ ] progress
 - [ ] leaderboard
 - [ ] login
