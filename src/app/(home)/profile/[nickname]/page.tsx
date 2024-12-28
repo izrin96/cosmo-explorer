@@ -30,7 +30,7 @@ export default async function UserCollectionPage(props: Props) {
 
   return (
     <>
-      <div className="text-xl font-semibold">{params.nickname}</div>
+      <div className="text-xl font-semibold">{targetUser.nickname}</div>
       <div className="overflow-auto text-xs text-muted-fg">
         {targetUser.address}
       </div>

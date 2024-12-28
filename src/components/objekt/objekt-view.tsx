@@ -109,8 +109,8 @@ export default memo(function ObjektView({
             shape="square"
             onClick={onClick}
           >
-            {`${getCollectionShortId(objekt)}`}
-            {!filters.grouped && ` #${(objekt as OwnedObjekt).objektNo}`}
+            {getCollectionShortId(objekt)}
+            {isOwned && !filters.grouped && ` #${(objekt as OwnedObjekt).objektNo}`}
           </Badge>
         </div>
       </div>
