@@ -30,7 +30,7 @@ export default function ArtistFilter({ filters, setFilters, artists }: Props) {
         selectedKeys={selected}
         onSelectionChange={update}
         items={artists}
-        className="max-h-72 min-w-52"
+        className="min-w-52"
       >
         {(item) => <Menu.Radio id={item.name}>{item.title}</Menu.Radio>}
       </Menu.Content>

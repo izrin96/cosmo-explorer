@@ -4,8 +4,7 @@ import { type Selection } from "@react-types/shared"
 import { ValidClass, validClasses } from "@/lib/universal/cosmo/common";
 import { memo, useCallback, useMemo } from "react";
 import { PropsWithFilters } from "@/hooks/use-cosmo-filters";
-import { Button } from "../ui/button";
-import { Menu } from "../ui";
+import { Button, Menu } from "../ui";
 
 type Props = PropsWithFilters<"class">;
 

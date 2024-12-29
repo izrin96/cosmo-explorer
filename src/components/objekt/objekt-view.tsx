@@ -19,8 +19,7 @@ import {
   getObjektSlug,
   getObjektType,
 } from "./objekt-util";
-import { Badge, GridList, Skeleton, Tabs } from "../ui";
-import { Modal } from "../ui";
+import { Badge, GridList, Skeleton, Tabs, Modal } from "../ui";
 import { useQuery } from "@tanstack/react-query";
 import { ofetch } from "ofetch";
 import Tilt from "react-parallax-tilt";
@@ -110,7 +109,9 @@ export default memo(function ObjektView({
             onClick={onClick}
           >
             {getCollectionShortId(objekt)}
-            {isOwned && !filters.grouped && ` #${(objekt as OwnedObjekt).objektNo}`}
+            {isOwned &&
+              !filters.grouped &&
+              ` #${(objekt as OwnedObjekt).objektNo}`}
           </Badge>
         </div>
       </div>
@@ -202,7 +203,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
         className="flex h-[21rem] sm:h-[32rem] aspect-photocard self-center flex-none select-none"
         style={css}
       >
-        <Tilt tiltReverse transitionSpeed={1000} tiltEnable={isDesktop}>
+        <Tilt tiltReverse transitionSpeed={1000} tiltEnable={isDesktop} tiltMaxAngleX={3} tiltMaxAngleY={3}>
           <div
             data-flipped={flipped}
             className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform transform-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"

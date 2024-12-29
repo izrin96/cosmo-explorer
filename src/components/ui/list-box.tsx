@@ -96,7 +96,7 @@ type ListBoxPickerProps<T> = ListBoxProps<T>
 const ListBoxPicker = <T extends object>({ className, ...props }: ListBoxPickerProps<T>) => {
   return (
     <ListBoxPrimitive
-      className={composeTailwindRenderProps(className, "max-h-72 overflow-auto p-1 outline-hidden")}
+      className={composeTailwindRenderProps(className, "overflow-auto p-1 outline-hidden")}
       {...props}
     />
   )

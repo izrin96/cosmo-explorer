@@ -4,8 +4,7 @@ import { type Selection } from "@react-types/shared"
 import { PropsWithFilters } from "@/hooks/use-cosmo-filters";
 import { ValidSeason, validSeasons } from "@/lib/universal/cosmo/common";
 import { useMemo, useCallback } from "react";
-import { Button } from "../ui/button";
-import { Menu } from "../ui";
+import { Menu, Button } from "../ui";
 
 type Props = PropsWithFilters<"season">;
 

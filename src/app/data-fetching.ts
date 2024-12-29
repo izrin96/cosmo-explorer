@@ -3,6 +3,15 @@ import { fetchArtistBff } from "@/lib/server/cosmo/artists";
 import { fetchAccessToken } from "@/lib/server/token";
 import { validArtists } from "@/lib/universal/cosmo/common";
 import { cache } from "react";
+import { getUser } from "./api/common";
+
+/**
+ * Decode the current token.
+ */
+export const decodeUser = cache(async () => {
+  const auth = await getUser();
+  return auth.success ? auth.user : undefined;
+});
 
 /**
  * Fetch a user by nickname or address.

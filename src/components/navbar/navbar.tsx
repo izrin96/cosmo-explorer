@@ -2,6 +2,8 @@ import { ThemeSwitcher } from "../theme-switcher";
 import { Container } from "../ui";
 import UserSearch from "../user-search";
 import Link from "next/link";
+// import AuthStatus from "./auth-status";
+// import AuthUser from "./auth-user";
 
 export default async function Navbar() {
   return (
@@ -15,6 +17,8 @@ export default async function Navbar() {
         <div className="flex items-center gap-2">
           <ThemeSwitcher />
           <UserSearch />
+          {/* <AuthStatus /> */}
+          {/* <AuthUser /> */}
         </div>
       </Container>
     </nav>

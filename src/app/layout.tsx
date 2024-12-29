@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import ClientProviders from "./client-providers";
-import { Toast } from "@/components/ui/toast";
+import { Toast } from "@/components/ui";
 import Navbar from "@/components/navbar/navbar";
 import { Suspense } from "react";
 

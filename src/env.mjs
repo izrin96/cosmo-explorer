@@ -23,10 +23,17 @@ export const env = createEnv({
     NEXT_PUBLIC_URL: z.string().optional(),
     NEXT_PUBLIC_VERCEL_URL: z.string().optional(),
     NEXT_PUBLIC_VERCEL_ENV: z.string().optional(),
+    NEXT_PUBLIC_ALCHEMY_KEY: z.string().optional(),
+    NEXT_PUBLIC_RAMPER_FIREBASE_KEY: z.string().optional(),
+    NEXT_PUBLIC_RAMPER_FIREBASE_ID: z.string().optional(),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_URL: process.env.NEXT_PUBLIC_URL,
     NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
     NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
-  }
+    NEXT_PUBLIC_ALCHEMY_KEY: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
+    NEXT_PUBLIC_RAMPER_FIREBASE_KEY:
+      process.env.NEXT_PUBLIC_RAMPER_FIREBASE_KEY,
+    NEXT_PUBLIC_RAMPER_FIREBASE_ID: process.env.NEXT_PUBLIC_RAMPER_FIREBASE_ID,
+  },
 });

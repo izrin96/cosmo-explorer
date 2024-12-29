@@ -8,13 +8,12 @@ import FilterTransferable from "./filter-transferable";
 import FilterOnline from "./filter-online";
 import FilterClass from "./filter-class";
 import FilterCollectionNo from "./filter-collection-no";
-import { Toggle } from "../ui/toggle";
+import { Toggle } from "../ui";
 import MemberFilter from "./filter-member";
 import { CosmoArtistWithMembersBFF } from "@/lib/universal/cosmo/artists";
 import ArtistFilter from "./filter-artist";
 import ColumnFilter from "./filter-column";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { useEffect, useState } from "react";
 
 type Props = {
   artists: CosmoArtistWithMembersBFF[];
@@ -22,15 +21,8 @@ type Props = {
 };
 
 export default function FilterView({ isOwned, artists }: Props) {
-  const [mounted, setMounted] = useState(false);
   const isDesktop = useMediaQuery();
   const [filters, setFilters] = useCosmoFilters();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
 
   return (
     <div className="flex gap-2 items-center flex-wrap justify-center">

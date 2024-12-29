@@ -31,16 +31,15 @@
 - [x] suspense
 - [x] serial number and collection number printed on picture
 - [x] highest/lowest number of duplicates
+- [x] login
+- [x] wallet connect
 - [ ] progress
-- [ ] leaderboard
-- [ ] login
 - [ ] transfer objekt, can select multiple
-- [ ] index all user using cosmo's search api
-- [ ] utilize zustand
+- [ ] leaderboard
 - [ ] user's trades history
-- [ ] user's como, user's profile picture
-- [ ] prefetch
-- [ ] search user change component to cmdk
+- [ ] index all user using cosmo's search api
+- [ ] user's como, user's profile picture (low prio)
+- [ ] search user change component to cmdk (low prio)
 
 ## features
 
