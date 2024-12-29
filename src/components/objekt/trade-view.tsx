@@ -245,7 +245,7 @@ function UserLink({ address }: { address: string }) {
 
   return (
     <Link href={`/@${data?.nickname ?? address}`}>
-      {data?.nickname ?? address}
+      {data?.nickname ?? address.substring(0, 6)}
     </Link>
   );
 }
