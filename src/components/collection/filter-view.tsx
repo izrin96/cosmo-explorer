@@ -7,7 +7,7 @@ import FilterGridable from "./filter-gridable";
 import FilterTransferable from "./filter-transferable";
 import FilterOnline from "./filter-online";
 import FilterClass from "./filter-class";
-import FilterCollectionNo from "./filter-collection-no";
+import FilterSearch from "./filter-search";
 import { Toggle } from "../ui";
 import MemberFilter from "./filter-member";
 import { CosmoArtistWithMembersBFF } from "@/lib/universal/cosmo/artists";
@@ -53,8 +53,8 @@ export default function FilterView({ isOwned, artists }: Props) {
         setFilters={setFilters}
         isOwned={isOwned}
       />
-      <FilterCollectionNo
-        filters={filters.collection}
+      <FilterSearch
+        filters={filters.search}
         setFilters={setFilters}
       />
       {isOwned && (

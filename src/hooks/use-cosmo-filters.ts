@@ -36,10 +36,8 @@ export function useCosmoFilters() {
     transferable: parseAsBoolean,
     gridable: parseAsBoolean,
     used_for_grid: parseAsBoolean,
-    // grid param: "Atom01 JinSoul 101Z"
-    collection: parseAsString,
-    // index param: ["101Z", "102Z"]
-    collectionNo: parseAsArrayOf(parseAsString),
+    search: parseAsString,
+    searches: parseAsArrayOf(parseAsString),
     grouped: parseAsBoolean,
     column: parseAsInteger
   });

@@ -3,12 +3,12 @@
 import { PropsWithFilters } from "@/hooks/use-cosmo-filters";
 import { SearchField } from "../ui";
 
-type Props = PropsWithFilters<"collection">;
+type Props = PropsWithFilters<"search">;
 
-export default function FilterCollectionNo({ filters, setFilters }: Props) {
+export default function FilterSearch({ filters, setFilters }: Props) {
   function update(value: string) {
     setFilters({
-      collection: value === "" ? null : value,
+        search: value === "" ? null : value,
     });
   }
 

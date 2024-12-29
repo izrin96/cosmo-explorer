@@ -1,8 +1,18 @@
 import { CosmoFilters } from "@/hooks/use-cosmo-filters";
 import { ValidClass, ValidSeason } from "@/lib/universal/cosmo/common";
-import { getCollectionShortId, IndexedObjekt } from "./universal/objekts";
+import {
+  getSeasonCollectionNo,
+  IndexedObjekt,
+  ValidObjekt,
+} from "./universal/objekts";
 import { OwnedObjekt } from "./universal/cosmo/objekts";
 import { groupBy, prop } from "remeda";
+
+const searchFilter = (search: string) => (objekt: ValidObjekt) =>
+  `${objekt.member} ${objekt.collectionNo}`.toLowerCase().includes(search) ||
+  `${objekt.member} ${getSeasonCollectionNo(objekt)}`
+    .toLowerCase()
+    .includes(search);
 
 export function filterObjektsIndexed(
   filters: CosmoFilters,
@@ -28,12 +38,15 @@ export function filterObjektsIndexed(
     objekts = objekts.filter((a) => filters.on_offline?.includes(a.onOffline));
   }
 
-  const collectionNo = filters.collection ?? "";
-  if (collectionNo) {
+  const search = filters.search;
+  if (search) {
+    objekts = objekts.filter(searchFilter(search));
+  }
+
+  const searches = filters.searches ?? [];
+  if (searches.length > 0) {
     objekts = objekts.filter((objekt) =>
-      getCollectionShortId(objekt)
-        ?.toLowerCase()
-        ?.includes(collectionNo.toLowerCase())
+      searches.map((s) => s.toLowerCase()).some((s) => searchFilter(s)(objekt))
     );
   }
 
@@ -108,12 +121,15 @@ export function filterObjektsOwned(
     );
   }
 
-  const collectionNo = filters.collection ?? "";
-  if (collectionNo) {
+  const search = filters.search;
+  if (search) {
+    objekts = objekts.filter(searchFilter(search));
+  }
+
+  const searches = filters.searches ?? [];
+  if (searches.length > 0) {
     objekts = objekts.filter((objekt) =>
-      getCollectionShortId(objekt)
-        ?.toLowerCase()
-        ?.includes(collectionNo.toLowerCase())
+      searches.map((s) => s.toLowerCase()).some((s) => searchFilter(s)(objekt))
     );
   }
 

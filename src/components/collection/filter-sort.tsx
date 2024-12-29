@@ -34,7 +34,7 @@ export default function SortFilter({
       newFilters.length > 0 ? (newFilters[0] as ValidSort) : "newest";
 
     setFilters((current) => ({
-      sort: newValue,
+      sort: newValue === "newest" ? null : newValue,
       grouped: newValue.startsWith("duplicate") ? true : current.grouped,
     }));
   }

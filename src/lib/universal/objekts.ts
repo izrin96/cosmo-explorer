@@ -33,5 +33,9 @@ export function parsePage<T>(data: any) {
 }
 
 export function getCollectionShortId(objekt: ValidObjekt) {
-  return `${objekt.member} ${objekt.season.charAt(0)}${objekt.collectionNo}`
+  return `${objekt.member} ${getSeasonCollectionNo(objekt)}`
+}
+
+export function getSeasonCollectionNo(objekt: ValidObjekt) {
+  return `${objekt.season.charAt(0)}${objekt.collectionNo}`
 }
