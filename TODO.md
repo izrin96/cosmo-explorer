@@ -33,11 +33,12 @@
 - [x] highest/lowest number of duplicates
 - [x] login
 - [x] wallet connect
-- [ ] progress
-- [ ] transfer objekt, can select multiple
+- [ ] improve navbar
+- [ ] user collection progress
 - [ ] leaderboard
 - [ ] user's trades history
-- [ ] index all user using cosmo's search api
+- [ ] index all user using cosmo's search api (low prio)
+- [ ] transfer objekt, can select multiple (low prio)
 - [ ] user's como, user's profile picture (low prio)
 - [ ] search user change component to cmdk (low prio)
 

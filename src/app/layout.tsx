@@ -64,9 +64,9 @@ export default function RootLayout({
           <ClientProviders>
             <div className="relative flex min-h-dvh flex-col">
               <Navbar />
-              <div className="flex min-w-full flex-col items-center">
+              <main className="flex min-w-full flex-col items-center">
                 {children}
-              </div>
+              </main>
             </div>
           </ClientProviders>
           <Toast />

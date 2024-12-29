@@ -19,7 +19,7 @@ export default function FilterSearches({ filters, setFilters }: Props) {
           ? selectedItems.items.map((item) => item.name)
           : null,
     });
-  }, [selectedItems.items]);
+  }, [selectedItems.items, setFilters]);
 
   return (
     <TagField
