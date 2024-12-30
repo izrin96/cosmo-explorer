@@ -123,7 +123,9 @@ function ProfileViewRender({ profile, artists }: Props) {
       <FilterView isOwned artists={artists} />
       <div className="flex items-center gap-2">
         {hasNextPage && <Loader />}
-        <span className="font-bold">{objektsFiltered.length} total</span>
+        <span className="font-semibold">
+          {objektsFiltered.flatMap(item => item).length} total{filters.grouped ? ` (${objektsFiltered.length} grouped)` : ''}
+        </span>
       </div>
 
       <WindowVirtualizer>{virtualList}</WindowVirtualizer>

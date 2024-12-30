@@ -67,7 +67,7 @@ export default function IndexView({ objekts, artists }: Props) {
   return (
     <div className="flex flex-col gap-2">
       <FilterView artists={artists} />
-      <span className="font-bold">{objektsFiltered.length} total</span>
+      <span className="font-semibold">{objektsFiltered.length} total</span>
 
       <WindowVirtualizer>{virtualList}</WindowVirtualizer>
 
