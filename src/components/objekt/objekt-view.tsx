@@ -74,11 +74,11 @@ export default memo(function ObjektView({
         <Tilt
           tiltEnable={isDesktop}
           tiltReverse
-          scale={1.08}
+          scale={isDesktop ? 1.08 : undefined}
           transitionSpeed={1000}
-          glareEnable
-          glarePosition="bottom"
-          glareBorderRadius="12px"
+          glareEnable={isDesktop}
+          glarePosition={isDesktop ? "bottom" : undefined}
+          glareBorderRadius={isDesktop ? "12px" : undefined}
         >
           <div
             className="cursor-pointer relative overflow-hidden aspect-photocard drop-shadow"
@@ -205,7 +205,13 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
         className="flex h-[21rem] sm:h-[32rem] aspect-photocard self-center flex-none select-none"
         style={css}
       >
-        <Tilt tiltReverse transitionSpeed={1000} tiltEnable={isDesktop} tiltMaxAngleX={3} tiltMaxAngleY={3}>
+        <Tilt
+          tiltReverse
+          transitionSpeed={1000}
+          tiltEnable={isDesktop}
+          tiltMaxAngleX={3}
+          tiltMaxAngleY={3}
+        >
           <div
             data-flipped={flipped}
             className="relative h-full aspect-photocard cursor-pointer touch-manipulation transition-transform transform-3d transform-gpu duration-300 data-[flipped=true]:rotate-y-180"
