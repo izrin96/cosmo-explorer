@@ -11,7 +11,9 @@ import { groupBy, prop } from "remeda";
 const searchFilter = (search: string) => (objekt: ValidObjekt) => {
   const searchLower = search.toLowerCase();
   return (
-    `${objekt.member} ${objekt.collectionNo}`.toLowerCase().includes(searchLower) ||
+    `${objekt.member} ${objekt.collectionNo}`
+      .toLowerCase()
+      .includes(searchLower) ||
     `${objekt.member} ${getSeasonCollectionNo(objekt)}`
       .toLowerCase()
       .includes(searchLower)
@@ -42,15 +44,22 @@ export function filterObjektsIndexed(
     objekts = objekts.filter((a) => filters.on_offline?.includes(a.onOffline));
   }
 
-  const search = filters.search;
-  if (search) {
-    objekts = objekts.filter(searchFilter(search));
+  if (filters.search) {
+    // objekts = objekts.filter(searchFilter(search));
+    // support multiple query split by commas
+    const searches = filters.search
+      .split(",")
+      .filter(Boolean)
+      .map((a) => a.trim());
+    objekts = objekts.filter((objekt) =>
+      searches.some((s) => searchFilter(s)(objekt))
+    );
   }
 
   const searches = filters.searches ?? [];
   if (searches.length > 0) {
     objekts = objekts.filter((objekt) =>
-      searches.map((s) => s.toLowerCase()).some((s) => searchFilter(s)(objekt))
+      searches.some((s) => searchFilter(s)(objekt))
     );
   }
 
@@ -125,15 +134,22 @@ export function filterObjektsOwned(
     );
   }
 
-  const search = filters.search;
-  if (search) {
-    objekts = objekts.filter(searchFilter(search));
+  if (filters.search) {
+    // objekts = objekts.filter(searchFilter(search));
+    // support multiple query split by commas
+    const searches = filters.search
+      .split(",")
+      .filter(Boolean)
+      .map((a) => a.trim());
+    objekts = objekts.filter((objekt) =>
+      searches.some((s) => searchFilter(s)(objekt))
+    );
   }
 
   const searches = filters.searches ?? [];
   if (searches.length > 0) {
     objekts = objekts.filter((objekt) =>
-      searches.map((s) => s.toLowerCase()).some((s) => searchFilter(s)(objekt))
+      searches.some((s) => searchFilter(s)(objekt))
     );
   }
 

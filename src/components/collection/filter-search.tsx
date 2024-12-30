@@ -15,9 +15,9 @@ export default function FilterSearch({ filters, setFilters }: Props) {
   return (
     <div>
       <SearchField
-        placeholder="Search"
+        placeholder="Search (split by commas)"
         onChange={(value) => update(value)}
-        className="w-40"
+        className="min-w-40"
         value={filters ?? ""}
         aria-label="Search"
       />
