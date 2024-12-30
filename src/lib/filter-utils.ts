@@ -8,11 +8,15 @@ import {
 import { OwnedObjekt } from "./universal/cosmo/objekts";
 import { groupBy, prop } from "remeda";
 
-const searchFilter = (search: string) => (objekt: ValidObjekt) =>
-  `${objekt.member} ${objekt.collectionNo}`.toLowerCase().includes(search) ||
-  `${objekt.member} ${getSeasonCollectionNo(objekt)}`
-    .toLowerCase()
-    .includes(search);
+const searchFilter = (search: string) => (objekt: ValidObjekt) => {
+  const searchLower = search.toLowerCase();
+  return (
+    `${objekt.member} ${objekt.collectionNo}`.toLowerCase().includes(searchLower) ||
+    `${objekt.member} ${getSeasonCollectionNo(objekt)}`
+      .toLowerCase()
+      .includes(searchLower)
+  );
+};
 
 export function filterObjektsIndexed(
   filters: CosmoFilters,
