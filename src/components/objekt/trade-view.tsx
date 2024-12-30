@@ -206,7 +206,7 @@ function TradeTable({ slug, serial }: { slug: string; serial: number }) {
           <Table.Column isRowHeader isResizable>
             Owner
           </Table.Column>
-          <Table.Column>Date</Table.Column>
+          <Table.Column minWidth={200}>Date</Table.Column>
         </Table.Header>
         <Table.Body items={data}>
           {(item) => (
