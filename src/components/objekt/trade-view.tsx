@@ -126,7 +126,7 @@ function Trades({
     <div className="flex flex-col gap-2">
       <div className="flex gap-2 items-center">
         <NumberField
-          minValue={1}
+          minValue={0}
           className="grow"
           aria-label="Serial no."
           value={serial}

@@ -56,13 +56,13 @@ export async function user(accessToken: string) {
 /**
  * Search for the given user.
  */
-export async function search(token: string, term: string) {
+export async function search(token: string, query: string) {
   return await cosmo<CosmoSearchResult>("/user/v1/search", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
     query: {
-      query: term,
+      query,
     },
   });
 }

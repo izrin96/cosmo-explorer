@@ -33,14 +33,15 @@
 - [x] highest/lowest number of duplicates
 - [x] login
 - [x] wallet connect
+- [x] fix accent color on some objekt (low prio)
 - [ ] improve navbar
 - [ ] user collection progress
 - [ ] leaderboard
 - [ ] user's trades history
-- [ ] index all user using cosmo's search api (low prio)
 - [ ] transfer objekt, can select multiple (low prio)
 - [ ] user's como, user's profile picture (low prio)
 - [ ] search user change component to cmdk (low prio)
+- [ ] ~~index all user using cosmo's search api (low prio)~~ (cannot proceed due to rate limit)
 
 ## features
 

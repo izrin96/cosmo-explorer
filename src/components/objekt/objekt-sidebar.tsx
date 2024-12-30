@@ -15,7 +15,7 @@ export default function ObjektSidebar({ collection, serial }: Props) {
       style={{ lineHeight: `${width}px`, fontSize: `${width * 0.47}px` }}
     >
       <span>{collection}</span>
-      {serial && <span className="font-dotmatrix font-normal mr-[3px]">#{serial.toString().padStart(5, "0")}</span>}
+      {serial !== undefined && <span className="font-dotmatrix font-normal mr-[3px]">#{serial.toString().padStart(5, "0")}</span>}
     </div>
   );
 }
