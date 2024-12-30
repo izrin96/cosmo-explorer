@@ -44,13 +44,14 @@ export default memo(function ObjektView({
   priority = false,
   setActive,
 }: Props) {
+  const isDesktop = useMediaQuery();
   const [filters] = useCosmoFilters();
   const [objekt] = objekts;
   const [open, setOpen] = useState(false);
   const [_, startTransition] = useTransition();
 
   const css = {
-    "--objekt-background-color": objekt.backgroundColor,
+    "--objekt-accent-color": objekt.accentColor,
     "--objekt-text-color": objekt.textColor,
   } as CSSProperties;
 
@@ -71,6 +72,7 @@ export default memo(function ObjektView({
     <div style={css}>
       <div className="flex flex-col gap-2">
         <Tilt
+          tiltEnable={isDesktop}
           tiltReverse
           scale={1.08}
           transitionSpeed={1000}
