@@ -45,7 +45,7 @@ const dropdownSectionStyles = tv({
     section:
       "first:-mt-[5px] xss3 flex flex-col gap-y-0.5 after:block after:h-[4px] after:content-['']",
     header:
-      "-top-[5px] -mb-0.5 -mx-1.5 sticky z-10 min-w-(--trigger-width) truncate border-y bg-muted px-4 py-2 font-medium text-muted-fg text-sm supports-[-moz-appearance:none]:bg-muted [&+*]:mt-1",
+      "-top-[5px] -mb-0.5 -mx-1 sticky z-10 min-w-(--trigger-width) truncate border-y bg-muted px-4 py-2 font-medium text-muted-fg text-sm supports-[-moz-appearance:none]:bg-muted [&+*]:mt-1",
   },
 })
 

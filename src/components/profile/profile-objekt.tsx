@@ -13,7 +13,7 @@ import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
 import { GRID_COLUMNS, GRID_COLUMNS_MOBILE } from "@/lib/utils";
 import {
   QueryErrorResetBoundary,
-  useSuspenseInfiniteQuery,
+  useInfiniteQuery,
 } from "@tanstack/react-query";
 import ObjektView from "../objekt/objekt-view";
 import { filterAndGroupObjektsOwned } from "@/lib/filter-utils";
@@ -31,19 +31,19 @@ type Props = {
   profile: CosmoPublicUser;
 };
 
-export default function ProfileView({ ...props }: Props) {
+export default function ProfileObjektRender({ ...props }: Props) {
   return (
     <QueryErrorResetBoundary>
       {({ reset }) => (
         <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallbackRender}>
-          <ProfileViewRender {...props} />
+          <ProfileObjekt {...props} />
         </ErrorBoundary>
       )}
     </QueryErrorResetBoundary>
   );
 }
 
-function ProfileViewRender({ profile, artists }: Props) {
+function ProfileObjekt({ profile, artists }: Props) {
   const [filters] = useCosmoFilters();
 
   const isDesktop = useMediaQuery();
@@ -65,15 +65,14 @@ function ProfileViewRender({ profile, artists }: Props) {
     [profile.address]
   );
 
-  const { data, fetchNextPage, hasNextPage, isFetching } =
-    useSuspenseInfiniteQuery({
-      queryKey: ["owned-collections", profile.address],
-      queryFn: queryFunction,
-      initialPageParam: 0,
-      getNextPageParam: (lastPage) => lastPage.nextStartAfter,
-      refetchOnWindowFocus: false,
-      staleTime: 1000 * 60 * 5, // 5 minutes
-    });
+  const { data, fetchNextPage, hasNextPage, isFetching } = useInfiniteQuery({
+    queryKey: ["owned-collections", profile.address],
+    queryFn: queryFunction,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => lastPage.nextStartAfter,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
 
   const objektsOwned = useMemo(() => {
     return data?.pages?.flatMap((page) => page.objekts) ?? [];
@@ -124,7 +123,8 @@ function ProfileViewRender({ profile, artists }: Props) {
       <div className="flex items-center gap-2">
         {hasNextPage && <Loader />}
         <span className="font-semibold">
-          {objektsFiltered.flatMap(item => item).length} total{filters.grouped ? ` (${objektsFiltered.length} grouped)` : ''}
+          {objektsFiltered.flatMap((item) => item).length} total
+          {filters.grouped ? ` (${objektsFiltered.length} grouped)` : ""}
         </span>
       </div>
 

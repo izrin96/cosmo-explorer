@@ -1,8 +1,5 @@
-import {
-  getArtistsWithMembers,
-  getUserByIdentifier,
-} from "@/app/data-fetching";
-import ProfileObjekt from "@/components/profile/profile-objekt";
+import { getUserByIdentifier } from "@/app/data-fetching";
+import ProfileTradesRender from "@/components/profile/profile-trades";
 import { Metadata } from "next";
 
 type Props = {
@@ -16,21 +13,20 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const profile = await getUserByIdentifier(params.nickname);
 
   return {
-    title: `${profile.nickname}'s Collection`,
+    title: `${profile.nickname}'s Trades`,
   };
 }
 
-export default async function UserCollectionPage(props: Props) {
+export default async function UserTransfersPage(props: Props) {
   const params = await props.params;
 
-  const [targetUser, artists] = await Promise.all([
+  const [targetUser] = await Promise.all([
     getUserByIdentifier(params.nickname),
-    getArtistsWithMembers(),
   ]);
 
   return (
     <>
-      <ProfileObjekt profile={targetUser} artists={artists} />
+      <ProfileTradesRender profile={targetUser} />
     </>
   );
 }

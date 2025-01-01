@@ -13,14 +13,13 @@ import {
   Card,
   Loader,
   NumberField,
-  Skeleton,
   Table,
 } from "../ui";
 import { IconArrowLeft, IconArrowRight } from "justd-icons";
 import { format } from "date-fns";
-import Link from "next/link";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallbackRender from "../error-fallback";
+import UserLink from "../user-link";
 
 type TradeViewProps = {
   slug: string;
@@ -222,30 +221,5 @@ function TradeTable({ slug, serial }: { slug: string; serial: number }) {
         </Table.Body>
       </Table>
     </Card>
-  );
-}
-
-type FetchUserByAddressResult = {
-  result: {
-    nickname: string;
-    address: string;
-  };
-};
-
-function UserLink({ address }: { address: string }) {
-  const { data, isPending } = useQuery({
-    queryFn: async () =>
-      await ofetch<FetchUserByAddressResult>(
-        `/api/user/by-address/${address}`
-      ).then((res) => res.result),
-    queryKey: ["user-link", address],
-  });
-
-  if (isPending) return <Skeleton className="w-10 h-3" />;
-
-  return (
-    <Link href={`/@${data?.nickname ?? address}`}>
-      {data?.nickname ?? address.substring(0, 6)}
-    </Link>
   );
 }

@@ -39,13 +39,16 @@ type Props = {
 const MemoizedImage = memo(NextImage);
 
 export default memo(function ObjektView({
-  objekts,
   isOwned = false,
   priority = false,
   setActive,
+  ...props
 }: Props) {
   const isDesktop = useMediaQuery();
   const [filters] = useCosmoFilters();
+  const objekts = props.objekts
+    .map((objekt) => objekt as OwnedObjekt)
+    .toSorted((a, b) => a.objektNo - b.objektNo);
   const [objekt] = objekts;
   const [open, setOpen] = useState(false);
   const [_, startTransition] = useTransition();
@@ -69,8 +72,8 @@ export default memo(function ObjektView({
   }, [setOpen, setActive, slug]);
 
   return (
-    <div style={css}>
-      <div className="flex flex-col gap-2">
+    <>
+      <div className="flex flex-col gap-2" style={css}>
         <Tilt
           tiltEnable={isDesktop}
           tiltReverse
@@ -131,7 +134,7 @@ export default memo(function ObjektView({
           });
         }}
       />
-    </div>
+    </>
   );
 });
 
@@ -364,7 +367,7 @@ function OwnedListPanel({ objekts }: OwnedListPanelProps) {
     <GridList
       items={objekts}
       aria-label="Select objekt"
-      selectionMode="single"
+      selectionMode="multiple"
       className="min-w-64 max-h-full"
     >
       {(item) => (

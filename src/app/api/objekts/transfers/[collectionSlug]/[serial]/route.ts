@@ -15,13 +15,6 @@ type Params = {
   }>;
 };
 
-type FetchUserByAddressResult = {
-  result: {
-    nickname: string;
-    address: string;
-  };
-};
-
 export async function GET(_: Request, props: Params) {
   const params = await props.params;
 

@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         source: "/@:nickname",
         destination: "/profile/:nickname",
       },
+      {
+        source: "/@:nickname/trades",
+        destination: "/profile/:nickname/trades",
+      },
     ];
   },
 

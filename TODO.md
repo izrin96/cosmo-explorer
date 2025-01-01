@@ -34,13 +34,14 @@
 - [x] login
 - [x] wallet connect
 - [x] fix accent color on some objekt (low prio)
-- [ ] improve navbar
+- [x] user's trades history
 - [ ] user collection progress
 - [ ] leaderboard
-- [ ] user's trades history
+- [ ] improve navbar
 - [ ] transfer objekt, can select multiple (low prio)
 - [ ] user's como, user's profile picture (low prio)
 - [ ] search user change component to cmdk (low prio)
+- [ ] dehydrate react-query and use suspense
 - [ ] ~~index all user using cosmo's search api (low prio)~~ (cannot proceed due to rate limit)
 
 ## features
