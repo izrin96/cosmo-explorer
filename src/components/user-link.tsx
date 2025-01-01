@@ -11,15 +11,17 @@ type FetchUserByAddressResult = {
 };
 
 export default function UserLink({ address }: { address: string }) {
-  const { data, isPending } = useQuery({
-    queryFn: async () =>
-      await ofetch<FetchUserByAddressResult>(
-        `/api/user/by-address/${address}`
-      ).then((res) => res.result),
-    queryKey: ["user-link", address],
-  });
+  // const { data, isPending } = useQuery({
+  //   queryFn: async () =>
+  //     await ofetch<FetchUserByAddressResult>(
+  //       `/api/user/by-address/${address}`
+  //     ).then((res) => res.result),
+  //   queryKey: ["user-link", address],
+  // });
 
-  if (isPending) return <Skeleton className="w-10 h-3" />;
+  // if (isPending) return <Skeleton className="w-10 h-3" />;
+
+  const data = null as any;
 
   return (
     <Link href={`/@${data?.nickname ?? address}`}>
