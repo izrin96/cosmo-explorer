@@ -49,7 +49,7 @@ async function fetchTransferRows(
     )
     .leftJoin(objekts, eq(transfers.objektId, objekts.id))
     .leftJoin(collections, eq(transfers.collectionId, collections.id))
-    .orderBy(desc(transfers.timestamp), asc(transfers.tokenId))
+    .orderBy(desc(transfers.timestamp), asc(transfers.id))
     .limit(PER_PAGE)
     .offset(page * PER_PAGE);
 
