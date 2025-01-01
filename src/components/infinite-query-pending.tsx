@@ -24,6 +24,7 @@ export function InfiniteQueryNext({
     <div className="flex justify-center py-6">
       {status === "success" && hasNextPage && !isFetchingNextPage && (
         <InView
+          rootMargin="0px 0px 900px 0px"
           as="button"
           onChange={onInView}
           onClick={fetchNextPage}

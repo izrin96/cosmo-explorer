@@ -38,10 +38,11 @@
 - [ ] user collection progress
 - [ ] leaderboard
 - [ ] improve navbar
+- [ ] virtualize table row (low prio)
+- [ ] dehydrate react-query and use suspense (low prio)
 - [ ] transfer objekt, can select multiple (low prio)
 - [ ] user's como, user's profile picture (low prio)
 - [ ] search user change component to cmdk (low prio)
-- [ ] dehydrate react-query and use suspense
 - [ ] ~~index all user using cosmo's search api (low prio)~~ (cannot proceed due to rate limit)
 
 ## features
