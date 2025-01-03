@@ -343,10 +343,10 @@ function AttributePanel({ objekt, children }: AttributeProps) {
       <Pill label="Collection No." value={objekt.collectionNo} />
       <PillColor
         label="Accent Color"
-        value={objekt.accentColor}
+        value={objekt.accentColor.toUpperCase()}
         objekt={objekt}
       />
-      <Pill label="Text Color" value={objekt.textColor} />
+      <Pill label="Text Color" value={objekt.textColor.toUpperCase()} />
       {children}
     </div>
   );

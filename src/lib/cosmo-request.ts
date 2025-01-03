@@ -12,6 +12,14 @@ type OwnedObjektRequest = {
   startAfter: number;
 };
 
+const overrideColor: Record<string, string> = {
+  "Divine01 SeoYeon 117Z": "#B400FF",
+  "Divine01 SeoYeon 118Z": "#B400FF",
+  "Divine01 SeoYeon 119Z": "#B400FF",
+  "Divine01 SeoYeon 120Z": "#B400FF",
+  "Divine01 SeoYeon 317Z": "df2e37",
+};
+
 export async function fetchOwnedObjekts({
   address,
   startAfter,
@@ -27,27 +35,13 @@ export async function fetchOwnedObjekts({
     .then((res) => ({
       ...res,
       objekts: res.objekts.map((objekt) => {
-        // temporary fix accent color for below collection
-        if (
-          [
-            "Divine01 SeoYeon 117Z",
-            "Divine01 SeoYeon 118Z",
-            "Divine01 SeoYeon 119Z",
-            "Divine01 SeoYeon 120Z",
-          ].includes(objekt.collectionId)
-        ) {
+        // temporary fix accent color for some collection
+        const override = overrideColor[objekt.collectionId];
+        if (override) {
           return {
             ...objekt,
-            backgroundColor: "#B400FF",
-            accentColor: "#B400FF",
-          };
-        }
-
-        if (["Divine01 SeoYeon 317Z"].includes(objekt.collectionId)) {
-          return {
-            ...objekt,
-            backgroundColor: "#df2e37",
-            accentColor: "#df2e37",
+            backgroundColor: override,
+            accentColor: override,
           };
         }
 
