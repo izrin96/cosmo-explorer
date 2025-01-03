@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ofetch } from "ofetch";
-import { Skeleton } from "./ui";
+import { Skeleton, Tooltip } from "./ui";
+import { IconCircleInfo } from "justd-icons";
 import Link from "next/link";
 
 type FetchUserByAddressResult = {
@@ -24,8 +25,19 @@ export default function UserLink({ address }: { address: string }) {
   const data = null as any;
 
   return (
-    <Link href={`/@${data?.nickname ?? address}`}>
-      {data?.nickname ?? address.substring(0, 6)}
-    </Link>
+    <div className="inline-flex gap-2">
+      <Link href={`/@${data?.nickname ?? address}`}>
+        {data?.nickname ?? address.substring(0, 6)}
+      </Link>
+
+      <Tooltip delay={0} closeDelay={0}>
+        <Tooltip.Trigger aria-label="Preview">
+          <IconCircleInfo />
+        </Tooltip.Trigger>
+        <Tooltip.Content>
+          Displayed as a wallet address. Nickname is not available yet.
+        </Tooltip.Content>
+      </Tooltip>
+    </div>
   );
 }
