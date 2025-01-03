@@ -30,8 +30,8 @@ const mapDesc: Record<ValidSort, string> = {
   oldestSeason: "Sort by Season (asc) and Collection No. (desc)",
   noDescending: "Sort by Collection No. (desc)",
   noAscending: "Sort by Collection No. (asc)",
-  serialDesc: "Sort by Serial (desc) and Collection No. (desc)",
-  serialAsc: "Sort by Serial (asc) and Collection No. (desc)",
+  serialDesc: "Sort by Serial (desc)",
+  serialAsc: "Sort by Serial (asc)",
   duplicateDesc: "Sort by duplicate count (desc)",
   duplicateAsc: "Sort by duplicate count (asc)",
 };

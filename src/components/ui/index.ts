@@ -14,6 +14,7 @@ export * from './form';
 export * from './grid-list';
 export * from './heading';
 export * from './keyboard';
+export * from './link';
 export * from './list-box';
 export * from './loader';
 export * from './menu';
