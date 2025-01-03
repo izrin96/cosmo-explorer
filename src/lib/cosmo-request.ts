@@ -43,6 +43,14 @@ export async function fetchOwnedObjekts({
           };
         }
 
+        if (["Divine01 SeoYeon 317Z"].includes(objekt.collectionId)) {
+          return {
+            ...objekt,
+            backgroundColor: "#df2e37",
+            accentColor: "#df2e37",
+          };
+        }
+
         return objekt;
       }),
     }));
