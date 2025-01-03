@@ -132,10 +132,14 @@ export function filterObjektsIndexed(
       );
       break;
     case "newestSeason":
-      objekts = objekts.toSorted((a, b) => b.season.localeCompare(a.season));
+      objekts = objekts
+        .toSorted((a, b) => b.collectionNo.localeCompare(a.collectionNo))
+        .toSorted((a, b) => b.season.localeCompare(a.season));
       break;
     case "oldestSeason":
-      objekts = objekts.toSorted((a, b) => a.season.localeCompare(b.season));
+      objekts = objekts
+        .toSorted((a, b) => a.collectionNo.localeCompare(b.collectionNo))
+        .toSorted((a, b) => a.season.localeCompare(b.season));
       break;
   }
 
@@ -228,10 +232,14 @@ function filterObjektsOwned(filters: CosmoFilters, objekts: OwnedObjekt[]) {
       objekts = objekts.toSorted((a, b) => a.objektNo - b.objektNo);
       break;
     case "newestSeason":
-      objekts = objekts.toSorted((a, b) => b.season.localeCompare(a.season));
+      objekts = objekts
+        .toSorted((a, b) => b.collectionNo.localeCompare(a.collectionNo))
+        .toSorted((a, b) => b.season.localeCompare(a.season));
       break;
     case "oldestSeason":
-      objekts = objekts.toSorted((a, b) => a.season.localeCompare(b.season));
+      objekts = objekts
+        .toSorted((a, b) => a.collectionNo.localeCompare(b.collectionNo))
+        .toSorted((a, b) => a.season.localeCompare(b.season));
       break;
   }
 

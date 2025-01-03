@@ -27,7 +27,7 @@ const mapDesc: Record<ValidSort, string> = {
   newest: "Sort by date (desc)",
   oldest: "Sort by date (asc)",
   newestSeason: "Sort by Season (desc) and Collection No. (desc)",
-  oldestSeason: "Sort by Season (asc) and Collection No. (desc)",
+  oldestSeason: "Sort by Season (asc) and Collection No. (asc)",
   noDescending: "Sort by Collection No. (desc)",
   noAscending: "Sort by Collection No. (asc)",
   serialDesc: "Sort by Serial (desc)",
