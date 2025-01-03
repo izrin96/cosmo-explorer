@@ -66,15 +66,16 @@ export default memo(function TradeRow({ row, address }: Props) {
           {format(row.transfer.timestamp, "yyyy/MM/dd hh:mm:ss a")}
         </td>
         <td className={tdClass}>
-          <Tooltip delay={0} closeDelay={0}>
+          <Link
+            onPress={onOpen}
+            className="cursor-pointer inline-flex gap-2 items-center"
+          >
+            {name}
+            <IconOpenLink />
+          </Link>
+          {/* <Tooltip delay={0} closeDelay={0}>
             <Tooltip.Trigger aria-label="Preview">
-              <Link
-                onPress={onOpen}
-                className="cursor-pointer inline-flex gap-2 items-center"
-              >
-                {name}
-                <IconOpenLink />
-              </Link>
+              <IconSearch />
             </Tooltip.Trigger>
             <Tooltip.Content placement="right">
               {row.collection && (
@@ -91,7 +92,7 @@ export default memo(function TradeRow({ row, address }: Props) {
                 </div>
               )}
             </Tooltip.Content>
-          </Tooltip>
+          </Tooltip> */}
         </td>
         <td className={tdClass}>{row.serial}</td>
         <td className={tdClass}>{action}</td>
