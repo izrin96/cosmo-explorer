@@ -39,7 +39,7 @@
 - [x] sort by season
 - [x] short form search
 - [x] hover trade history show picture
-- [ ] save tab state, via context or zustand persist store
+- [x] save tab state, via context or zustand persist store
 - [ ] transfer objekt, can select multiple
 - [ ] filter by date in user trade history
 - [ ] leaderboard
