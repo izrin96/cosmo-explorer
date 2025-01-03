@@ -77,9 +77,12 @@ export default memo(function ObjektView({
         <Tilt
           tiltEnable={isDesktop}
           tiltReverse
-          scale={isDesktop ? 1.08 : undefined}
+          scale={isDesktop ? 1.06 : undefined}
           transitionSpeed={1000}
+          tiltMaxAngleX={10}
+          tiltMaxAngleY={10}
           glareEnable={isDesktop}
+          glareMaxOpacity={0.2}
           glarePosition={isDesktop ? "bottom" : undefined}
           glareBorderRadius={isDesktop ? "12px" : undefined}
         >

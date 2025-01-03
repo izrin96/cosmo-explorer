@@ -11,21 +11,33 @@ type Props = PropsWithFilters<"member"> & {
 };
 
 export default function MemberFilter({ filters, setFilters, artists }: Props) {
-  const selected = useMemo(() => new Set(filters ? [filters] : []), [filters]);
+  const selected = useMemo(() => new Set(filters), [filters]);
 
-  const update = useCallback((key: Selection) => {
-    const newFilters = [...key] as string[];
-    setFilters({
-      member: newFilters.length > 0 ? newFilters[0] : null,
-      artist: null,
-    });
-  }, [setFilters]);
+  const update = useCallback(
+    (key: Selection) => {
+      const newFilters = [...key] as string[];
+      setFilters({
+        member: newFilters.length > 0 ? newFilters : null,
+        artist: null,
+      });
+    },
+    [setFilters]
+  );
 
   return (
     <Menu>
-      <Button appearance="outline" className={filters ? "data-pressed:border-primary data-hovered:border-primary border-primary": ""}>Member</Button>
+      <Button
+        appearance="outline"
+        className={
+          filters
+            ? "data-pressed:border-primary data-hovered:border-primary border-primary"
+            : ""
+        }
+      >
+        Member
+      </Button>
       <Menu.Content
-        selectionMode="single"
+        selectionMode="multiple"
         selectedKeys={selected}
         onSelectionChange={update}
         items={artists}
@@ -38,7 +50,9 @@ export default function MemberFilter({ filters, setFilters, artists }: Props) {
             id={artist.name}
           >
             {(member) => (
-              <Menu.Radio id={member.name}>{member.name}</Menu.Radio>
+              <Menu.Checkbox id={member.name} textValue={member.name}>
+                {member.name}
+              </Menu.Checkbox>
             )}
           </Menu.Section>
         )}

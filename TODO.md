@@ -35,15 +35,21 @@
 - [x] wallet connect
 - [x] fix accent color on some objekt (low prio)
 - [x] user's trades history
-- [ ] user collection progress
+- [x] filter multiple member
+- [x] sort by season
+- [x] short form search
+- [ ] hover trade history show picture
+- [ ] save tab state, via context or zustand persist store
+- [ ] transfer objekt, can select multiple
+- [ ] filter by date in user trade history
 - [ ] leaderboard
 - [ ] improve navbar
-- [ ] virtualize table row (low prio)
+- [ ] user collection progress
+- [ ] index all user using cosmo's search api (otw)
 - [ ] dehydrate react-query and use suspense (low prio)
-- [ ] transfer objekt, can select multiple (low prio)
 - [ ] user's como, user's profile picture (low prio)
 - [ ] search user change component to cmdk (low prio)
-- [ ] ~~index all user using cosmo's search api (low prio)~~ (cannot proceed due to rate limit)
+- [ ] virtualize table row (low prio) (cannot do window virtualize on `<table>`, will change to `<div>`) (low prio)
 
 ## features
 

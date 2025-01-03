@@ -150,6 +150,7 @@ export const pinRelations = relations(pins, ({ one }) => ({
 }));
 
 export const accessToken = pgTable("access_token", {
+  id: serial("id").primaryKey(),
   accessToken: varchar("access_token").notNull(),
   refreshToken: varchar("refresh_token").notNull(),
 });

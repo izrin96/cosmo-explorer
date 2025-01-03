@@ -13,12 +13,27 @@ interface Props extends PropsWithFilters<"sort"> {
 const map: Record<ValidSort, string> = {
   newest: "Newest",
   oldest: "Oldest",
-  noAscending: "Lowest Collection No.",
+  newestSeason: "Newest Season",
+  oldestSeason: "Oldest Season",
   noDescending: "Highest Collection No.",
-  serialAsc: "Lowest Serial",
+  noAscending: "Lowest Collection No.",
   serialDesc: "Highest Serial",
-  duplicateAsc: "Lowest Duplicate",
+  serialAsc: "Lowest Serial",
   duplicateDesc: "Highest Duplicate",
+  duplicateAsc: "Lowest Duplicate",
+};
+
+const mapDesc: Record<ValidSort, string> = {
+  newest: "Sort by date (desc)",
+  oldest: "Sort by date (asc)",
+  newestSeason: "Sort by Season (desc) and Collection No. (desc)",
+  oldestSeason: "Sort by Season (asc) and Collection No. (desc)",
+  noDescending: "Sort by Collection No. (desc)",
+  noAscending: "Sort by Collection No. (asc)",
+  serialDesc: "Sort by Serial (desc) and Collection No. (desc)",
+  serialAsc: "Sort by Serial (asc) and Collection No. (desc)",
+  duplicateDesc: "Sort by duplicate count (desc)",
+  duplicateAsc: "Sort by duplicate count (asc)",
 };
 
 export default function SortFilter({
@@ -53,7 +68,14 @@ export default function SortFilter({
         items={availableSorts.map((value) => ({ value }))}
         className="min-w-52"
       >
-        {(item) => <Menu.Radio id={item.value}>{map[item.value]}</Menu.Radio>}
+        {(item) => (
+          <Menu.Radio id={item.value} textValue={map[item.value]}>
+            <Menu.ItemDetails
+              label={map[item.value]}
+              description={mapDesc[item.value]}
+            />
+          </Menu.Radio>
+        )}
       </Menu.Content>
     </Menu>
   );

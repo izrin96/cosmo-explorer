@@ -14,17 +14,29 @@ type Props = PropsWithFilters<"artist"> & {
 export default function ArtistFilter({ filters, setFilters, artists }: Props) {
   const selected = useMemo(() => new Set(filters ? [filters] : []), [filters]);
 
-  const update = useCallback((key: Selection) => {
-    const newFilters = [...key] as ValidArtist[];
-    setFilters({
-      artist: newFilters.length > 0 ? newFilters[0] : null,
-      member: null,
-    });
-  }, [setFilters]);
+  const update = useCallback(
+    (key: Selection) => {
+      const newFilters = [...key] as ValidArtist[];
+      setFilters({
+        artist: newFilters.length > 0 ? newFilters[0] : null,
+        member: null,
+      });
+    },
+    [setFilters]
+  );
 
   return (
     <Menu>
-      <Button appearance="outline" className={filters ? "data-pressed:border-primary data-hovered:border-primary border-primary": ""}>Artist</Button>
+      <Button
+        appearance="outline"
+        className={
+          filters
+            ? "data-pressed:border-primary data-hovered:border-primary border-primary"
+            : ""
+        }
+      >
+        Artist
+      </Button>
       <Menu.Content
         selectionMode="single"
         selectedKeys={selected}
@@ -32,7 +44,11 @@ export default function ArtistFilter({ filters, setFilters, artists }: Props) {
         items={artists}
         className="min-w-52"
       >
-        {(item) => <Menu.Radio id={item.name}>{item.title}</Menu.Radio>}
+        {(item) => (
+          <Menu.Radio id={item.name} textValue={item.title}>
+            {item.title}
+          </Menu.Radio>
+        )}
       </Menu.Content>
     </Menu>
   );

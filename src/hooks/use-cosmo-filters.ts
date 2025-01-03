@@ -21,7 +21,7 @@ import {
 
 export function useCosmoFilters() {
   return useQueryStates({
-    member: parseAsString,
+    member: parseAsArrayOf(parseAsString),
     artist: parseAsStringEnum<ValidArtist>(Object.values(validArtists)),
     sort: parseAsStringEnum<ValidSort>(Object.values(validSorts)),
     class: parseAsArrayOf(
@@ -37,7 +37,6 @@ export function useCosmoFilters() {
     gridable: parseAsBoolean,
     used_for_grid: parseAsBoolean,
     search: parseAsString,
-    searches: parseAsArrayOf(parseAsString),
     grouped: parseAsBoolean,
     column: parseAsInteger
   });

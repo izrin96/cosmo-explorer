@@ -8,24 +8,71 @@ import {
 import { OwnedObjekt } from "./universal/cosmo/objekts";
 import { groupBy, prop } from "remeda";
 
+const shortformMembers: Record<string, string> = {
+  naky: "NaKyoung",
+  tone: "Kotone",
+  sulin: "Sullin",
+  choery: "Choerry",
+  sy: "SeoYeon",
+  yy: "YooYeon",
+  jb: "JooBin",
+  dh: "DaHyun",
+  kd: "Kaede",
+  hr: "HyeRin",
+  jw: "JiWoo",
+  cy: "ChaeYeon",
+  sm: "SooMin",
+  nk: "NaKyoung",
+  yb: "YuBin",
+  k: "Kaede",
+  yj: "YeonJi",
+  n: "Nien",
+  sh: "SoHyun",
+  x: "Xinyu",
+  m: "Mayu",
+  l: "Lynn",
+  hy: "HaYeon",
+  so: "ShiOn",
+  cw: "ChaeWon",
+  s: "Sullin",
+  sa: "SeoAh",
+  jy: "JiYeon",
+  hj: "HeeJin",
+  hs: "HaSeul",
+  kl: "KimLip",
+  js: "JinSoul",
+  c: "Choerry",
+};
+
+function getMemberShortKeys(value: string) {
+  return Object.keys(shortformMembers).filter(
+    (key) => shortformMembers[key] === value
+  );
+}
+
 const searchFilter = (search: string) => (objekt: ValidObjekt) => {
   const searchLower = search.toLowerCase();
+  const keys = [...getMemberShortKeys(objekt.member), objekt.member];
   return (
-    `${objekt.member} ${objekt.collectionNo}`
-      .toLowerCase()
-      .includes(searchLower) ||
-    `${objekt.member} ${getSeasonCollectionNo(objekt)}`
-      .toLowerCase()
-      .includes(searchLower)
+    keys.some((key) =>
+      `${key} ${objekt.collectionNo}`.toLowerCase().includes(searchLower)
+    ) ||
+    keys.some((key) =>
+      `${key} ${getSeasonCollectionNo(objekt)}`
+        .toLowerCase()
+        .includes(searchLower)
+    )
   );
 };
+
+// todo: refactor and optimize this filtering
 
 export function filterObjektsIndexed(
   filters: CosmoFilters,
   objekts: IndexedObjekt[]
 ) {
   if (filters.member) {
-    objekts = objekts.filter((a) => a.member === filters.member);
+    objekts = objekts.filter((a) => filters.member?.includes(a.member));
   }
   if (filters.artist) {
     objekts = objekts.filter((a) => a.artist === filters.artist);
@@ -45,7 +92,6 @@ export function filterObjektsIndexed(
   }
 
   if (filters.search) {
-    // objekts = objekts.filter(searchFilter(search));
     // support multiple query split by commas
     const searches = filters.search
       .split(",")
@@ -56,12 +102,10 @@ export function filterObjektsIndexed(
     );
   }
 
-  const searches = filters.searches ?? [];
-  if (searches.length > 0) {
-    objekts = objekts.filter((objekt) =>
-      searches.some((s) => searchFilter(s)(objekt))
-    );
-  }
+  // sort by noDescending first
+  objekts = objekts.toSorted((a, b) =>
+    b.collectionNo.localeCompare(a.collectionNo)
+  );
 
   const sort = filters.sort ?? "newest";
   switch (sort) {
@@ -87,17 +131,20 @@ export function filterObjektsIndexed(
         a.collectionNo.localeCompare(b.collectionNo)
       );
       break;
+    case "newestSeason":
+      objekts = objekts.toSorted((a, b) => b.season.localeCompare(a.season));
+      break;
+    case "oldestSeason":
+      objekts = objekts.toSorted((a, b) => a.season.localeCompare(b.season));
+      break;
   }
 
   return objekts;
 }
 
-export function filterObjektsOwned(
-  filters: CosmoFilters,
-  objekts: OwnedObjekt[]
-) {
+function filterObjektsOwned(filters: CosmoFilters, objekts: OwnedObjekt[]) {
   if (filters.member) {
-    objekts = objekts.filter((a) => a.member === filters.member);
+    objekts = objekts.filter((a) => filters.member?.includes(a.member));
   }
   if (filters.artist) {
     objekts = objekts.filter((a) =>
@@ -135,7 +182,6 @@ export function filterObjektsOwned(
   }
 
   if (filters.search) {
-    // objekts = objekts.filter(searchFilter(search));
     // support multiple query split by commas
     const searches = filters.search
       .split(",")
@@ -146,12 +192,10 @@ export function filterObjektsOwned(
     );
   }
 
-  const searches = filters.searches ?? [];
-  if (searches.length > 0) {
-    objekts = objekts.filter((objekt) =>
-      searches.some((s) => searchFilter(s)(objekt))
-    );
-  }
+  // sort by noDescending first
+  objekts = objekts.toSorted((a, b) =>
+    b.collectionNo.localeCompare(a.collectionNo)
+  );
 
   const sort = filters.sort ?? "newest";
   switch (sort) {
@@ -183,12 +227,18 @@ export function filterObjektsOwned(
     case "serialAsc":
       objekts = objekts.toSorted((a, b) => a.objektNo - b.objektNo);
       break;
+    case "newestSeason":
+      objekts = objekts.toSorted((a, b) => b.season.localeCompare(a.season));
+      break;
+    case "oldestSeason":
+      objekts = objekts.toSorted((a, b) => a.season.localeCompare(b.season));
+      break;
   }
 
   return objekts;
 }
 
-export function filterGroupedObjektsOwned(
+function filterGroupedObjektsOwned(
   filters: CosmoFilters,
   objekts: OwnedObjekt[][]
 ) {

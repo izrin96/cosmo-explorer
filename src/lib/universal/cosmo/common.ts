@@ -8,13 +8,14 @@ export type ValidArtist = (typeof validArtists)[number];
 export const validSorts = [
   "newest",
   "oldest",
-  "noAscending",
+  "newestSeason",
+  "oldestSeason",
   "noDescending",
-  // should not be sent to cosmo
-  "serialAsc",
+  "noAscending",
   "serialDesc",
-  "duplicateAsc",
+  "serialAsc",
   "duplicateDesc",
+  "duplicateAsc",
 ] as const;
 export type ValidSort = (typeof validSorts)[number];
 

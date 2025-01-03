@@ -5,8 +5,9 @@ import { AggregatedTransfer } from "@/lib/universal/transfers";
 import UserLink from "../user-link";
 import { format } from "date-fns";
 import { getCollectionShortId, ValidObjekt } from "@/lib/universal/objekts";
-import { memo, startTransition, useCallback, useState } from "react";
+import { memo, useState } from "react";
 import { ObjektModal } from "../objekt/objekt-view";
+import { IconOpenLink } from "justd-icons";
 
 const nullAddress = "0x0000000000000000000000000000000000000000";
 
@@ -36,11 +37,7 @@ export default memo(function TradeRow({ row, address }: Props) {
     </Badge>
   );
 
-  const onOpen = useCallback(() => {
-    startTransition(() => {
-      setOpen(true);
-    });
-  }, [setOpen]);
+  const onOpen = () => setOpen(true);
 
   const user = isReceiver ? (
     row.transfer.from === nullAddress ? (
@@ -54,14 +51,19 @@ export default memo(function TradeRow({ row, address }: Props) {
 
   return (
     <>
-      <tr
-        className="tr group relative border-b bg-bg text-fg cursor-pointer"
-        onClick={onOpen}
-      >
+      <tr className="tr group relative border-b bg-bg text-fg">
         <td className={tdClass}>
           {format(row.transfer.timestamp, "yyyy/MM/dd hh:mm:ss a")}
         </td>
-        <td className={tdClass}>{name}</td>
+        <td className={tdClass}>
+          <span
+            onClick={onOpen}
+            className="cursor-pointer inline-flex gap-2 items-center"
+          >
+            {name}
+            <IconOpenLink />
+          </span>
+        </td>
         <td className={tdClass}>{row.serial}</td>
         <td className={tdClass}>{action}</td>
         <td className={tdClass}>{user}</td>
@@ -78,11 +80,7 @@ export default memo(function TradeRow({ row, address }: Props) {
               objektNo: row.serial,
             } as ValidObjekt,
           ]}
-          onClose={() => {
-            startTransition(() => {
-              setOpen(false);
-            });
-          }}
+          onClose={() => setOpen(false)}
         />
       )}
     </>
