@@ -22,7 +22,30 @@ export async function fetchOwnedObjekts({
       start_after: `${startAfter}`,
       sort: "newest",
     },
-  }).then((res) => parsePage<OwnedObjektsResult>(res));
+  })
+    .then((res) => parsePage<OwnedObjektsResult>(res))
+    .then((res) => ({
+      ...res,
+      objekts: res.objekts.map((objekt) => {
+        // temporary fix accent color for below collection
+        if (
+          [
+            "Divine01 SeoYeon 117Z",
+            "Divine01 SeoYeon 118Z",
+            "Divine01 SeoYeon 119Z",
+            "Divine01 SeoYeon 120Z",
+          ].includes(objekt.collectionId)
+        ) {
+          return {
+            ...objekt,
+            backgroundColor: "#B400FF",
+            accentColor: "#B400FF",
+          };
+        }
+
+        return objekt;
+      }),
+    }));
 }
 
 export async function fetchOwnedObjektsParallel({

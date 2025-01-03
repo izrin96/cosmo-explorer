@@ -40,6 +40,7 @@
 - [x] short form search
 - [x] hover trade history show picture
 - [x] save tab state, via context or zustand persist store
+- [ ] fix performance issue with modal
 - [ ] transfer objekt, can select multiple
 - [ ] filter by date in user trade history
 - [ ] leaderboard

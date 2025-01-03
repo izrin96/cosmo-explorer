@@ -28,7 +28,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import ErrorFallbackRender from "../error-fallback";
 import ObjektSidebar from "./objekt-sidebar";
 import { useCosmoFilters } from "@/hooks/use-cosmo-filters";
-import { useObjektTabs } from "@/hooks/use-objekt-tabs";
+import { useObjektModal } from "@/hooks/use-objekt-modal";
 
 type Props = {
   objekts: ValidObjekt[];
@@ -185,7 +185,7 @@ function ObjektDetail({ objekts, isOwned = false }: ObjektDetailProps) {
   const [objekt] = objekts;
   const [flipped, setFlipped] = useState(false);
   const [hide, setHide] = useState(false);
-  const { currentTab, setCurrentTab } = useObjektTabs();
+  const { currentTab, setCurrentTab } = useObjektModal();
 
   const slug = getObjektSlug(objekt);
 

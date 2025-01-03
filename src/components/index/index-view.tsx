@@ -11,7 +11,7 @@ import { CosmoArtistWithMembersBFF } from "@/lib/universal/cosmo/artists";
 import { WindowVirtualizer } from "virtua";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { parseAsString, useQueryState } from "nuqs";
-import { ObjektTabsProvider } from "@/hooks/use-objekt-tabs";
+import { ObjektModalProvider } from "@/hooks/use-objekt-modal";
 
 type Props = {
   artists: CosmoArtistWithMembersBFF[];
@@ -70,7 +70,7 @@ export default function IndexView({ objekts, artists }: Props) {
       <FilterView artists={artists} />
       <span className="font-semibold">{objektsFiltered.length} total</span>
 
-      <ObjektTabsProvider initialTab="metadata">
+      <ObjektModalProvider initialTab="metadata">
         <WindowVirtualizer>{virtualList}</WindowVirtualizer>
 
         {open && (
@@ -83,7 +83,7 @@ export default function IndexView({ objekts, artists }: Props) {
             }}
           />
         )}
-      </ObjektTabsProvider>
+      </ObjektModalProvider>
     </div>
   );
 }

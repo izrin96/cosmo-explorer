@@ -7,27 +7,27 @@ type ContextProps = {
   setCurrentTab: (val: string) => void;
 };
 
-const ObjektTabsContext = createContext<ContextProps>({} as ContextProps);
+const ObjektModalContext = createContext<ContextProps>({} as ContextProps);
 
 type ProviderProps = {
   children: ReactNode;
   initialTab?: string;
 };
 
-export function ObjektTabsProvider({
+export function ObjektModalProvider({
   children,
   initialTab = "metadata",
 }: ProviderProps) {
   const [currentTab, setCurrentTab] = useState(initialTab);
   return (
-    <ObjektTabsContext value={{ currentTab, setCurrentTab }}>
+    <ObjektModalContext value={{ currentTab, setCurrentTab }}>
       {children}
-    </ObjektTabsContext>
+    </ObjektModalContext>
   );
 }
 
-export function useObjektTabs() {
-  const ctx = useContext(ObjektTabsContext);
+export function useObjektModal() {
+  const ctx = useContext(ObjektModalContext);
   return {
     ...ctx,
   };

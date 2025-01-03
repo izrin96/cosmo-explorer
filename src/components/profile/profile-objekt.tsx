@@ -25,7 +25,7 @@ import { fetchOwnedObjektsParallel } from "@/lib/cosmo-request";
 import { OwnedObjekt } from "@/lib/universal/cosmo/objekts";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallbackRender from "../error-fallback";
-import { ObjektTabsProvider } from "@/hooks/use-objekt-tabs";
+import { ObjektModalProvider } from "@/hooks/use-objekt-modal";
 
 type Props = {
   artists: CosmoArtistWithMembersBFF[];
@@ -129,9 +129,9 @@ function ProfileObjekt({ profile, artists }: Props) {
         </span>
       </div>
 
-      <ObjektTabsProvider initialTab="owned">
+      <ObjektModalProvider initialTab="owned">
         <WindowVirtualizer>{virtualList}</WindowVirtualizer>
-      </ObjektTabsProvider>
+      </ObjektModalProvider>
     </div>
   );
 }

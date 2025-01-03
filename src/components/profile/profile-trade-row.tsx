@@ -1,16 +1,13 @@
 "use client";
 
-import { Badge, Link, Tooltip } from "../ui";
+import { Badge, Link } from "../ui";
 import { AggregatedTransfer } from "@/lib/universal/transfers";
 import UserLink from "../user-link";
 import { format } from "date-fns";
 import { getCollectionShortId, ValidObjekt } from "@/lib/universal/objekts";
-import { CSSProperties, memo, useState } from "react";
+import { memo, useState } from "react";
 import { ObjektModal } from "../objekt/objekt-view";
 import { IconOpenLink } from "justd-icons";
-import Image from "next/image";
-import ObjektSidebar from "../objekt/objekt-sidebar";
-import { getObjektImageUrls } from "../objekt/objekt-util";
 
 const nullAddress = "0x0000000000000000000000000000000000000000";
 
@@ -40,13 +37,6 @@ export default memo(function TradeRow({ row, address }: Props) {
     </Badge>
   );
 
-  const { front } = getObjektImageUrls(row.collection as ValidObjekt);
-
-  const css = {
-    "--objekt-accent-color": row.collection?.accentColor,
-    "--objekt-text-color": row.collection?.textColor,
-  } as CSSProperties;
-
   const onOpen = () => setOpen(true);
 
   const user = isReceiver ? (
@@ -73,26 +63,6 @@ export default memo(function TradeRow({ row, address }: Props) {
             {name}
             <IconOpenLink />
           </Link>
-          {/* <Tooltip delay={0} closeDelay={0}>
-            <Tooltip.Trigger aria-label="Preview">
-              <IconSearch />
-            </Tooltip.Trigger>
-            <Tooltip.Content placement="right">
-              {row.collection && (
-                <div
-                  className="relative overflow-hidden aspect-photocard drop-shadow h-[20rem]"
-                  style={css}
-                >
-                  <Image
-                    fill
-                    src={front.display}
-                    alt={row.collection.collectionId}
-                  />
-                  <ObjektSidebar collection={row.collection.collectionNo} />
-                </div>
-              )}
-            </Tooltip.Content>
-          </Tooltip> */}
         </td>
         <td className={tdClass}>{row.serial}</td>
         <td className={tdClass}>{action}</td>

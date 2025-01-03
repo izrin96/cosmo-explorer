@@ -13,7 +13,7 @@ import { TransferResult } from "@/lib/universal/transfers";
 import { InfiniteQueryNext } from "../infinite-query-pending";
 import ProfileTradeRow from "./profile-trade-row";
 import { Card } from "../ui";
-import { ObjektTabsProvider } from "@/hooks/use-objekt-tabs";
+import { ObjektModalProvider } from "@/hooks/use-objekt-modal";
 
 type Props = {
   profile: CosmoPublicUser;
@@ -70,7 +70,7 @@ function ProfileTrades({ address }: { address: string }) {
               </tr>
             </thead>
             <tbody className="[&_.tr:last-child]:border-0">
-              <ObjektTabsProvider>
+              <ObjektModalProvider>
                 {rows.map((row) => (
                   <ProfileTradeRow
                     key={row.transfer.id}
@@ -78,7 +78,7 @@ function ProfileTrades({ address }: { address: string }) {
                     address={address}
                   />
                 ))}
-              </ObjektTabsProvider>
+              </ObjektModalProvider>
             </tbody>
           </table>
         </div>
